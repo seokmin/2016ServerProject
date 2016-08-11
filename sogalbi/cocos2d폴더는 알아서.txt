@@ -1,1 +1,2 @@
 cocos2d-x 3.12버전을 알아서 cocos2d폴더에 풀어주세요
+http://www.cocos2d-x.org/filedown/cocos2d-x-3.12.zip
