@@ -1,5 +1,4 @@
-#ifndef  _APP_DELEGATE_H_
-#define  _APP_DELEGATE_H_
+#pragma once
 
 /**
 @brief    The cocos2d Application.
@@ -33,6 +32,3 @@ public:
     */
     virtual void applicationWillEnterForeground();
 };
-
-#endif // _APP_DELEGATE_H_
-
