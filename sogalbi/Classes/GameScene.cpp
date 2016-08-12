@@ -26,11 +26,13 @@ bool GameScene::init()
     {
         return false;
 	}
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	InitLayout();
-    return true;
+	initLayout();
+    
+	// 네트워크 작업 스레딩
+	auto scheduler = Director::getInstance()->getScheduler();
+	//scheduler->performFunctionInCocosThread(std::bind());
+	return true;
 }
 
 
@@ -52,7 +54,7 @@ void GameScene::menuCloseCallback(Ref* pSender)
 }
 
 
-void GameScene::InitLayout()
+void GameScene::initLayout()
 {
 	// 배경화면
 	auto background = Sprite::create(FILENAME::SPRITE::TABLE_BG);
@@ -74,6 +76,7 @@ void GameScene::InitLayout()
 	deck->setRotation(-75.f);
 	this->addChild(deck);
 
+	// 방 번호
 	auto roomText = std::string("Room No : ") + std::to_string(RandomHelper::random_int(1, 99));
 	auto roomNum = Label::createWithTTF(roomText,FILENAME::FONT::SOYANON,32);
 	roomNum->setColor(Color3B(255,255,0));
