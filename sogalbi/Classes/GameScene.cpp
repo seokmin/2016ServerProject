@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "SimpleAudioEngine.h"
 #include "ResourceInfo.h"
+#include "Player.h"
 
 #pragma execution_character_set("UTF-8")
 
@@ -57,7 +58,7 @@ void GameScene::menuCloseCallback(Ref* pSender)
 void GameScene::initLayout()
 {
 	// 배경화면
-	auto background = Sprite::create(FILENAME::SPRITE::TABLE_BG);
+	auto background = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::TABLE_BG);
 	background->setAnchorPoint(Vec2(0, 0));
 	background->getTexture()->setAliasTexParameters();
 	this->addChild(background, DEF::Z_ORDER::BACK);
@@ -71,7 +72,7 @@ void GameScene::initLayout()
 	this->addChild(leaveMenu, DEF::Z_ORDER::UI);
 
 	// 딜러 덱
-	auto deck = Sprite::create(FILENAME::SPRITE::DECK);
+	auto deck = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::DECK);
 	deck->setPosition(900.f, 700.f);
 	deck->setRotation(-75.f);
 	this->addChild(deck);
@@ -83,4 +84,19 @@ void GameScene::initLayout()
 	roomNum->setPosition(20.f, 660.f);
 	roomNum->setAnchorPoint(Vec2(0.f,0.f));
 	this->addChild(roomNum);
+
+	// 플레이어 네임택 와꾸
+	for (auto& player : _players)
+	{
+		player = Player::create();
+		addChild(player);
+	}
+	auto screenSize = getContentSize();
+	_players[0]->setPosition(130, 260);
+ 	_players[1]->setPosition((screenSize.width/2+130)/2,190);
+ 	_players[2]->setPosition(screenSize.width/2,120);
+ 	_players[3]->setPosition(screenSize.width-_players[1]->getPosition().x,190);
+	_players[4]->setPosition(screenSize.width-130,260);
+
+
 }

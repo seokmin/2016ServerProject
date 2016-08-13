@@ -6,15 +6,20 @@ class Player :
 public:
 	CREATE_FUNC(Player);
 	bool init() override;
+	void setAsPlayer();
+	void setNameLabel(std::string name);
+	void setPoke(std::string pokeFileName);
+	void setMoneyWhole();
+	void setMoneyBet();
 
 private:
-	Sprite* _backGround;
+	Sprite* _nameTag;
+	Sprite* _nameTagBack;
 	Sprite* _pokemon;
-	Sprite* _banner;
+	Sprite* _stateBanner;
 	Label* _nameLabel;
 	Label* _moneyLabelFront;
 	Label* _moneyLabelBack;
-	Label* _stateLabel;
 	
 	unsigned _money;
 	unsigned _betMoney;

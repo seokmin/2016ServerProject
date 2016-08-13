@@ -54,6 +54,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     register_all_packages();
 
+	// 아틀라스 읽어오기
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("textures.plist");
+
     // create a scene. it's an autorelease object
     auto scene = GameScene::createScene();
 

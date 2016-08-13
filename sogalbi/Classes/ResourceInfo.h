@@ -14,6 +14,18 @@ namespace FILENAME
 	{
 		DEF_FILENAME(SPRITE, TABLE_BG, "tableBg.png");
 		DEF_FILENAME(SPRITE, DECK, "deckRed.png");
+		DEF_FILENAME(SPRITE, NAMETAG, "nameTag.png");
+		DEF_FILENAME(SPRITE, NAMETAG_BACK, "nameTagBack.png");
+		DEF_FILENAME(SPRITE, BANNER_BLACKJACK, "bannerBlackJack.png");
+		DEF_FILENAME(SPRITE, BANNER_STAND, "bannerStand.png");
+		DEF_FILENAME(SPRITE, BANNER_WAITING, "bannerWaiting.png");
+		DEF_FILENAME(SPRITE, HIT, "hit.png");
+
+		DEF_FILENAME(SPRITE, POKE_1, "poke/°ÅºÏ¿Õ.png");
+		DEF_FILENAME(SPRITE, POKE_2, "poke/³ª¿ËÀÌ.png");
+		DEF_FILENAME(SPRITE, POKE_3, "poke/¸Á³ª´¨.png");
+		DEF_FILENAME(SPRITE, POKE_4, "poke/ÇÁÅ×¶ó.png");
+		DEF_FILENAME(SPRITE, POKE_5, "poke/ÇÇÄ«Ãò.png");
 	}
 	namespace FONT
 	{

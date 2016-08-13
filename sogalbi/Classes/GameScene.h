@@ -1,5 +1,7 @@
 #pragma once
 
+class Player;
+
 class GameScene : public cocos2d::Layer
 {
 public:
@@ -13,4 +15,5 @@ public:
 
 private:
 	void initLayout();
+	Player* _players[5];
 };
