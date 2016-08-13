@@ -148,6 +148,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
+    <ClCompile Include="..\Classes\LoginScene.cpp" />
     <ClCompile Include="..\Classes\NetworkManager.cpp" />
     <ClCompile Include="..\Classes\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -160,6 +161,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\definition.h" />
     <ClInclude Include="..\Classes\GameScene.h" />
+    <ClInclude Include="..\Classes\LoginScene.h" />
     <ClInclude Include="..\Classes\NetworkManager.h" />
     <ClInclude Include="..\Classes\pch.h" />
     <ClInclude Include="..\Classes\Player.h" />

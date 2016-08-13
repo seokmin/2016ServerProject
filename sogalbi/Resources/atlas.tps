@@ -139,6 +139,10 @@
         <key>dataFileNames</key>
         <map type="GFileNameMap">
             <key>data</key>
+            <struct type="DataFile">
+                <key>name</key>
+                <filename>textures.plist</filename>
+            </struct>
             <key>header</key>
             <key>source</key>
             <struct type="DataFile">
@@ -198,6 +202,7 @@
             <key type="filename">Sprites/bannerWaiting.png</key>
             <key type="filename">Sprites/deckRed.png</key>
             <key type="filename">Sprites/hit.png</key>
+            <key type="filename">Sprites/loginBg.png</key>
             <key type="filename">Sprites/nameTag.png</key>
             <key type="filename">Sprites/nameTagBack.png</key>
             <key type="filename">Sprites/poke/거북왕.png</key>
@@ -207,7 +212,6 @@
             <key type="filename">Sprites/poke/피카츄.png</key>
             <key type="filename">Sprites/stand.png</key>
             <key type="filename">Sprites/tableBg.png</key>
-            <key type="filename">textures.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>

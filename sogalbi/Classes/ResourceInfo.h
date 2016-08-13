@@ -21,6 +21,8 @@ namespace FILENAME
 		DEF_FILENAME(SPRITE, BANNER_WAITING, "bannerWaiting.png");
 		DEF_FILENAME(SPRITE, HIT, "hit.png");
 
+		DEF_FILENAME(SPRITE, LOGIN_BG, "loginBg.png");
+
 		DEF_FILENAME(SPRITE, POKE_1, "poke/°ÅºÏ¿Õ.png");
 		DEF_FILENAME(SPRITE, POKE_2, "poke/³ª¿ËÀÌ.png");
 		DEF_FILENAME(SPRITE, POKE_3, "poke/¸Á³ª´¨.png");

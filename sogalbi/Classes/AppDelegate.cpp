@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "AppDelegate.h"
-#include "GameScene.h"
+#include "LoginScene.h"
 #include "SimpleAudioEngine.h"
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(DEF::SCREEN_SIZE::WIDTH, DEF::SCREEN_SIZE::HEIGHT);
@@ -58,7 +58,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("textures.plist");
 
     // create a scene. it's an autorelease object
-    auto scene = GameScene::createScene();
+    auto scene = LoginScene::createScene();
 
     // run
     director->runWithScene(scene);
