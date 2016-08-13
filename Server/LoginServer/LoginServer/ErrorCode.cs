@@ -9,8 +9,11 @@ namespace LoginServer
     public enum ERROR_CODE
     {
         NONE = 0,
+        
+        REQ_LOGIN_INVALID_PW = 10,
+        REQ_LOGIN_CREATE_ERROR = 11,
+        REQ_LOGIN_CREATE_SUCCESS = 12,
+        REQ_LOGIN_GET_USER_ERROR = 13,
 
-        REQ_LOGIN_INVALID_USERNAME = 10,
-        REQ_LOGIN_INVALID_PW = 11,
     }
 }

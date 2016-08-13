@@ -26,7 +26,11 @@ namespace LoginServer.DB
                 myConnection.Open();
 
                 DataSet ds = new DataSet();
-                MySqlDataAdapter da = new MySqlDataAdapter("SELECT username, pw FROM user where username = '" + username + "'", myConnection);
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("SELECT username, pw FROM user where username = '{0}'", username);
+
+                MySqlDataAdapter da = new MySqlDataAdapter(sb.ToString(), myConnection);
                 await da.FillAsync(ds, "userInfo");
 
                 dt = ds.Tables["userInfo"];
@@ -35,6 +39,25 @@ namespace LoginServer.DB
             }
 
             return dt;
+        }
+
+        public static async Task<int> CreateUser(string username, string pw)
+        {
+            int affectedRows = 0;
+            using (MySqlConnection myConnection = new MySqlConnection(MYSQL_CONNECT_STRING))
+            {
+                myConnection.Open();
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("INSERT INTO user SET username = '{0}', pw = '{1}'", username, pw);
+
+                MySqlCommand cmd = new MySqlCommand(sb.ToString(), myConnection);
+                affectedRows = await cmd.ExecuteNonQueryAsync();
+
+                myConnection.Close();
+            }
+
+            return affectedRows;
         }
     }
 

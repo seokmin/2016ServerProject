@@ -16,5 +16,10 @@ namespace LoginServer.Data
 
             return data;
         }
+
+        public static async Task<int> CreateUser(string username, string pw)
+        {
+            return await DB.MysqlLib.CreateUser(username, pw);
+        }
     }
 }
