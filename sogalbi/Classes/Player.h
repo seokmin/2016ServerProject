@@ -17,7 +17,7 @@ private:
 	Label* _stateLabel;
 	
 	unsigned _money;
-	unsigned _bet
-	bool isActivated = false;
-
+	unsigned _betMoney;
+	bool _isActivated = false;
+	
 };

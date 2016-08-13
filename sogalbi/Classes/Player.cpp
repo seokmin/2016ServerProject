@@ -3,5 +3,6 @@
 
 bool Player::init()
 {
-
+	;
+	return true;
 }
