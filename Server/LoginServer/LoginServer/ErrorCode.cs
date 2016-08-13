@@ -14,6 +14,7 @@ namespace LoginServer
         REQ_LOGIN_CREATE_ERROR = 11,
         REQ_LOGIN_CREATE_SUCCESS = 12,
         REQ_LOGIN_GET_USER_ERROR = 13,
+        REQ_LOGIN_AUTH_SAVE_ERROR = 13,
 
     }
 }

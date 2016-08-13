@@ -15,12 +15,10 @@ namespace LoginServer.Request
         public async Task<RES_LOGIN> Process(REQ_LOGIN requestPacket)
         {
             var responseResult = new RES_LOGIN();
-
+            
             var userData = await Data.UserRepository.GetUser(requestPacket.UserID);
             // user가 없다면 새로운 유저를 생성해줌.
-
-            Console.WriteLine(userData);
-
+            
             if (userData == null)
             {
                 responseResult.Return(ERROR_CODE.REQ_LOGIN_GET_USER_ERROR);
@@ -28,13 +26,13 @@ namespace LoginServer.Request
 
             if(userData.Rows.Count == 0)
             {
-                int affectedRows = await Data.UserRepository.CreateUser(requestPacket.UserID, requestPacket.PW);
-                if (affectedRows != 1)
+                var createResult = await Data.UserRepository.CreateUser(requestPacket.UserID, requestPacket.PW);
+                if (createResult.Item1 != 1)
                 {
-                    Console.WriteLine("errr" + affectedRows);
                     responseResult.Return(ERROR_CODE.REQ_LOGIN_CREATE_ERROR);
                 }
 
+                responseResult.Pokemon = (short)createResult.Item2;
                 responseResult.SetResult(ERROR_CODE.REQ_LOGIN_CREATE_SUCCESS);
             }
             else
@@ -43,10 +41,22 @@ namespace LoginServer.Request
                 {
                     return responseResult.Return(ERROR_CODE.REQ_LOGIN_INVALID_PW);
                 }
+                responseResult.Pokemon = (short)Int32.Parse(userData.Rows[0]["pokemon"].ToString());
                 responseResult.SetResult(ERROR_CODE.NONE);
             }
+            
+            Guid g = Guid.NewGuid();
+            string authToken = Convert.ToBase64String(g.ToByteArray());
+            authToken = authToken.Replace("=", "");
+            authToken = authToken.Replace("+", "");
+            authToken = authToken.Replace("/", "");
 
-            var authToken = System.DateTime.Now.Ticks.ToString();
+            int affectedRows = await Data.UserRepository.SaveAuthToken(authToken, requestPacket.UserID);
+
+            if(affectedRows == 0)
+            {
+                responseResult.Return(ERROR_CODE.REQ_LOGIN_AUTH_SAVE_ERROR);
+            }
 
             responseResult.AuthToken = authToken;
             return responseResult;

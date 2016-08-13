@@ -27,6 +27,7 @@ namespace LoginServer
 
         public short Result;
         public string AuthToken;
+        public short Pokemon;
     }
     #endregion
 }

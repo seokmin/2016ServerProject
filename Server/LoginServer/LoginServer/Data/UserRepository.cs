@@ -17,9 +17,19 @@ namespace LoginServer.Data
             return data;
         }
 
-        public static async Task<int> CreateUser(string username, string pw)
+        public static async Task<Tuple<int, int>> CreateUser(string username, string pw)
         {
-            return await DB.MysqlLib.CreateUser(username, pw);
+            Random r = new Random();
+            int pokemon = r.Next(1, 151);
+
+            return await DB.MysqlLib.CreateUser(username, pw, pokemon);
+        }
+
+        public static async Task<int> SaveAuthToken(string authToken, string username)
+        {
+            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            return await DB.MysqlLib.SaveAuthToken(authToken, username, timestamp);
         }
     }
 }

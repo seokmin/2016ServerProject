@@ -13,12 +13,13 @@ namespace LoginServer
     {
         static void Main()
         {
-            string baseAddress = "http://localhost:8258/";
+            StartOptions options = new StartOptions();
+            options.Urls.Add("http://*:8258");
 
             // Start OWIN host 
-            using (WebApp.Start<Startup>(url: baseAddress))
+            using (WebApp.Start<Startup>(options))
             {
-                Console.WriteLine("LoginServer Running.. : " + baseAddress);
+                Console.WriteLine("LoginServer Running.. : " + Environment.MachineName);
 
                 //이 using 안에서 빠져나가면 서버 종료됨..
                 Console.ReadLine();
