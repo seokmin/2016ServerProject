@@ -5,14 +5,13 @@
 
 using namespace COMMON;
 using NET_ERROR_CODE=NetworkConfig::NET_ERROR_CODE;
-
 class ILog;
 
 class INetworkManager
 {
 public:
-	INetworkManager() {}
-	virtual ~INetworkManager() = 0;
+	INetworkManager() {};
+	virtual ~INetworkManager() {};
 
 	virtual NET_ERROR_CODE Init(const NetworkConfig* pConfig, ILog* pLogger) { return NET_ERROR_CODE::NONE; }
 	

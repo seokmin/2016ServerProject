@@ -39,6 +39,7 @@ namespace COMMON
 		GAME_EMOTION_RES = 122,
 		GAME_EMOTION_NTF = 123,
 
+		MAX = 255,
 	};
 
 	const auto MAX_USER_ID_LEN = 5;
@@ -90,6 +91,9 @@ namespace COMMON
 
 	struct RecvPacketInfo
 	{
-
+		int SessionIndex = 0;
+		short PacketId = 0;
+		short PacketBodySize = 0;
+		char* pRefData = 0;
 	};
 }
