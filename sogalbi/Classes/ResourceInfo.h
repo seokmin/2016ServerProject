@@ -22,6 +22,9 @@ namespace FILENAME
 		DEF_FILENAME(SPRITE, HIT, "hit.png");
 
 		DEF_FILENAME(SPRITE, LOGIN_BG, "loginBg.png");
+		DEF_FILENAME(SPRITE, LAYER_CHANGE_CHANNEL, "layerChangeChannel");
+
+		DEF_FILENAME(SPRITE, LOBBY_BG, "lobbyBg.png");
 
 		DEF_FILENAME(SPRITE, POKE_1, "poke/°ÅºÏ¿Õ.png");
 		DEF_FILENAME(SPRITE, POKE_2, "poke/³ª¿ËÀÌ.png");
