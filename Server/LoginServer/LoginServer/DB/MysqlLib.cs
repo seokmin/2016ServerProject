@@ -89,7 +89,7 @@ namespace LoginServer.DB
                 DataSet ds = new DataSet();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("SELECT ip, curNum, maxNum, timestamp FROM channel ORDER BY curNum ASC LIMIT 1");
+                sb.AppendFormat("SELECT ip, curNum, maxNum, timestamp, name FROM channel ORDER BY curNum ASC LIMIT 1");
 
                 MySqlDataAdapter da = new MySqlDataAdapter(sb.ToString(), myConnection);
                 await da.FillAsync(ds, "channelInfo");

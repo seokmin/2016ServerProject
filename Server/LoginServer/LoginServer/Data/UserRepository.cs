@@ -42,7 +42,8 @@ namespace LoginServer.Data
             channel.CurNum = (short)Int32.Parse(data.Rows[0]["curNum"].ToString());
             channel.MaxNum = (short)Int32.Parse(data.Rows[0]["maxNum"].ToString());
             channel.IsOpen = true;
-            
+            channel.ChannelName = data.Rows[0]["name"].ToString();
+
             return channel;
         }
     }

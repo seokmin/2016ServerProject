@@ -38,6 +38,7 @@ namespace LoginServer
         public short MaxNum;
         public short CurNum;
         public bool IsOpen;
+        public string ChannelName;
     }
     #endregion
 }
