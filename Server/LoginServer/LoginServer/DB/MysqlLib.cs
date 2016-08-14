@@ -79,7 +79,7 @@ namespace LoginServer.DB
             return affectedRows;
         }
 
-        public static async Task<DataTable> GetChannels()
+        public static async Task<DataTable> GetChannel()
         {
             DataTable dt = null;
             using (MySqlConnection myConnection = new MySqlConnection(MYSQL_CONNECT_STRING))
@@ -89,7 +89,7 @@ namespace LoginServer.DB
                 DataSet ds = new DataSet();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("SELECT ip, curNum, maxNum, timestamp FROM channel");
+                sb.AppendFormat("SELECT ip, curNum, maxNum, timestamp FROM channel ORDER BY curNum ASC LIMIT 1");
 
                 MySqlDataAdapter da = new MySqlDataAdapter(sb.ToString(), myConnection);
                 await da.FillAsync(ds, "channelInfo");

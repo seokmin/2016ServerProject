@@ -32,20 +32,17 @@ namespace LoginServer.Data
             return await DB.MysqlLib.SaveAuthToken(authToken, username, timestamp);
         }
 
-        public static async Task<RES_LOGIN_CHANNEL[]> GetChannels()
+        public static async Task<RES_LOGIN_CHANNEL> GetChannel()
         {
-            var data = await DB.MysqlLib.GetChannels();
+            var data = await DB.MysqlLib.GetChannel();
 
-            RES_LOGIN_CHANNEL[] channel = new RES_LOGIN_CHANNEL[data.Rows.Count];
-
-            for(int i=0; i<data.Rows.Count; ++i)
-            {
-                channel[i].IP = data.Rows[i]["ip"].ToString();
-                channel[i].CurNum = (short)Int32.Parse(data.Rows[i]["curNum"].ToString());
-                channel[i].MaxNum = (short)Int32.Parse(data.Rows[i]["maxNum"].ToString());
-                channel[i].IsOpen = true;
-            }
-
+            RES_LOGIN_CHANNEL channel;
+            
+            channel.IP = data.Rows[0]["ip"].ToString();
+            channel.CurNum = (short)Int32.Parse(data.Rows[0]["curNum"].ToString());
+            channel.MaxNum = (short)Int32.Parse(data.Rows[0]["maxNum"].ToString());
+            channel.IsOpen = true;
+            
             return channel;
         }
     }

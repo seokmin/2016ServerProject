@@ -29,7 +29,7 @@ namespace LoginServer
         public string AuthToken;
         public short Pokemon;
 
-        public RES_LOGIN_CHANNEL[] Channels;
+        public RES_LOGIN_CHANNEL Channel;
     }
 
     public struct RES_LOGIN_CHANNEL
