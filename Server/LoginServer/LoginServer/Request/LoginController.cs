@@ -44,7 +44,9 @@ namespace LoginServer.Request
                 responseResult.Pokemon = (short)Int32.Parse(userData.Rows[0]["pokemon"].ToString());
                 responseResult.SetResult(ERROR_CODE.NONE);
             }
-            
+
+            responseResult.Channels = await Data.UserRepository.GetChannels();
+
             Guid g = Guid.NewGuid();
             string authToken = Convert.ToBase64String(g.ToByteArray());
             authToken = authToken.Replace("=", "");

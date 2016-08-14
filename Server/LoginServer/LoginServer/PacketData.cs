@@ -28,6 +28,16 @@ namespace LoginServer
         public short Result;
         public string AuthToken;
         public short Pokemon;
+
+        public RES_LOGIN_CHANNEL[] Channels;
+    }
+
+    public struct RES_LOGIN_CHANNEL
+    {
+        public string IP;
+        public short MaxNum;
+        public short CurNum;
+        public bool IsOpen;
     }
     #endregion
 }

@@ -78,6 +78,29 @@ namespace LoginServer.DB
 
             return affectedRows;
         }
+
+        public static async Task<DataTable> GetChannels()
+        {
+            DataTable dt = null;
+            using (MySqlConnection myConnection = new MySqlConnection(MYSQL_CONNECT_STRING))
+            {
+                myConnection.Open();
+
+                DataSet ds = new DataSet();
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("SELECT ip, curNum, maxNum, timestamp FROM channel");
+
+                MySqlDataAdapter da = new MySqlDataAdapter(sb.ToString(), myConnection);
+                await da.FillAsync(ds, "channelInfo");
+
+                dt = ds.Tables["channelInfo"];
+
+                myConnection.Close();
+            }
+
+            return dt;
+        }
     }
 
     public class DBUser
