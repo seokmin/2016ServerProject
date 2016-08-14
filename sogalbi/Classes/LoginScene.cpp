@@ -1,9 +1,11 @@
 #include "pch.h"
-#include "LoginScene.h"
-#include "ResourceInfo.h"
 #include "ui\UITextField.h"
 #include "network\HttpRequest.h"
 #include "network\HttpClient.h"
+
+#include "LoginScene.h"
+#include "ResourceInfo.h"
+#include "..\..\Common\Packet.h"
 
 #pragma execution_character_set("UTF-8")
 
@@ -108,7 +110,7 @@ void LoginScene::initLayout()
 	addChild(_nameField);
 
 	// 비밀번호
-	_passField = ui::TextField::create("asdfasdf", FILENAME::FONT::SOYANON, 48);
+	_passField = ui::TextField::create("****", FILENAME::FONT::SOYANON, 48);
 	_passField->setAnchorPoint(Vec2(0, 0));
 	_passField->setPosition(Vec2(585, 170));
 	_passField->setPasswordEnabled(true);

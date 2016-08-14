@@ -194,24 +194,23 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">CloseNormal.png</key>
-            <key type="filename">CloseSelected.png</key>
-            <key type="filename">HelloWorld.png</key>
-            <key type="filename">Sprites/bannerBlackJack.png</key>
-            <key type="filename">Sprites/bannerStand.png</key>
-            <key type="filename">Sprites/bannerWaiting.png</key>
-            <key type="filename">Sprites/deckRed.png</key>
-            <key type="filename">Sprites/hit.png</key>
-            <key type="filename">Sprites/loginBg.png</key>
-            <key type="filename">Sprites/nameTag.png</key>
-            <key type="filename">Sprites/nameTagBack.png</key>
-            <key type="filename">Sprites/poke/거북왕.png</key>
-            <key type="filename">Sprites/poke/나옹이.png</key>
-            <key type="filename">Sprites/poke/망나뇽.png</key>
-            <key type="filename">Sprites/poke/프테라.png</key>
-            <key type="filename">Sprites/poke/피카츄.png</key>
-            <key type="filename">Sprites/stand.png</key>
-            <key type="filename">Sprites/tableBg.png</key>
+            <key type="filename">Sprites/Sprites/bannerBlackJack.png</key>
+            <key type="filename">Sprites/Sprites/bannerStand.png</key>
+            <key type="filename">Sprites/Sprites/bannerWaiting.png</key>
+            <key type="filename">Sprites/Sprites/deckRed.png</key>
+            <key type="filename">Sprites/Sprites/hit.png</key>
+            <key type="filename">Sprites/Sprites/layerChangeChannel.png</key>
+            <key type="filename">Sprites/Sprites/lobbyBg.png</key>
+            <key type="filename">Sprites/Sprites/loginBg.png</key>
+            <key type="filename">Sprites/Sprites/nameTag.png</key>
+            <key type="filename">Sprites/Sprites/nameTagBack.png</key>
+            <key type="filename">Sprites/Sprites/poke/거북왕.png</key>
+            <key type="filename">Sprites/Sprites/poke/나옹이.png</key>
+            <key type="filename">Sprites/Sprites/poke/망나뇽.png</key>
+            <key type="filename">Sprites/Sprites/poke/프테라.png</key>
+            <key type="filename">Sprites/Sprites/poke/피카츄.png</key>
+            <key type="filename">Sprites/Sprites/stand.png</key>
+            <key type="filename">Sprites/Sprites/tableBg.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -219,7 +218,7 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>.</filename>
+            <filename>Sprites</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

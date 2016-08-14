@@ -1,15 +1,16 @@
 #pragma once
 #include <memory>
+
 #include "Common.h"
 #include "ServerConfig.h"
 
-#include "LobbyManager.h"
 #include "UserManager.h"
+#include "RoomManager.h"
 #include "PacketProcess.h"
 #include "ILog.h"
 #include "ITcpNetwork.h"
 
-using ERROR_CODE = Common::ERROR_CODE;
+using ERROR_CODE = COMMON::ERROR_CODE;
 
 class App
 {
@@ -35,6 +36,5 @@ private:
 	std::unique_ptr<ITcpNetwork> m_pNetwork;
 	std::unique_ptr<PacketProcess> m_pPacketProc;
 	std::unique_ptr<UserManager> m_pUserMgr;
-	std::unique_ptr<LobbyManager> m_pLobbyMgr;
-
+	std::unique_ptr<RoomManager> m_pRoomMgr;
 };

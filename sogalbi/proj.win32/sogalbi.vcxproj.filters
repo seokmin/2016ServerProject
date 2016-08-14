@@ -10,6 +10,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{f2699f78-2012-4d89-826a-e5802794e99b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -29,6 +32,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\LoginScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LobbyScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -55,6 +61,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\LoginScene.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LobbyScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Packet.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
