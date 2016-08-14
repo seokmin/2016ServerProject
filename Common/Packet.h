@@ -73,7 +73,7 @@ namespace COMMON
 
 	struct PacketRoomListReq
 	{
-		short _pageSize;
+		short _pageSize; // if 0, get full list
 	};
 
 	struct PacketRoomListRes : PaketBase
@@ -86,5 +86,10 @@ namespace COMMON
 		short	_roomNum;
 		wchar_t _caption[MAX_ROOM_CAPTION_LEN+1];
 		short	_userCountInRoom;
+	};
+
+	struct RecvPacketInfo
+	{
+
 	};
 }
