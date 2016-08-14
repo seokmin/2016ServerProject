@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "LoginScene.h"
 #include "ResourceInfo.h"
+#include "ui\UITextField.h"
+#include "network\HttpRequest.h"
+#include "network\HttpClient.h"
+
+#pragma execution_character_set("UTF-8")
 
 cocos2d::Scene* LoginScene::createScene()
 {
@@ -36,11 +41,44 @@ void LoginScene::menuCloseCallback(cocos2d::Ref* pSender)
 	//_eventDispatcher->dispatchEvent(&customEndEvent);
 }
 
+void LoginScene::menuStartCallback(cocos2d::Ref* pSender)
+{
+	auto name = _nameField->getString();
+	auto pass = _passField->getString();
+
+	if (name == "")
+		MessageBoxW(nullptr,L"이름을 쳐!", L"오류다",MB_OK);
+	if (pass == "")
+		MessageBoxW(nullptr, L"비번을 쳐!", L"오류다", MB_OK);
+	auto request = new network::HttpRequest();
+	auto address = "http://10.73.43.23:8258/Request/Login";
+	request->setUrl(address);
+	request->setRequestType(network::HttpRequest::Type::POST);
+	request->setResponseCallback(CC_CALLBACK_2(LoginScene::startResponseCallback, this));
+	request->setHeaders({"Content-Type:application/json"});
+	std::string postData = "{\"UserID\" : \"" + name + "\",\"PW\" : \""
+		+ pass + "\"}";
+	request->setRequestData(postData.c_str(), postData.length());
+	network::HttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void LoginScene::startResponseCallback(network::HttpClient* sender, network::HttpResponse* response)
+{
+	auto resData = response->getResponseData();
+	auto resString = std::string("");
+	for (auto& i : *resData)
+		resString += i;
+
+	MessageBox(resString.c_str(), "response");
+}
+
 void LoginScene::initLayout()
 {
 	// 배경
 	auto bg = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::LOGIN_BG);
 	bg->setAnchorPoint(Vec2(0,0));
+	bg->getTexture()->setAliasTexParameters();
 	addChild(bg);
 
 	// 나가기 버튼
@@ -51,5 +89,30 @@ void LoginScene::initLayout()
 	leaveMenu->setPosition(1199.f, 674.f);
 	this->addChild(leaveMenu, DEF::Z_ORDER::UI);
 
-	// 제목
+	// 시작 버튼
+	auto startLabel = Label::createWithTTF("시작", FILENAME::FONT::SOYANON, 72);
+	startLabel->setColor(Color3B::GREEN);
+	auto startButton = MenuItemLabel::create(startLabel, CC_CALLBACK_1(LoginScene::menuStartCallback, this));
+	auto startMenu = Menu::create(startButton, nullptr);
+	startMenu->setAnchorPoint(Vec2(0, 0));
+	startMenu->setPosition(850, 230);
+	addChild(startMenu);
+
+	// 이름
+	_nameField = ui::TextField::create("닉네임", FILENAME::FONT::SOYANON, 48);
+	_nameField->setAnchorPoint(Vec2(0, 0));
+	_nameField->setPosition(Vec2(585, 282));
+	_nameField->setCursorEnabled(true);
+	_nameField->setMaxLength(5);
+	_nameField->setMaxLengthEnabled(true);
+	addChild(_nameField);
+
+	// 비밀번호
+	_passField = ui::TextField::create("asdfasdf", FILENAME::FONT::SOYANON, 48);
+	_passField->setAnchorPoint(Vec2(0, 0));
+	_passField->setPosition(Vec2(585, 170));
+	_passField->setPasswordEnabled(true);
+	_passField->setPasswordStyleText("*");
+	_passField->setCursorEnabled(true);
+	addChild(_passField);
 }
