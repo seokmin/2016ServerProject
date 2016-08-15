@@ -45,7 +45,6 @@ namespace COMMON
 	const auto MAX_USER_ID_LEN = 5;
 	const auto MAX_USER_PW_LEN = 10;
 	const auto AUTH_TOKEN_LEN = 20;
-	const auto NUM_OF_ROOM_IN_ONE_REQ = 6;
 	const auto MAX_ROOM_CAPTION_LEN = 15;
 
 	struct PaketHeader
@@ -54,13 +53,13 @@ namespace COMMON
 		short _bodySize;
 	};
 
-	//로그인은 로그인서버랑 HTTP로 하기로 한거 아님?
 	struct PaketBase
 	{
-		short _err_code = ERROR_CODE::NONE;
+		short _errorCode = ERROR_CODE::NONE;
 		void SetErrCode(ERROR_CODE errNum) { _err_code = (short)errNum; };
 	};
 
+	// 로그인 서버가 알려준 채널 서버 주소에 대해 id, 패스워드, 인증키를 보내며 로그인을 요청한다.
 	struct PaketLoginReq
 	{
 		wchar_t _id[MAX_USER_ID_LEN+1];
@@ -68,20 +67,27 @@ namespace COMMON
 		char	_authToken[AUTH_TOKEN_LEN + 1];
 	};
 
+	// _errorCode가 ERROR_CODE::NONE이면 성공으로 간주
 	struct PacketLoginRes : PaketBase
 	{
 	};
 
+	// 특정 페이지에 대한 룸 정보를 요청한다.
 	struct PacketRoomListReq
 	{
-		short _pageSize; // if 0, get full list
+		short _pageNum;
+		//short _pageSize; // if 0, get full list
 	};
 
+	// 해당 페이지에 대한 룸 정보를 모두 보내준다.
+	const auto NUM_OF_ROOMS_IN_PAGE = 6;
 	struct PacketRoomListRes : PaketBase
 	{
-		short	_pageNum;
+		RoomInfoSmall _roomInfos[NUM_OF_ROOM_IN_ONE_REQ];
+		//short	_pageNum;
 	};
 
+	// 로비에 보여지기 위한 룸 정보
 	struct RoomInfoSmall : PaketBase
 	{
 		short	_roomNum;
@@ -89,6 +95,7 @@ namespace COMMON
 		short	_userCountInRoom;
 	};
 
+	// 이건 서버에서만 쓰지 않을까요?
 	struct RecvPacketInfo
 	{
 		int SessionIndex = 0;
