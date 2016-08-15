@@ -1,0 +1,14 @@
+{
+  "Result": 0,
+  "AuthToken": "fExs6b7vrUp53bwZB5qtQ", // 20자리 문자열
+  "Pokemon": 18,
+  "Channel": 
+    {
+      "Name": "채널 코코스",
+      "Rgb": {"r": 255, "g": 125, "b": 0},
+      "IP": "127.0.0.1",
+      "Port": 123,
+      "MaxNum": 100, // 최대 접속자 수
+      "CurNum": 0 // 현재 접속자 수
+    }
+}

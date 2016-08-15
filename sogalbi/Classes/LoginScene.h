@@ -1,5 +1,7 @@
 #pragma once
 
+#include "json/json.h"
+
 namespace cocos2d
 {
 	namespace ui
@@ -30,6 +32,7 @@ public:
 
 private:
 	void initLayout();
-	ui::TextField* _nameField;
-	ui::TextField* _passField;
+	ui::TextField*	_nameField;
+	ui::TextField*	_passField;
+	Json::Reader	_reader;
 };

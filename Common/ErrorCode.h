@@ -53,5 +53,20 @@ namespace COMMON
 		ROOM_EMOTION_INVALID_EMOTION = 302,
 		ROOM_EMOTION_INVALID_ROOM_INDEX = 303,
 	};
-
+	/*
+	Result Status
+	0 : No Error
+	10 : Invalid Password
+	11 : Create Account Error
+	12 : Create Successful
+	13 : Get User Error
+	*/
+	enum RESULT_LOGIN : short
+	{
+		SUCCESS_LOGIN = 0,
+		SUCCESS_CREATE_ACCOUNT = 12,
+		ERR_INVALID_PASSWORD = 10,
+		ERR_CREATE_ACCOUNT = 11,
+		ERR_GET_USER = 13
+	};
 };

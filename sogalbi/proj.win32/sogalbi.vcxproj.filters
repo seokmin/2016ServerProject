@@ -13,6 +13,9 @@
     <Filter Include="Common">
       <UniqueIdentifier>{f2699f78-2012-4d89-826a-e5802794e99b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\jsoncpp">
+      <UniqueIdentifier>{15742fec-48ec-44b1-802f-3bdbf4bd4624}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -36,6 +39,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\LobbyScene.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jsoncpp.cpp">
+      <Filter>src\jsoncpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +72,18 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Common\Packet.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\json\json.h">
+      <Filter>src\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\json\json-forwards.h">
+      <Filter>src\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\ErrorCode.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Common.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
