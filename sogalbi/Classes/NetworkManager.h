@@ -7,7 +7,7 @@ public:
 
 	void connectTcp(std::string serverIp, int serverPort);
 
-	void sendPacket_LogIn();
+	void sendPacket_LogIn(std::string authToken);
 
 
 private:
