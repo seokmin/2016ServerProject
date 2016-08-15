@@ -59,11 +59,9 @@ namespace COMMON
 		void SetErrCode(ERROR_CODE errNum) { _errorCode = (short)errNum; };
 	};
 
-	// 로그인 서버가 알려준 채널 서버 주소에 대해 id, 패스워드, 인증키를 보내며 로그인을 요청한다.
+	// 로그인 서버가 알려준 채널 서버 주소에 대해 인증키를 보내며 로그인을 요청한다.
 	struct PaketLoginReq
 	{
-		wchar_t _id[MAX_USER_ID_LEN+1];
-		wchar_t _pw[MAX_USER_PW_LEN+1];
 		char	_authToken[AUTH_TOKEN_LEN + 1];
 	};
 
