@@ -3,6 +3,7 @@
 
 namespace COMMON
 {
+
 	// 21 이상에서 시작해야함.
 	enum PACKET_ID : short
 	{
@@ -20,12 +21,11 @@ namespace COMMON
 
 		CHANNEL_JOIN_REQ = 41,
 		CHANNEL_JOIN_RES = 42,
-		CHANNEL_JOIN_NTF = 43,
+		CHANNEL_JOIN_NTF = 43, // 필요 없을 듯?
 
 		CHANNEL_LEAVE_REQ = 51,
 		CHANNEL_LEAVE_RES = 52,
-		CHANNEL_LEAVE_USER_NTF = 53,
-
+		CHANNEL_LEAVE_USER_NTF = 53, // 이것도 필요 없을 듯.
 
 		GAME_BET_REQ = 101,
 		GAME_BET_RES = 102,
@@ -42,31 +42,33 @@ namespace COMMON
 		MAX = 255,
 	};
 
+	const auto MAX_PACKET_SIZE = 1024;
 	const auto MAX_USER_ID_LEN = 5;
 	const auto MAX_USER_PW_LEN = 10;
 	const auto AUTH_TOKEN_LEN = 20;
 	const auto MAX_ROOM_CAPTION_LEN = 15;
 
-	struct PaketHeader
+	struct PacketHeader
 	{
-		short _id;
-		short _bodySize;
+		PACKET_ID	_id;
+		short		_bodySize;
 	};
+	const auto PACKET_HEADER_SIZE = sizeof(PacketHeader);
 
-	struct PaketBase
+	struct PacketBase
 	{
 		short _errorCode = ERROR_CODE::NONE;
 		void SetErrCode(ERROR_CODE errNum) { _errorCode = (short)errNum; };
 	};
 
 	// 로그인 서버가 알려준 채널 서버 주소에 대해 인증키를 보내며 로그인을 요청한다.
-	struct PaketLoginReq
+	struct PacketLoginReq
 	{
 		char	_authToken[AUTH_TOKEN_LEN + 1];
 	};
 
 	// _errorCode가 ERROR_CODE::NONE이면 성공으로 간주
-	struct PacketLoginRes : PaketBase
+	struct PacketLoginRes : PacketBase
 	{
 	};
 
@@ -78,7 +80,7 @@ namespace COMMON
 	};
 
 	// 로비에 보여지기 위한 룸 정보
-	struct RoomInfoSmall : PaketBase
+	struct RoomInfoSmall : PacketBase
 	{
 		short	_roomNum;
 		wchar_t _caption[MAX_ROOM_CAPTION_LEN + 1];
@@ -87,7 +89,7 @@ namespace COMMON
 
 	// 해당 페이지에 대한 룸 정보를 모두 보내준다.
 	const auto NUM_OF_ROOMS_IN_PAGE = 6;
-	struct PacketRoomListRes : PaketBase
+	struct PacketRoomListRes : PacketBase
 	{
 		RoomInfoSmall _roomInfos[NUM_OF_ROOMS_IN_PAGE];
 		//short	_pageNum;

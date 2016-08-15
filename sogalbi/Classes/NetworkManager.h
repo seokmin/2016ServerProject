@@ -1,4 +1,5 @@
 #pragma once
+
 class NetworkManager
 {
 public:
@@ -7,9 +8,12 @@ public:
 	void connectTcp(std::string serverIp, int serverPort);
 
 	void sendPacket_LogIn();
+
+
 private:
 	NetworkManager();
-	void initTcp();
+	void	initTcp();
+	void	sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData);
 
 private:
 	static NetworkManager* _instance;

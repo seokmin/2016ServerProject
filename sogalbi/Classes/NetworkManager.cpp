@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "NetworkManager.h"
+#include "..\..\Common\Packet.h"
 #include "Ws2tcpip.h"
-
+#include "NetworkManager.h"
 
 NetworkManager* NetworkManager::_instance = nullptr;
 
@@ -29,6 +29,22 @@ void NetworkManager::initTcp()
 	}
 }
 
+void NetworkManager::sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData)
+{
+	char data[COMMON::MAX_PACKET_SIZE] = { 0, };
+
+	// 헤더
+	COMMON::PacketHeader packetHeader{ packetId,dataSize };
+	memcpy(data, (char*)&packetHeader, COMMON::PACKET_HEADER_SIZE);
+
+	// 데이터
+	if (dataSize > 0)
+		memcpy(data + COMMON::PACKET_HEADER_SIZE, pData, dataSize);
+
+	// 전송
+	send(_sock, data, dataSize + COMMON::PACKET_HEADER_SIZE, 0);
+}
+
 NetworkManager* NetworkManager::getInstance()
 {
 	if (_instance == nullptr)
@@ -48,4 +64,13 @@ void NetworkManager::connectTcp(std::string serverIp, int serverPort)
 	auto result = connect(_sock,(SOCKADDR*)&serverAddr, sizeof(serverAddr));
 	if (result == SOCKET_ERROR)
 		log("connet() failed");
+}
+
+void NetworkManager::sendPacket_LogIn(std::string authToken)
+{
+	auto packetId = COMMON::PACKET_ID::CHANNEL_JOIN_REQ;
+	auto data = COMMON::PacketLoginReq{};
+	strncpy_s(data._authToken, authToken.c_str(), strlen(authToken.c_str()));
+	sendPacket(packetId, sizeof(data), (char*)&data);
+	log("packet sent");
 }
