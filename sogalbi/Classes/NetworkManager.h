@@ -4,9 +4,9 @@ class NetworkManager
 public:
 	static NetworkManager* getInstance();
 
-	void init();
-	void mainLoop();
-	bool connectTcp(std::string serverIp, int serverPort);
+	void connectTcp(std::string serverIp, int serverPort);
+
+	void sendPacket_LogIn();
 private:
 	NetworkManager();
 	void initTcp();
@@ -14,4 +14,6 @@ private:
 private:
 	static NetworkManager* _instance;
 	SOCKET _sock;
+	std::string	_serverIp;
+	int			_port;
 };

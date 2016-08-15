@@ -7,6 +7,7 @@
 #include "..\..\Common\Packet.h"
 #include "ResourceInfo.h"
 #include "LoginScene.h"
+#include "NetworkManager.h"
 
 #pragma execution_character_set("UTF-8")
 
@@ -108,21 +109,24 @@ void LoginScene::startResponseCallback(network::HttpClient* sender, network::Htt
 	auto result = (COMMON::RESULT_LOGIN)loginRes.get("Result", "failed").asInt();
 	auto authToken = loginRes.get("AuthToken", "failed").asString();
 	auto pokeNum = loginRes.get("Pokemon", -1).asInt();
+	DEF::ChannelInfo channel;
 	{
-		auto channelInfo = loginRes.get("Channel", "failed");
-		auto name = channelInfo.get("Name", "failed").asString();
-		auto ip = channelInfo.get("IP", nullptr).asString();
-		auto port = channelInfo.get("Port", nullptr).asInt();
-		auto maxUserNum = channelInfo.get("MaxNum", nullptr).asInt();
-		auto currentUserNum = channelInfo.get("CurNum", nullptr).asInt();
+		auto channelValue = loginRes.get("Channel", "failed");
+		channel.name = channelValue.get("Name", "failed").asString();
+		channel.address = channelValue.get("IP", nullptr).asString();
+		channel.port = channelValue.get("Port", nullptr).asInt();
+		channel.maxUser = channelValue.get("MaxNum", nullptr).asInt();
+		channel.currentUser = channelValue.get("CurNum", nullptr).asInt();
 		{
-			auto rgb = channelInfo.get("Rgb", nullptr);
-			auto r = rgb.get("r", -1).asInt();
-			auto g = rgb.get("g", -1).asInt();
-			auto b = rgb.get("b", -1).asInt();
+			auto rgb = channelValue.get("Rgb", nullptr);
+			channel.color.r = rgb.get("r", -1).asInt();
+			channel.color.g = rgb.get("g", -1).asInt();
+			channel.color.b = rgb.get("b", -1).asInt();
 		}
 	}
-
+	auto scheduler = Director::getInstance()->getScheduler();
+	scheduler->performFunctionInCocosThread(
+		CC_CALLBACK_0(NetworkManager::connectTcp, NetworkManager::getInstance(), channel.address, channel.port));
 }
 
 void LoginScene::initLayout()

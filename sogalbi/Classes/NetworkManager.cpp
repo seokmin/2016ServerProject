@@ -2,6 +2,7 @@
 #include "NetworkManager.h"
 #include "Ws2tcpip.h"
 
+
 NetworkManager* NetworkManager::_instance = nullptr;
 
 NetworkManager::NetworkManager()
@@ -28,8 +29,15 @@ void NetworkManager::initTcp()
 	}
 }
 
+NetworkManager* NetworkManager::getInstance()
+{
+	if (_instance == nullptr)
+		_instance = new NetworkManager();
+	return _instance;
+}
+
 // 성공시 true, 실패시 false 반환
-bool NetworkManager::connectTcp(std::string serverIp, int serverPort)
+void NetworkManager::connectTcp(std::string serverIp, int serverPort)
 {
 	SOCKADDR_IN serverAddr;
 	ZeroMemory(&serverAddr, sizeof(serverAddr));
@@ -39,6 +47,5 @@ bool NetworkManager::connectTcp(std::string serverIp, int serverPort)
 	
 	auto result = connect(_sock,(SOCKADDR*)&serverAddr, sizeof(serverAddr));
 	if (result == SOCKET_ERROR)
-		return false;
-	return true;
+		log("connet() failed");
 }
