@@ -56,7 +56,7 @@ namespace COMMON
 	struct PaketBase
 	{
 		short _errorCode = ERROR_CODE::NONE;
-		void SetErrCode(ERROR_CODE errNum) { _err_code = (short)errNum; };
+		void SetErrCode(ERROR_CODE errNum) { _errorCode = (short)errNum; };
 	};
 
 	// 로그인 서버가 알려준 채널 서버 주소에 대해 id, 패스워드, 인증키를 보내며 로그인을 요청한다.
@@ -79,20 +79,20 @@ namespace COMMON
 		//short _pageSize; // if 0, get full list
 	};
 
-	// 해당 페이지에 대한 룸 정보를 모두 보내준다.
-	const auto NUM_OF_ROOMS_IN_PAGE = 6;
-	struct PacketRoomListRes : PaketBase
-	{
-		RoomInfoSmall _roomInfos[NUM_OF_ROOM_IN_ONE_REQ];
-		//short	_pageNum;
-	};
-
 	// 로비에 보여지기 위한 룸 정보
 	struct RoomInfoSmall : PaketBase
 	{
 		short	_roomNum;
-		wchar_t _caption[MAX_ROOM_CAPTION_LEN+1];
+		wchar_t _caption[MAX_ROOM_CAPTION_LEN + 1];
 		short	_userCountInRoom;
+	};
+
+	// 해당 페이지에 대한 룸 정보를 모두 보내준다.
+	const auto NUM_OF_ROOMS_IN_PAGE = 6;
+	struct PacketRoomListRes : PaketBase
+	{
+		RoomInfoSmall _roomInfos[NUM_OF_ROOMS_IN_PAGE];
+		//short	_pageNum;
 	};
 
 	// 이건 서버에서만 쓰지 않을까요?
