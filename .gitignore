@@ -11,6 +11,7 @@ ResourcePot/
 cocos2d/
 Debug.win32/
 Release.win32/
+.vscode/
 
 sogalbi/proj.android-studio/*.gradle
 sogalbi/proj.android-studio/local.properties
