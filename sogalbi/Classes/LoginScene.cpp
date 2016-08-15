@@ -2,12 +2,14 @@
 #include "ui\UITextField.h"
 #include "network\HttpRequest.h"
 #include "network\HttpClient.h"
+#include <thread>
 
 #include "..\..\Common\ErrorCode.h"
 #include "..\..\Common\Packet.h"
 #include "ResourceInfo.h"
 #include "LoginScene.h"
 #include "NetworkManager.h"
+#include "ClientLogger.h"
 
 #pragma execution_character_set("UTF-8")
 
@@ -103,6 +105,12 @@ void LoginScene::startResponseCallback(network::HttpClient* sender, network::Htt
 	for (auto& i : *resData)
 		resString += i;
 
+	if (resString == "")
+	{
+		ClientLogger::logThreadSafe("로그인 서버가 응답하지 않습니다!");
+		ClientLogger::msgBox(L"로그인 서버가 응답하지 않습니다!",true);
+		return;
+	}
 	// Json 파싱
 	Json::Value loginRes;
 	_reader.parse(resString, loginRes);
@@ -124,9 +132,9 @@ void LoginScene::startResponseCallback(network::HttpClient* sender, network::Htt
 			channel.color.b = rgb.get("b", -1).asInt();
 		}
 	}
-	auto scheduler = Director::getInstance()->getScheduler();
-	scheduler->performFunctionInCocosThread(
-		CC_CALLBACK_0(NetworkManager::connectTcp, NetworkManager::getInstance(), channel.address, channel.port));
+	auto bindFunc = CC_CALLBACK_0(NetworkManager::connectTcp, NetworkManager::getInstance(), channel.address, channel.port);
+	auto newThread = std::thread(bindFunc);
+	
 }
 
 void LoginScene::initLayout()

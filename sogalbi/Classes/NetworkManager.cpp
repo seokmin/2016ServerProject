@@ -2,6 +2,7 @@
 #include "..\..\Common\Packet.h"
 #include "Ws2tcpip.h"
 #include "NetworkManager.h"
+#include "ClientLogger.h"
 
 NetworkManager* NetworkManager::_instance = nullptr;
 
@@ -55,6 +56,7 @@ NetworkManager* NetworkManager::getInstance()
 // 성공시 true, 실패시 false 반환
 void NetworkManager::connectTcp(std::string serverIp, int serverPort)
 {
+	_mutex.lock();
 	SOCKADDR_IN serverAddr;
 	ZeroMemory(&serverAddr, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
@@ -63,14 +65,17 @@ void NetworkManager::connectTcp(std::string serverIp, int serverPort)
 	
 	auto result = connect(_sock,(SOCKADDR*)&serverAddr, sizeof(serverAddr));
 	if (result == SOCKET_ERROR)
-		log("connet() failed");
+		ClientLogger::logThreadSafe("connect() failed");
+	_mutex.unlock();
 }
 
 void NetworkManager::sendPacket_LogIn(std::string authToken)
 {
+	_mutex.lock();
 	auto packetId = COMMON::PACKET_ID::CHANNEL_JOIN_REQ;
 	auto data = COMMON::PacketLoginReq{};
 	strncpy_s(data._authToken, authToken.c_str(), strlen(authToken.c_str()));
 	sendPacket(packetId, sizeof(data), (char*)&data);
-	log("packet sent");
+	ClientLogger::logThreadSafe("send packet success");
+	_mutex.unlock();
 }

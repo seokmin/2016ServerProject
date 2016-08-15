@@ -43,6 +43,9 @@
     <ClCompile Include="..\Classes\jsoncpp.cpp">
       <Filter>src\jsoncpp</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\ClientLogger.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Common\Common.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ClientLogger.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

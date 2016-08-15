@@ -17,6 +17,7 @@ private:
 
 private:
 	static NetworkManager* _instance;
+	std::mutex	_mutex;
 	SOCKET _sock;
 	std::string	_serverIp;
 	int			_port;
