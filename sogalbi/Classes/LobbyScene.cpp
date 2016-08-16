@@ -7,10 +7,10 @@
 
 #pragma execution_character_set("UTF-8")
 
-cocos2d::Scene* LobbyScene::createScene()
+cocos2d::Scene* LobbyScene::createScene(DEF::ChannelInfo info)
 {
 	auto scene = Scene::create();
-	auto layer = LobbyScene::create();
+	auto layer = LobbyScene::create(info);
 	scene->addChild(layer);
 
 	return scene;
@@ -28,23 +28,32 @@ bool LobbyScene::init()
 
 void LobbyScene::menuCloseCallback(cocos2d::Ref* pSender)
 {
-	//Close the cocos2d-x game scene and quit the application
-	Director::getInstance()->end();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	exit(0);
-#endif
-
-	/*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() and exit(0) as given above,instead trigger a custom event created in RootViewController.mm as below*/
-
-	//EventCustom customEndEvent("game_scene_close_event");
-	//_eventDispatcher->dispatchEvent(&customEndEvent);
+	// 이전 씬으로 돌아간다.
+	Director::getInstance()->popScene();
 }
+
+LobbyScene* LobbyScene::create(DEF::ChannelInfo info)
+{
+	LobbyScene *pRet = new(std::nothrow) LobbyScene();
+	pRet->_channelInfo = info;
+	if (pRet && pRet->init())
+	{
+		pRet->autorelease();
+		return pRet;
+	}
+	else
+	{
+		delete pRet;
+		pRet = nullptr;
+		return nullptr;
+	}
+}
+
 void LobbyScene::initLayout()
 {
 	// 배경
 	auto bg = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::LOBBY_BG);
-	bg->setAnchorPoint(Vec2(0,0));
+	bg->setAnchorPoint(Vec2(0, 0));
 	bg->getTexture()->setAliasTexParameters();
 	addChild(bg);
 
@@ -54,5 +63,11 @@ void LobbyScene::initLayout()
 	auto leaveButton = MenuItemLabel::create(leaveLabel, CC_CALLBACK_1(LobbyScene::menuCloseCallback, this));
 	auto leaveMenu = Menu::create(leaveButton, nullptr);
 	leaveMenu->setPosition(1199.f, 674.f);
-	this->addChild(leaveMenu, DEF::Z_ORDER::UI);
+	addChild(leaveMenu, DEF::Z_ORDER::UI);
+
+	// 좌측 상단 라벨
+	_serverLabel = Label::createWithTTF(_channelInfo.name, FILENAME::FONT::SOYANON, 64);
+	_serverLabel->setColor(Color3B(_channelInfo.color));
+	_serverLabel->setPosition(200, 670);
+	addChild(_serverLabel);
 }

@@ -10,6 +10,7 @@
 #include "LoginScene.h"
 #include "NetworkManager.h"
 #include "ClientLogger.h"
+#include "LobbyScene.h"
 
 #pragma execution_character_set("UTF-8")
 
@@ -59,6 +60,16 @@ std::wstring getStringFromFilename(std::string filename)
 }
 void LoginScene::menuStartCallback(cocos2d::Ref* pSender)
 {
+
+	// 디버그용 : 일단 무조건 로비씬으로 간다.
+	DEF::ChannelInfo inf;
+	inf.name = "채널 코코스";
+	inf.color = Color3B::RED;
+	
+	auto lobbyScene = LobbyScene::createScene(inf);
+	Director::getInstance()->pushScene(lobbyScene);
+	return;
+
  	auto name = _nameField->getString();
  	auto pass = _passField->getString();
  
@@ -79,24 +90,6 @@ void LoginScene::menuStartCallback(cocos2d::Ref* pSender)
  	request->release();
 }
 
-/*
-RES_LOGIN
-{
-“Result”: 0,
-“AuthToken”: “fExs6b7vrUp53bwZB5qtQ”, // 20자리 문자열
-“Pokemon”: 18,
-“Channel”:
-{
-“Name”: “채널 코코스”,
-“Color”: “F226DA”,
-“IP”: “127.0.0.1”,
-“Port”: “123”,
-“MaxNum”: 100, // 최대 접속자 수
-“CurNum”: 0, // 현재 접속자 수
-“IsOpen”: true // 필요 없을 것 같다.
-}
-}
-*/
 void LoginScene::startResponseCallback(network::HttpClient* sender, network::HttpResponse* response)
 {
 	// 받아온 정보를 문자열로 변환
@@ -175,6 +168,8 @@ void LoginScene::initLayout()
 	_passField = ui::TextField::create("****", FILENAME::FONT::SOYANON, 48);
 	_passField->setAnchorPoint(Vec2(0, 0));
 	_passField->setPosition(Vec2(585, 170));
+	_passField->setMaxLength(10);
+	_passField->setMaxLengthEnabled(true);
 	_passField->setPasswordEnabled(true);
 	_passField->setPasswordStyleText("*");
 	_passField->setCursorEnabled(true);
