@@ -154,7 +154,7 @@ void LoginScene::initLayout()
 	startMenu->setAnchorPoint(Vec2(0, 0));
 	startMenu->setPosition(850, 230);
 	addChild(startMenu);
-
+	
 	// 이름
 	_nameField = ui::TextField::create("닉네임", FILENAME::FONT::SOYANON, 48);
 	_nameField->setAnchorPoint(Vec2(0, 0));
