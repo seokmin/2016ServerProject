@@ -2,6 +2,8 @@
 #include "ui\UITextField.h"
 #include "network\HttpRequest.h"
 #include "network\HttpClient.h"
+#include "SimpleAudioEngine.h"
+
 #include <thread>
 
 #include "..\..\Common\ErrorCode.h"
@@ -28,7 +30,11 @@ bool LoginScene::init()
 	if (!Layer::init())
 		return false;
 
+	// ·¹ÀÌ¾Æ¿ô
 	initLayout();
+
+	// bgm
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::LOGIN_BGM.c_str(), true);
 
 	return true;
 }

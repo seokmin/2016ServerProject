@@ -5,6 +5,7 @@ namespace FOLDERNAME
 {
 	const std::string SPRITE = "Sprites/";
 	const std::string FONT = "fonts/";
+	const std::string AUDIO = "Sounds/";
 }
 
 namespace FILENAME
@@ -36,5 +37,9 @@ namespace FILENAME
 	{
 		DEF_FILENAME(FONT, PIXEL, "pixel.ttf");
 		DEF_FILENAME(FONT, SOYANON, "default.ttf");
+	}
+	namespace AUDIO
+	{
+		DEF_FILENAME(AUDIO, LOGIN_BGM, "login.mp3");
 	}
 }
