@@ -23,9 +23,9 @@ public:
 	short MaxClientRecvBufferSize;
 	short MaxClientSendBufferSize;
 
-	int MaxChannelUserCount = 100;
-	int MaxRoomCountByLobby = 20;
-	int MaxRoomUserCount = 5;
+	static const int MaxChannelUserCount = 100;
+	static const int MaxRoomCount = 20;
+	static const int MaxRoomUserCount = 5;
 
 	// 에러 코드는 1 ~ 200까지 사용한다.
 	enum NET_ERROR_CODE : short

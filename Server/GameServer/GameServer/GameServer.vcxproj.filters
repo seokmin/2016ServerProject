@@ -19,9 +19,6 @@
     <Filter Include="Header Files\Network">
       <UniqueIdentifier>{7557d7f0-216d-4d87-90d7-afb7bdc8ac29}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Manager">
-      <UniqueIdentifier>{934ac84c-ec6c-4246-952a-3997eaf65afc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\DB">
       <UniqueIdentifier>{2ddf4dbd-0fc6-495f-98aa-d5cd1afc60c7}</UniqueIdentifier>
     </Filter>
@@ -66,12 +63,6 @@
     <ClInclude Include="PacketProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RoomManager.h">
-      <Filter>Header Files\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="UserManager.h">
-      <Filter>Header Files\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="MysqlManager.h">
       <Filter>Source Files\DB</Filter>
     </ClInclude>
@@ -79,6 +70,15 @@
       <Filter>Source Files\DB</Filter>
     </ClInclude>
     <ClInclude Include="User.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -111,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RoomManager.cpp">
+      <Filter>Source Files\Room</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
       <Filter>Source Files\Room</Filter>
     </ClCompile>
   </ItemGroup>

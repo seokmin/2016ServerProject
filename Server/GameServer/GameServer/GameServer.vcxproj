@@ -150,6 +150,7 @@
     <ClInclude Include="NetworkConfig.h" />
     <ClInclude Include="NetworkManager_mock.h" />
     <ClInclude Include="PacketProcess.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="RoomManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="MysqlManager.cpp" />
     <ClCompile Include="NetworkManager_mock.cpp" />
     <ClCompile Include="PacketProcess.cpp" />
+    <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
