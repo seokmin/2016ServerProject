@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>4.2.3</string>
         <key>fileName</key>
-        <string>C:/Users/Sorae/Documents/GitHub/2016ServerProject/sogalbi/Resources/atlas.tps</string>
+        <string>D:/DATA/Work/GitHubProjects/2016ServerProject/sogalbi/Resources/atlas.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -194,6 +194,15 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">Sprites/Sprites/Dummy/dummy1.png</key>
+            <key type="filename">Sprites/Sprites/Dummy/dummy2.png</key>
+            <key type="filename">Sprites/Sprites/Dummy/dummy3.png</key>
+            <key type="filename">Sprites/Sprites/Dummy/dummy4.png</key>
+            <key type="filename">Sprites/Sprites/Dummy/dummy5.png</key>
+            <key type="filename">Sprites/Sprites/Dummy/dummy6.png</key>
+            <key type="filename">Sprites/Sprites/Dummy/dummy7.png</key>
+            <key type="filename">Sprites/Sprites/Dummy/dummy8.png</key>
+            <key type="filename">Sprites/Sprites/arrow.png</key>
             <key type="filename">Sprites/Sprites/bannerBlackJack.png</key>
             <key type="filename">Sprites/Sprites/bannerStand.png</key>
             <key type="filename">Sprites/Sprites/bannerWaiting.png</key>

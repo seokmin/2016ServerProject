@@ -12,9 +12,8 @@
 #include "LoginScene.h"
 #include "NetworkManager.h"
 #include "ClientLogger.h"
-#include "LobbyScene.h"
 
-#pragma execution_character_set("UTF-8")
+//#pragma execution_character_set("UTF-8")
 
 cocos2d::Scene* LoginScene::createScene()
 {
@@ -39,7 +38,7 @@ bool LoginScene::init()
 	return true;
 }
 
-void LoginScene::menuCloseCallback(cocos2d::Ref* pSender)
+void LoginScene::leaveButtonClicked(cocos2d::Ref* pSender)
 {
 	//Close the cocos2d-x game scene and quit the application
 	Director::getInstance()->end();
@@ -54,130 +53,258 @@ void LoginScene::menuCloseCallback(cocos2d::Ref* pSender)
 	//_eventDispatcher->dispatchEvent(&customEndEvent);
 }
 
-std::wstring getStringFromFilename(std::string filename)
+void LoginScene::loginButtonClicked(cocos2d::Ref* pSender)
 {
-	std::wstring s;
-	FileUtils::getInstance()->getContents(filename, &s);
+	_loginMenu->setEnabled(false);
+
+	// 테스트 json 입력
+// 	loginResponseArrived(nullptr, nullptr);
+// 	return;
+	// 테스트 끝
 	
-	// truncated
-	s.resize(wcslen(s.data()));
+	auto name = _nameField->getString();
+	auto pass = _passField->getString();
 
-	return s;
-}
-void LoginScene::menuStartCallback(cocos2d::Ref* pSender)
-{
-
-	// 디버그용 : 일단 무조건 로비씬으로 간다.
-	DEF::ChannelInfo inf;
-	inf.name = "채널 코코스";
-	inf.color = Color3B::RED;
-	
-	auto lobbyScene = LobbyScene::createScene(inf);
-	Director::getInstance()->pushScene(lobbyScene);
-	return;
-
- 	auto name = _nameField->getString();
- 	auto pass = _passField->getString();
- 
- 	if (name == "")
- 		MessageBoxW(nullptr,L"이름을 쳐!", L"오류다",MB_OK);
- 	if (pass == "")
- 		MessageBoxW(nullptr, L"비번을 쳐!", L"오류다", MB_OK);
- 	auto request = new network::HttpRequest();
- 	auto address = "http://10.73.43.23:8258/Request/Login";
- 	request->setUrl(address);
- 	request->setRequestType(network::HttpRequest::Type::POST);
- 	request->setResponseCallback(CC_CALLBACK_2(LoginScene::startResponseCallback, this));
- 	request->setHeaders({"Content-Type:application/json"});
- 	std::string postData = "{\"UserID\" : \"" + name + "\",\"PW\" : \""
- 		+ pass + "\"}";
- 	request->setRequestData(postData.c_str(), postData.length());
- 	network::HttpClient::getInstance()->send(request);
- 	request->release();
+	if (name == "")
+		MessageBoxW(nullptr, L"이름을 쳐!", L"오류다", MB_OK);
+	else if (pass == "")
+		MessageBoxW(nullptr, L"비번을 쳐!", L"오류다", MB_OK);
+	else
+	{
+		auto request = new network::HttpRequest();
+		auto address = "http://10.73.43.23:8258/Request/Login";
+		request->setUrl(address);
+		request->setRequestType(network::HttpRequest::Type::POST);
+		request->setResponseCallback(CC_CALLBACK_2(LoginScene::loginResponseArrived, this));
+		request->setHeaders({ "Content-Type:application/json" });
+		std::string postData = "{\"UserID\" : \"" + name + "\",\"PW\" : \""
+			+ pass + "\"}";
+		request->setRequestData(postData.c_str(), postData.length());
+		network::HttpClient::getInstance()->send(request);
+		request->release();
+		return;
+	}
+	// 이름이나 비번 안친 경우이므로 로그인 버튼 다시 누를 수 있게
+	_loginMenu->setEnabled(true);
 }
 
-void LoginScene::startResponseCallback(network::HttpClient* sender, network::HttpResponse* response)
+void LoginScene::logoutButtonClicked(Ref* pSender)
 {
+	// 로그아웃버튼 광클 못하게
+	_logoutMenu->setEnabled(false);
+
+	popDownChannelsLayer();
+	auto request = new network::HttpRequest();
+	auto address = "http://10.73.43.23:8258/Request/Logout";
+	request->setUrl(address);
+	request->setRequestType(network::HttpRequest::Type::POST);
+	request->setResponseCallback(CC_CALLBACK_2(LoginScene::logoutResponseArrived, this));
+	request->setHeaders({ "Content-Type:application/json" });
+	std::string postData = "{\"AuthToken\" : \"" + _authToken + "\"}";
+	request->setRequestData(postData.c_str(), postData.length());
+	network::HttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void LoginScene::loginResponseArrived(network::HttpClient* sender, network::HttpResponse* response)
+{
+
+	//auto resString = FileUtils::getInstance()->getStringFromFile("test.json");
+
 	// 받아온 정보를 문자열로 변환
 	auto resData = response->getResponseData();
 	auto resString = std::string("");
 	for (auto& i : *resData)
-		resString += i;
+ 		resString += i;
 
 	if (resString == "")
 	{
-		ClientLogger::logThreadSafe("로그인 서버가 응답하지 않습니다!");
-		ClientLogger::msgBox(L"로그인 서버가 응답하지 않습니다!",true);
+		ClientLogger::msgBox(L"로그인 서버가 응답하지 않습니다!", L"로그인 실패", true);
+		_loginMenu->setEnabled(true); // 로그인 실패했으므로 다시 누를 수 있게
 		return;
 	}
-	// Json 파싱
-	Json::Value loginRes;
-	_reader.parse(resString, loginRes);
-	auto result = (COMMON::RESULT_LOGIN)loginRes.get("Result", "failed").asInt();
-	auto authToken = loginRes.get("AuthToken", "failed").asString();
-	auto pokeNum = loginRes.get("Pokemon", -1).asInt();
-	DEF::ChannelInfo channel;
+
+	// 받아온 정보 파싱
+	auto channels = std::vector<DEF::ChannelInfo>();
+	parseChannelInfo(resString, channels);
+	popUpChannelsLayer(channels);
+
+}
+
+void LoginScene::logoutResponseArrived(network::HttpClient* sender, network::HttpResponse* response)
+{
+	// 로그아웃 성공시
+	// 로그아웃 버튼 다시 누를 수 있게
+	_logoutMenu->setEnabled(true);
+	_loginMenu->setEnabled(true);
+}
+
+void LoginScene::channelButtonClicked(DEF::ChannelInfo& targetChannel)
+{
+	// 채널버튼 여러번 클릭 못하게
+	_channelsMenu->setEnabled(false);
+	log(u8"채널 접속 시도");
+	log(targetChannel.name.c_str());
+
+	// 현재 칩으로 들어갈 수 있는 채널인지 확인
+	if (_currentChip < targetChannel.minBet || _currentChip > targetChannel.maxBet)
 	{
-		auto channelValue = loginRes.get("Channel", "failed");
-		channel.name = channelValue.get("Name", "failed").asString();
-		channel.address = channelValue.get("IP", nullptr).asString();
-		channel.port = channelValue.get("Port", nullptr).asInt();
-		channel.maxUser = channelValue.get("MaxNum", nullptr).asInt();
-		channel.currentUser = channelValue.get("CurNum", nullptr).asInt();
-		{
-			auto rgb = channelValue.get("Rgb", nullptr);
-			channel.color.r = rgb.get("r", -1).asInt();
-			channel.color.g = rgb.get("g", -1).asInt();
-			channel.color.b = rgb.get("b", -1).asInt();
-		}
+		ClientLogger::msgBox(L"현재 보유 칩으로는 입장할 수 없습니다.", L"입장 실패", true);
+		return;
 	}
-	auto bindFunc = CC_CALLBACK_0(NetworkManager::connectTcp, NetworkManager::getInstance(), channel.address, channel.port);
+	auto bindFunc = [&]() {
+		// 네트워크 접속 결과가 나오면 채널버튼 다시 클릭할 수 있게
+		if (!NetworkManager::getInstance()->connectTcp(targetChannel.ip, targetChannel.port))
+			_channelsMenu->setEnabled(true);
+	};
+	
+	//auto newThread = std::thread(std::bind(&NetworkManager::connectTcp, NetworkManager::getInstance(), targetChannel.ip, targetChannel.port));
 	auto newThread = std::thread(bindFunc);
 	
+	newThread.detach();
+}
+
+void LoginScene::popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos)
+{
+	_channelsBg->setVisible(true);
+	_loginMenu->setEnabled(false);
+	_nameField->setEnabled(false);
+	_passField->setEnabled(false);
+	_logoutMenu->setVisible(true);
+
+	for (auto& channel : channelInfos)
+	{
+		auto channelNode = Node::create();
+		
+		auto buttonClicked = [=](Ref*) {
+			auto copiedChannel = channel;
+			channelButtonClicked(copiedChannel);
+		};
+
+		auto buttonLabel = Label::createWithTTF(channel.name, FILENAME::FONT::SOYANON, 42);
+		buttonLabel->setColor(channel.rgb);
+		auto buttonItem = MenuItemLabel::create(buttonLabel, buttonClicked);
+
+		auto betString = std::string(u8"bet ");
+		betString += std::to_string(channel.minBet); betString += u8"~"; betString += std::to_string(channel.maxBet);
+		auto betLabel = Label::createWithTTF(betString,FILENAME::FONT::SOYANON, 32);
+		if (_currentChip < channel.minBet || _currentChip > channel.maxBet)
+			betLabel->setColor(Color3B(125, 0, 0)); // 베팅액이 안맞는 채널이면 빨간색으로 바꿈
+		betLabel->setPosition(buttonItem->getContentSize()/2 - Size(0, 40));
+
+		buttonItem->addChild(betLabel);
+		_channelsMenu->addChild(buttonItem);
+
+		auto a = buttonItem->getPosition();
+		auto b = betLabel->getPosition();
+	 }
+	_channelsMenu->alignItemsHorizontallyWithPadding(100.f);
+}
+
+
+void LoginScene::popDownChannelsLayer()
+{
+	_channelsBg->setVisible(false);
+	_logoutMenu->setVisible(false);
+	_channelsMenu->removeAllChildren();
+
+	// _loginMenu->setEnabled(true); // 이건 로그아웃 성공시에 한다.
+	_nameField->setEnabled(true);
+	_passField->setEnabled(true);
 }
 
 void LoginScene::initLayout()
 {
 	// 배경
 	auto bg = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::LOGIN_BG);
-	bg->setAnchorPoint(Vec2(0,0));
+	bg->setAnchorPoint(Vec2(0, 0));
 	bg->getTexture()->setAliasTexParameters();
-	addChild(bg);
+	addChild(bg,Z_ORDER::BACKGROUND);
 
 	// 나가기 버튼
-	auto leaveLabel = Label::createWithTTF("나가기", FILENAME::FONT::SOYANON, 40);
-	leaveLabel->setColor(Color3B(201, 201, 201));
-	auto leaveButton = MenuItemLabel::create(leaveLabel, CC_CALLBACK_1(LoginScene::menuCloseCallback, this));
-	auto leaveMenu = Menu::create(leaveButton, nullptr);
-	leaveMenu->setPosition(1199.f, 674.f);
-	this->addChild(leaveMenu, DEF::Z_ORDER::UI);
+	auto leaveLabel = Label::createWithTTF(u8"나가기", FILENAME::FONT::SOYANON, 40);
+	leaveLabel->setColor(Color3B{ 201, 201, 201 });
+	auto leaveButton = MenuItemLabel::create(leaveLabel, CC_CALLBACK_1(LoginScene::leaveButtonClicked, this));
+	_leaveMenu = Menu::create(leaveButton, nullptr);
+	_leaveMenu->setPosition(1199.f, 674.f);
+	this->addChild(_leaveMenu, Z_ORDER::UI_ALWAYS_TOP);
 
-	// 시작 버튼
-	auto startLabel = Label::createWithTTF("시작", FILENAME::FONT::SOYANON, 72);
+	// 로그인 버튼
+	auto startLabel = Label::createWithTTF(u8"로그인", FILENAME::FONT::SOYANON, 72);
 	startLabel->setColor(Color3B::GREEN);
-	auto startButton = MenuItemLabel::create(startLabel, CC_CALLBACK_1(LoginScene::menuStartCallback, this));
-	auto startMenu = Menu::create(startButton, nullptr);
-	startMenu->setAnchorPoint(Vec2(0, 0));
-	startMenu->setPosition(850, 230);
-	addChild(startMenu);
-	
+	auto startButton = MenuItemLabel::create(startLabel, CC_CALLBACK_1(LoginScene::loginButtonClicked, this));
+	_loginMenu = Menu::create(startButton, nullptr);
+	_loginMenu->setAnchorPoint(Vec2(0, 0));
+	_loginMenu->setPosition(890, 254);
+	addChild(_loginMenu, Z_ORDER::UI_LOGIN);
+
+	// 로그아웃 버튼
+	auto logoutLabel = Label::createWithTTF(u8"로그아웃", FILENAME::FONT::SOYANON, 32);
+	logoutLabel->setColor(Color3B{ 201,201,201 });
+	auto logoutButton = MenuItemLabel::create(logoutLabel, CC_CALLBACK_1(LoginScene::logoutButtonClicked, this));
+	_logoutMenu = Menu::create(logoutButton, nullptr);
+	_logoutMenu->setAnchorPoint(Vec2(0, 0));
+	_logoutMenu->setPosition(1050, 525);
+	_logoutMenu->setVisible(false);
+	addChild(_logoutMenu, Z_ORDER::UI_ALWAYS_TOP);
+
 	// 이름
-	_nameField = ui::TextField::create("닉네임", FILENAME::FONT::SOYANON, 48);
+	_nameField = ui::TextField::create(u8"닉네임", FILENAME::FONT::SOYANON, 48);
 	_nameField->setAnchorPoint(Vec2(0, 0));
-	_nameField->setPosition(Vec2(585, 282));
+	_nameField->setPosition(Vec2(544, 282));
 	_nameField->setCursorEnabled(true);
 	_nameField->setMaxLength(5);
 	_nameField->setMaxLengthEnabled(true);
-	addChild(_nameField);
+	addChild(_nameField, Z_ORDER::UI_LOGIN);
 
 	// 비밀번호
-	_passField = ui::TextField::create("****", FILENAME::FONT::SOYANON, 48);
+	_passField = ui::TextField::create(u8"****", FILENAME::FONT::SOYANON, 48);
 	_passField->setAnchorPoint(Vec2(0, 0));
-	_passField->setPosition(Vec2(585, 170));
-	_passField->setMaxLength(10);
+	_passField->setPosition(Vec2(544, 170));
+	_passField->setMaxLength(8);
 	_passField->setMaxLengthEnabled(true);
 	_passField->setPasswordEnabled(true);
 	_passField->setPasswordStyleText("*");
 	_passField->setCursorEnabled(true);
-	addChild(_passField);
+	addChild(_passField,Z_ORDER::UI_LOGIN);
+
+	// 채널 선택창 배경
+	_channelsBg = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::CHANNEL_LIST_BG);
+	_channelsBg->setAnchorPoint(Vec2::ZERO);
+	_channelsBg->setPosition(Vec2::ZERO);
+	_channelsBg->setVisible(false);
+	addChild(_channelsBg,Z_ORDER::UI_CHANNELS_BG);
+
+	// 채널 선택 메뉴
+	_channelsMenu = Menu::create();
+	addChild(_channelsMenu, Z_ORDER::UI_CHANNELS_ABOVE);
+}
+
+void LoginScene::parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector)
+{
+	// Json 파싱
+	Json::Value loginRes;
+	_reader.parse(resLoginString, loginRes);
+	auto result = (COMMON::RESULT_LOGIN)loginRes.get("Result", "failed").asInt();
+	_authToken = loginRes.get("AuthToken", "failed").asString();
+	_pokeNum = loginRes.get("Pokemon", -1).asInt();
+	_currentChip = loginRes.get("Chip", 01).asInt();
+
+	auto channelsValue = loginRes.get("Channels", "failed");
+	for (auto& eachChannelValue : channelsValue)
+	{
+		auto eachChanneInfo = DEF::ChannelInfo();
+
+		eachChanneInfo.name = eachChannelValue.get("Name", "failed").asString();
+		eachChanneInfo.ip = eachChannelValue.get("IP", "failed").asString();
+		eachChanneInfo.port = eachChannelValue.get("Port", -1).asInt();
+		eachChanneInfo.minBet = eachChannelValue.get("MinBet", -1).asInt();
+		eachChanneInfo.maxBet = eachChannelValue.get("MaxBet", -1).asInt();
+		auto rgb = eachChannelValue.get("Rgb", "failed");
+		eachChanneInfo.rgb.r = rgb.get("r", -1).asInt();
+		eachChanneInfo.rgb.g = rgb.get("g", -1).asInt();
+		eachChanneInfo.rgb.b = rgb.get("b", -1).asInt();
+
+		channelsVector.emplace_back(std::move(eachChanneInfo));
+	}
 }

@@ -54,8 +54,9 @@ NetworkManager* NetworkManager::getInstance()
 }
 
 // 성공시 true, 실패시 false 반환
-void NetworkManager::connectTcp(std::string serverIp, int serverPort)
+bool NetworkManager::connectTcp(std::string serverIp, int serverPort)
 {
+	auto returnVal = true;
 	_mutex.lock();
 	SOCKADDR_IN serverAddr;
 	ZeroMemory(&serverAddr, sizeof(serverAddr));
@@ -65,8 +66,13 @@ void NetworkManager::connectTcp(std::string serverIp, int serverPort)
 	
 	auto result = connect(_sock,(SOCKADDR*)&serverAddr, sizeof(serverAddr));
 	if (result == SOCKET_ERROR)
+	{
+		ClientLogger::msgBox(L"해당 채널이 응답하지 않습니다.");
 		ClientLogger::logThreadSafe("connect() failed");
+		returnVal = false;
+	}
 	_mutex.unlock();
+	return returnVal;
 }
 
 void NetworkManager::sendPacket_LogIn(std::string authToken)

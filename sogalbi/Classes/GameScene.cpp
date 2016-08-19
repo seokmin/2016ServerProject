@@ -4,7 +4,7 @@
 #include "ResourceInfo.h"
 #include "Player.h"
 
-#pragma execution_character_set("UTF-8")
+/*#pragma execution_character_set("UTF-8")*/
 
 Scene* GameScene::createScene()
 {
@@ -61,7 +61,7 @@ void GameScene::initLayout()
 	auto background = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::TABLE_BG);
 	background->setAnchorPoint(Vec2(0, 0));
 	background->getTexture()->setAliasTexParameters();
-	this->addChild(background, DEF::Z_ORDER::BACK);
+	this->addChild(background);
 
 	// 나가기 버튼
 	auto leaveLabel = Label::createWithTTF("나가기", FILENAME::FONT::SOYANON, 40);
@@ -69,7 +69,7 @@ void GameScene::initLayout()
 	auto leaveButton = MenuItemLabel::create(leaveLabel, CC_CALLBACK_1(GameScene::menuCloseCallback, this));
 	auto leaveMenu = Menu::create(leaveButton, nullptr);
 	leaveMenu->setPosition(1199.f, 674.f);
-	this->addChild(leaveMenu, DEF::Z_ORDER::UI);
+	this->addChild(leaveMenu);
 
 	// 딜러 덱
 	auto deck = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::DECK);

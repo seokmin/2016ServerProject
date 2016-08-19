@@ -37,9 +37,6 @@
     <ClCompile Include="..\Classes\LoginScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\LobbyScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\jsoncpp.cpp">
       <Filter>src\jsoncpp</Filter>
     </ClCompile>
@@ -69,9 +66,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\LoginScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\LobbyScene.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Common\Packet.h">

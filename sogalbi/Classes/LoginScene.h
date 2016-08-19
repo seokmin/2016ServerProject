@@ -22,17 +22,50 @@ public:
 
 	virtual bool init() override;
 
-	void menuCloseCallback(cocos2d::Ref* pSender);
+	void leaveButtonClicked(Ref* pSender);
 
-	void menuStartCallback(cocos2d::Ref* pSender);
+	void loginButtonClicked(Ref* pSender);
+	void loginResponseArrived(network::HttpClient* sender, network::HttpResponse* response);
 
-	void startResponseCallback(network::HttpClient* sender,network::HttpResponse* response);
+	void logoutButtonClicked(Ref* pSender);
+	void logoutResponseArrived(network::HttpClient* sender, network::HttpResponse* response);
+
+
+	void channelButtonClicked(DEF::ChannelInfo& clickChannel);
 
 	CREATE_FUNC(LoginScene);
 
 private:
+	static enum Z_ORDER
+	{
+		ERR = -1,
+		BACKGROUND = 0,
+		UI_LOGIN = 1,
+		UI_CHANNELS_BG = 2,
+		UI_CHANNELS_ABOVE = 3,
+		UI_ALWAYS_TOP = 10
+	};
 	void initLayout();
+
+	void popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos);
+	void popDownChannelsLayer();
+
+
+	void parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector);
+
+	Json::Reader	_reader;
+
+	Menu*			_loginMenu;
+	Menu*			_leaveMenu;
 	ui::TextField*	_nameField;
 	ui::TextField*	_passField;
-	Json::Reader	_reader;
+
+	Menu*			_logoutMenu;
+	Menu*			_channelsMenu;
+	Sprite*			_channelsBg;
+	Label*			_channelsLabel;
+
+	int				_currentChip = 0;
+	std::string		_authToken;
+	int				_pokeNum;
 };

@@ -5,7 +5,7 @@ class NetworkManager
 public:
 	static NetworkManager* getInstance();
 
-	void connectTcp(std::string serverIp, int serverPort);
+	bool connectTcp(std::string serverIp, int serverPort);
 
 	void sendPacket_LogIn(std::string authToken);
 
