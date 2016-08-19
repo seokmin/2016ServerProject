@@ -19,6 +19,21 @@
     <Filter Include="Header Files\Network">
       <UniqueIdentifier>{7557d7f0-216d-4d87-90d7-afb7bdc8ac29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Manager">
+      <UniqueIdentifier>{934ac84c-ec6c-4246-952a-3997eaf65afc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DB">
+      <UniqueIdentifier>{2ddf4dbd-0fc6-495f-98aa-d5cd1afc60c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\User">
+      <UniqueIdentifier>{4d9b42eb-1fcf-456c-b732-3f0956647449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MockLayer">
+      <UniqueIdentifier>{8ee5c4f8-8f2e-4a94-97cd-19aa5c4c891e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Room">
+      <UniqueIdentifier>{6ff901f4-602e-4a0b-9fa6-eb92d6f8df2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -51,11 +66,23 @@
     <ClInclude Include="PacketProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RoomManager.h">
+      <Filter>Header Files\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="UserManager.h">
+      <Filter>Header Files\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="MysqlManager.h">
+      <Filter>Source Files\DB</Filter>
+    </ClInclude>
+    <ClInclude Include="DBmanager.h">
+      <Filter>Source Files\DB</Filter>
+    </ClInclude>
+    <ClInclude Include="User.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,10 +90,28 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NetworkManager_mock.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MockLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DBmanager.cpp">
+      <Filter>Source Files\DB</Filter>
+    </ClCompile>
+    <ClCompile Include="MysqlManager.cpp">
+      <Filter>Source Files\DB</Filter>
+    </ClCompile>
+    <ClCompile Include="UserManager.cpp">
+      <Filter>Source Files\User</Filter>
+    </ClCompile>
+    <ClCompile Include="User.cpp">
+      <Filter>Source Files\User</Filter>
     </ClCompile>
     <ClCompile Include="PacketProcess.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomManager.cpp">
+      <Filter>Source Files\Room</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

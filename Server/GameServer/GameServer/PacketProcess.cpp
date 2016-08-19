@@ -12,11 +12,6 @@ void PacketProcess::Process(PacketInfo packetInfo)
 	//[TODO] ...
 }
 
-void PacketProcess::StateCheckAndSubmit()
-{
-	return;
-}
-
 ERROR_CODE PacketProcess::NtfSysCloseSesson(PacketInfo packetInfo)
 {
 	//[TODO] ...

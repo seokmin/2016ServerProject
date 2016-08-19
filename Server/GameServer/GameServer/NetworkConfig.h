@@ -10,7 +10,7 @@ public:
 	static const int MAX_NET_ERROR_STRING_COUNT = 64;
 	static const int MAX_IP_LEN = 32; // IP 문자열 최대 길이
 	static const int MAX_PACKET_SIZE = 1024; // 최대 패킷 크기
-	static const int PACKET_HEADER_SIZE = sizeof(PaketHeader);
+	static const int PACKET_HEADER_SIZE = COMMON::PACKET_HEADER_SIZE;
 
 	unsigned short Port;
 	int BackLogCount;
@@ -23,10 +23,9 @@ public:
 	short MaxClientRecvBufferSize;
 	short MaxClientSendBufferSize;
 
-	int MaxLobbyCount;
-	int MaxLobbyUserCount;
-	int MaxRoomCountByLobby;
-	int MaxRoomUserCount;
+	int MaxChannelUserCount = 100;
+	int MaxRoomCountByLobby = 20;
+	int MaxRoomUserCount = 5;
 
 	// 에러 코드는 1 ~ 200까지 사용한다.
 	enum NET_ERROR_CODE : short

@@ -30,7 +30,6 @@ public:
 
 	void Process(PacketInfo packetInfo);
 
-	void StateCheckAndSubmit();
 private:
 	ILog* m_pRefLogger;
 	TcpNet* m_pRefNetwork;

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "App.h"
+#include "DBmanager.h"
 
 ERROR_CODE App::Init()
 {
@@ -25,11 +26,21 @@ void App::Run()
 
 			m_pPacketProc->Process(packetInfo);
 		}
-		m_pPacketProc->StateCheckAndSubmit();
+		
+		StateCheckAndSubmit();
 		
 		std::this_thread::sleep_for(std::chrono::milliseconds(0));
 	}
 }
+
+void App::StateCheckAndSubmit()
+{
+
+	int curUserCount = m_pUserMgr->GetCurrentUserCount();
+	m_pDB->SubmitState(m_pServerConfig->MaxChannelUserCount, curUserCount);
+	return;
+}
+
 
 ERROR_CODE App::LoadConfig()
 {
