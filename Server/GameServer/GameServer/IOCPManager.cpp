@@ -1,6 +1,4 @@
-//#include "stdafx.h"
-
-#include <WinSock2.h>
+#include "stdafx.h"
 #include "IOCPManager.h"
 
 

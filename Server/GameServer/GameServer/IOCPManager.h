@@ -3,7 +3,6 @@
 struct ServerSetting
 {
 	int			_portNum;
-
 };
 
 class IOCPManager
