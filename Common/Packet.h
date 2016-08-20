@@ -72,6 +72,47 @@ namespace COMMON
 
 	};
 
+	struct CardInfo
+	{
+		enum class CardShape {
+			EMPTY = 0, // 카드 없음
+
+			SPADE = 1,
+			DIAMOND = 2,
+			HEART = 3,
+			CLOVER = 4,
+		} _shape;
+
+		short _number; // J = 11, Q = 12, K = 13
+	};
+	const int MAX_HAND = 2; // maximum hands by split
+	struct DealerInfo
+	{
+		CardInfo _openedCardList[11];
+		int _hiddenCard;  // How many hidden cards is there? maybe 0 or 1;
+	};
+
+	struct HandInfo
+	{
+		CardInfo _cardList[10];
+		enum HandState {
+			CURRENT = 0,
+			BURST = 1,
+			STAND = 2,
+			BLACKJACK = 3,
+		} _handState;
+		bool _isDoubledown;
+	};
+	struct UserInfo
+	{
+		int _pokeNum; // 1 ~ 151
+		wchar_t _name[MAX_USER_ID_LEN + 1];
+		int _totalMony;
+		int _betMoney;
+		HandInfo _hands[MAX_HAND];
+	};
+
+
 	static const int MAX_USERCOUNT_PER_ROOM = 5;
 	struct PacketRoomUserlistRes : PacketBase
 	{
@@ -95,48 +136,6 @@ namespace COMMON
 	struct PacketRoomLeaveNtf
 	{
 		int _slotNum;
-	};
-
-	const int MAX_HAND = 2; // maximum hands by split
-	struct DealerInfo
-	{
-		CardInfo _openedCardList[11];
-		int _hiddenCard;  // How many hidden cards is there? maybe 0 or 1;
-	};
-
-	struct UserInfo
-	{
-		int _pokeNum; // 1 ~ 151
-		wchar_t _name[MAX_USER_ID_LEN + 1];
-		int _totalMony;
-		int _betMoney;
-		HandInfo _hands[MAX_HAND];
-	};
-
-	struct HandInfo
-	{
-		CardInfo _cardList[10];
-		enum HandState {
-			CURRENT = 0,
-			BURST = 1,
-			STAND = 2,
-			BLACKJACK = 3,
-		} _handState; 
-		bool _isDoubledown;
-	};
-
-	struct CardInfo
-	{
-		enum class CardShape {
-			EMPTY = 0, // 카드 없음
-
-			SPADE = 1,
-			DIAMOND = 2,
-			HEART = 3,
-			CLOVER = 4,
-		} _shape;
-
-		short _number; // J = 11, Q = 12, K = 13
 	};
 
 	// 이건 서버에서만 쓰지 않을까요?
