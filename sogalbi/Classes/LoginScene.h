@@ -51,7 +51,7 @@ private:
 	void popDownChannelsLayer();
 
 
-	void parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector);
+	int parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector);
 
 	void connectChannel(std::string ip, int port);
 

@@ -4,7 +4,6 @@
 #include "ResourceInfo.h"
 #include "Player.h"
 
-/*#pragma execution_character_set("UTF-8")*/
 
 Scene* GameScene::createScene()
 {

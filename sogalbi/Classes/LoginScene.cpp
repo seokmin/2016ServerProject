@@ -13,8 +13,6 @@
 #include "NetworkManager.h"
 #include "ClientLogger.h"
 
-//#pragma execution_character_set("UTF-8")
-
 cocos2d::Scene* LoginScene::createScene()
 {
 	auto scene = Scene::create();
@@ -116,7 +114,7 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 	auto resString = std::string("");
 	for (auto& i : *resData)
  		resString += i;
-
+	// result 10일때 invalid password다
 	if (resString == "")
 	{
 		ClientLogger::msgBox(L"로그인 서버가 응답하지 않습니다!", L"로그인 실패", false);
@@ -126,8 +124,22 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 
 	// 받아온 정보 파싱
 	auto channels = std::vector<DEF::ChannelInfo>();
-	parseChannelInfo(resString, channels);
-	popUpChannelsLayer(channels);
+	auto result = parseChannelInfo(resString, channels);
+	if (result == COMMON::RESULT_LOGIN::ERR_INVALID_PASSWORD)
+	{
+		ClientLogger::msgBox(L"비번 틀려쪙!", L"로그인 실패", false);
+		_loginMenu->setEnabled(true);
+		return;
+	}
+	else if (result == COMMON::RESULT_LOGIN::SUCCESS_CREATE_ACCOUNT || result == COMMON::RESULT_LOGIN::SUCCESS_LOGIN)
+	{
+		// 로그인 성공시
+		popUpChannelsLayer(channels);
+	}
+	else
+	{
+		ClientLogger::msgBox(L"서버에 문제가 있어용", L"로그인 실패", false);
+	}
 
 }
 
@@ -150,6 +162,8 @@ void LoginScene::channelButtonClicked(DEF::ChannelInfo& targetChannel)
 	if (_currentChip < targetChannel.minBet || _currentChip > targetChannel.maxBet)
 	{
 		ClientLogger::msgBox(L"현재 보유 칩으로는 입장할 수 없습니다.", L"입장 실패", false);
+		// 채널버튼 다시 클릭할 수 있게
+		_channelsMenu->setEnabled(true);
 		return;
 	}
 // 	auto bindFunc = [&]() {
@@ -195,8 +209,8 @@ void LoginScene::popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos)
 		buttonItem->addChild(betLabel);
 		_channelsMenu->addChild(buttonItem);
 
-		auto a = buttonItem->getPosition();
-		auto b = betLabel->getPosition();
+		// 정렬용
+		buttonItem->setContentSize(betLabel->getContentSize());
 	 }
 	_channelsMenu->alignItemsHorizontallyWithPadding(100.f);
 }
@@ -280,7 +294,7 @@ void LoginScene::initLayout()
 	addChild(_channelsMenu, Z_ORDER::UI_CHANNELS_ABOVE);
 }
 
-void LoginScene::parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector)
+int LoginScene::parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector)
 {
 	// Json 파싱
 	Json::Value loginRes;
@@ -307,6 +321,7 @@ void LoginScene::parseChannelInfo(std::string& resLoginString, std::vector<DEF::
 
 		channelsVector.emplace_back(std::move(eachChanneInfo));
 	}
+	return result;
 }
 
 void LoginScene::connectChannel(std::string ip, int port)
