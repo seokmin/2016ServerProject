@@ -38,17 +38,12 @@ private:
 
 private:
 	ERROR_CODE NtfSysCloseSesson(PacketInfo packetInfo);
-	
-	ERROR_CODE Login(PacketInfo packetInfo);
-	ERROR_CODE Logout(PacketInfo packetInfo);
-	ERROR_CODE ChannelEnter(PacketInfo packetInfo);
-	ERROR_CODE ChannelRoomList(PacketInfo packetInfo);
-	ERROR_CODE ChannelLeave(PacketInfo packetInfo);
 
 	ERROR_CODE RoomEnter(PacketInfo packetInfo);
 	ERROR_CODE RoomUserList(PacketInfo packetInfo);
 	ERROR_CODE RoomLeave(PacketInfo packetInfo);
 	ERROR_CODE RoomChat(PacketInfo packetInfo);
+	ERROR_CODE RoomChange(PacketInfo packetInfo);
 	
 	ERROR_CODE LeaveAllAndLogout(User* pUser, int SessionId);
 };
