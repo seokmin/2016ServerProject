@@ -28,7 +28,7 @@ namespace LoginServer.DB
                 DataSet ds = new DataSet();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("SELECT username, pw, pokemon FROM user where username = '{0}'", username);
+                sb.AppendFormat("SELECT username, pw, pokemon, chip FROM user where username = '{0}'", username);
 
                 MySqlDataAdapter da = new MySqlDataAdapter(sb.ToString(), myConnection);
                 await da.FillAsync(ds, "userInfo");
@@ -41,7 +41,7 @@ namespace LoginServer.DB
             return dt;
         }
 
-        public static async Task<Tuple<int, int>> CreateUser(string username, string pw, int pokemon)
+        public static async Task<Tuple<int, int>> CreateUser(string username, string pw, int pokemon, int startChip)
         {
             int affectedRows = 0;
             using (MySqlConnection myConnection = new MySqlConnection(MYSQL_CONNECT_STRING))
@@ -49,7 +49,7 @@ namespace LoginServer.DB
                 myConnection.Open();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("INSERT INTO user SET username = '{0}', pw = '{1}', pokemon = '{2}'", username, pw, pokemon);
+                sb.AppendFormat("INSERT INTO user SET username = '{0}', pw = '{1}', pokemon = '{2}', chip = '{3}'", username, pw, pokemon, startChip);
 
                 MySqlCommand cmd = new MySqlCommand(sb.ToString(), myConnection);
                 affectedRows = await cmd.ExecuteNonQueryAsync();
@@ -89,7 +89,7 @@ namespace LoginServer.DB
                 DataSet ds = new DataSet();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("SELECT ip, curNum, maxNum, timestamp, name FROM channel ORDER BY curNum ASC LIMIT 1");
+                sb.AppendFormat("SELECT name, ip, port, r, g, b, minBet, maxBet FROM channel");
 
                 MySqlDataAdapter da = new MySqlDataAdapter(sb.ToString(), myConnection);
                 await da.FillAsync(ds, "channelInfo");
@@ -101,7 +101,26 @@ namespace LoginServer.DB
 
             return dt;
         }
-    }
+
+        public static async Task<int> Logout(string authToken)
+        {
+            int affectedRows = 0;
+            using (MySqlConnection myConnection = new MySqlConnection(MYSQL_CONNECT_STRING))
+            {
+                myConnection.Open();
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("DELETE FROM auth WHERE authToken = '{0}'", authToken);
+
+                MySqlCommand cmd = new MySqlCommand(sb.ToString(), myConnection);
+                affectedRows = await cmd.ExecuteNonQueryAsync();
+
+                myConnection.Close();
+            }
+
+            return affectedRows;
+        }
+    }    
 
     public class DBUser
     {

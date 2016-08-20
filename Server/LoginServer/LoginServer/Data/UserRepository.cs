@@ -22,7 +22,9 @@ namespace LoginServer.Data
             Random r = new Random();
             int pokemon = r.Next(1, 151);
 
-            return await DB.MysqlLib.CreateUser(username, pw, pokemon);
+            int startChip = 50;
+
+            return await DB.MysqlLib.CreateUser(username, pw, pokemon, startChip);
         }
 
         public static async Task<int> SaveAuthToken(string authToken, string username)
@@ -32,19 +34,34 @@ namespace LoginServer.Data
             return await DB.MysqlLib.SaveAuthToken(authToken, username, timestamp);
         }
 
-        public static async Task<RES_LOGIN_CHANNEL> GetChannel()
+        public static async Task<RES_LOGIN_CHANNEL[]> GetChannel()
         {
             var data = await DB.MysqlLib.GetChannel();
 
-            RES_LOGIN_CHANNEL channel;
-            
-            channel.IP = data.Rows[0]["ip"].ToString();
-            channel.CurNum = (short)Int32.Parse(data.Rows[0]["curNum"].ToString());
-            channel.MaxNum = (short)Int32.Parse(data.Rows[0]["maxNum"].ToString());
-            channel.IsOpen = true;
-            channel.ChannelName = data.Rows[0]["name"].ToString();
+            RES_LOGIN_CHANNEL[] channel = new RES_LOGIN_CHANNEL[data.Rows.Count];
 
+            for (int i = 0; i < data.Rows.Count; ++i)
+            {
+                channel[i].Name = data.Rows[i]["name"].ToString();
+                channel[i].Rgb.r = (short)Int32.Parse(data.Rows[i]["r"].ToString());
+                channel[i].Rgb.g = (short)Int32.Parse(data.Rows[i]["g"].ToString());
+                channel[i].Rgb.b = (short)Int32.Parse(data.Rows[i]["b"].ToString());
+                channel[i].IP = data.Rows[i]["ip"].ToString();
+                channel[i].Port = (short)Int32.Parse(data.Rows[i]["port"].ToString());
+                channel[i].MinBet = Int32.Parse(data.Rows[i]["minBet"].ToString());
+                channel[i].MaxBet = Int32.Parse(data.Rows[i]["maxBet"].ToString());
+            }
             return channel;
+        }
+
+        public static async Task<ERROR_CODE> Logout(string authToken)
+        {
+            var response = await DB.MysqlLib.Logout(authToken);
+
+            if (response != 1)
+                return ERROR_CODE.REQ_LOGOUT_FAIL;
+
+            return ERROR_CODE.NONE;
         }
     }
 }

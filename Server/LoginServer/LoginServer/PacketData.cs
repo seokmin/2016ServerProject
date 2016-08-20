@@ -28,17 +28,44 @@ namespace LoginServer
         public short Result;
         public string AuthToken;
         public short Pokemon;
+        public int Chip;
+        public RES_LOGIN_CHANNEL[] Channels;
+    }
 
-        public RES_LOGIN_CHANNEL Channel;
+    public struct Rgb
+    {
+        public short r;
+        public short g;
+        public short b;
     }
 
     public struct RES_LOGIN_CHANNEL
     {
+        public string Name;
+        public Rgb Rgb;
         public string IP;
-        public short MaxNum;
-        public short CurNum;
-        public bool IsOpen;
-        public string ChannelName;
+        public short Port;
+        public int MinBet;
+        public int MaxBet;
+    }
+
+    public struct REQ_LOGOUT
+    {
+        public string AuthToken;
+    }
+
+    public struct RES_LOGOUT
+    {
+        public RES_LOGOUT Return(ERROR_CODE error)
+        {
+            Result = (short)error; return this;
+        }
+
+        public void SetResult(ERROR_CODE error)
+        {
+            Result = (short)error;
+        }
+        public short Result;
     }
     #endregion
 }
