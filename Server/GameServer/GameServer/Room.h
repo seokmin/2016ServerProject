@@ -1,5 +1,5 @@
 #pragma once
-#include "NetworkConfig.h"
+#include "ServerConfig.h"
 class User;
 
 class Room
@@ -10,6 +10,6 @@ public:
 
 private:
 	int m_id;
-	User* m_userList[NetworkConfig::MaxRoomUserCount] = {nullptr, };
+	User* m_userList[NetworkConfig::MAX_USERCOUNT_PER_ROOM] = {nullptr, };
 };
 

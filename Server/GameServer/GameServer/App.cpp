@@ -35,9 +35,8 @@ void App::Run()
 
 void App::StateCheckAndSubmit()
 {
-
 	int curUserCount = m_pUserMgr->GetCurrentUserCount();
-	m_pDB->SubmitState(m_pServerConfig->MaxChannelUserCount, curUserCount);
+	m_pDB->SubmitState(m_pServerConfig->MAX_USERCOUNT_PER_CHANNEL, curUserCount);
 	return;
 }
 

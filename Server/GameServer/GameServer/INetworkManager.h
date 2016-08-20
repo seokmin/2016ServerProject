@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NetworkConfig.h"
+#include "ServerConfig.h"
 #include "Common.h"
 
 using namespace COMMON;

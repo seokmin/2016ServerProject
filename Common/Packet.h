@@ -7,9 +7,8 @@ namespace COMMON
 	// 21 이상에서 시작해야함.
 	enum PACKET_ID : short
 	{
-		ROOM_ENTER_REQ = 21, //방 조인 요청
-		ROOM_ENTER_NOW_REQ = 22, //바로 조인 요청.
-		ROOM_ENTER_RES = 23,
+		ROOM_ENTER_REQ = 21,
+		ROOM_ENTER_RES = 22,
 
 		ROOM_ENTER_USER_LIST_REQ = 25,
 		ROOM_ENTER_USER_LIST_RES = 26,
@@ -65,6 +64,79 @@ namespace COMMON
 	// _errorCode가 ERROR_CODE::NONE이면 성공으로 간주
 	struct PacketRoomEnterRes : PacketBase
 	{
+		int _roomNum;
+	};
+
+	struct PacketRoomUserlistReq
+	{
+
+	};
+
+	static const int MAX_USERCOUNT_PER_ROOM = 5;
+	struct PacketRoomUserlistRes : PacketBase
+	{
+		int _roomNum;
+		DealerInfo _dealerinfo;
+		UserInfo _users[MAX_USERCOUNT_PER_ROOM];
+	};
+
+	struct PacketRoomEnterNtf
+	{
+		UserInfo _enterUser;
+		int _slotNum;
+	};
+
+	struct PacketRoomLeaveReq
+	{
+	};
+	struct PacketRoomLeaveRes : PacketBase
+	{
+	};
+	struct PacketRoomLeaveNtf
+	{
+		int _slotNum;
+	};
+
+	const int MAX_HAND = 2; // maximum hands by split
+	struct DealerInfo
+	{
+		CardInfo _openedCardList[11];
+		int _hiddenCard;  // How many hidden cards is there? maybe 0 or 1;
+	};
+
+	struct UserInfo
+	{
+		int _pokeNum; // 1 ~ 151
+		wchar_t _name[MAX_USER_ID_LEN + 1];
+		int _totalMony;
+		int _betMoney;
+		HandInfo _hands[MAX_HAND];
+	};
+
+	struct HandInfo
+	{
+		CardInfo _cardList[10];
+		enum HandState {
+			CURRENT = 0,
+			BURST = 1,
+			STAND = 2,
+			BLACKJACK = 3,
+		} _handState; 
+		bool _isDoubledown;
+	};
+
+	struct CardInfo
+	{
+		enum class CardShape {
+			EMPTY = 0, // 카드 없음
+
+			SPADE = 1,
+			DIAMOND = 2,
+			HEART = 3,
+			CLOVER = 4,
+		} _shape;
+
+		short _number; // J = 11, Q = 12, K = 13
 	};
 
 	// 이건 서버에서만 쓰지 않을까요?

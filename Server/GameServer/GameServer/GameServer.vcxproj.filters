@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Common">
-      <UniqueIdentifier>{02a45c49-2bd5-4fc2-8714-62576b7ef30d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Network">
-      <UniqueIdentifier>{7557d7f0-216d-4d87-90d7-afb7bdc8ac29}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\DB">
       <UniqueIdentifier>{2ddf4dbd-0fc6-495f-98aa-d5cd1afc60c7}</UniqueIdentifier>
     </Filter>
@@ -31,6 +25,12 @@
     <Filter Include="Source Files\Room">
       <UniqueIdentifier>{6ff901f4-602e-4a0b-9fa6-eb92d6f8df2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Network">
+      <UniqueIdentifier>{7557d7f0-216d-4d87-90d7-afb7bdc8ac29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{02a45c49-2bd5-4fc2-8714-62576b7ef30d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -40,28 +40,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Common\Common.h">
-      <Filter>Header Files\Common</Filter>
+      <Filter>Source Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Common\ErrorCode.h">
-      <Filter>Header Files\Common</Filter>
+      <Filter>Source Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Common\Packet.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="App.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="INetworkManager.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkConfig.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkManager_mock.h">
-      <Filter>Header Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="PacketProcess.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="MysqlManager.h">
       <Filter>Source Files\DB</Filter>
@@ -69,17 +54,32 @@
     <ClInclude Include="DBmanager.h">
       <Filter>Source Files\DB</Filter>
     </ClInclude>
-    <ClInclude Include="User.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="INetworkManager.h">
+      <Filter>Source Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Room.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RoomManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="NetworkManager_mock.h">
+      <Filter>Source Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="UserManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\User</Filter>
+    </ClInclude>
+    <ClInclude Include="User.h">
+      <Filter>Source Files\User</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Source Files\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomManager.h">
+      <Filter>Source Files\Room</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerConfig.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketProcess.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

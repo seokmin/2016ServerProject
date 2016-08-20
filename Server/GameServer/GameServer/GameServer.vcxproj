@@ -147,7 +147,7 @@
     <ClInclude Include="DBmanager.h" />
     <ClInclude Include="INetworkManager.h" />
     <ClInclude Include="MysqlManager.h" />
-    <ClInclude Include="NetworkConfig.h" />
+    <ClInclude Include="ServerConfig.h" />
     <ClInclude Include="NetworkManager_mock.h" />
     <ClInclude Include="PacketProcess.h" />
     <ClInclude Include="Room.h" />
