@@ -30,8 +30,11 @@ void NetworkManager::initTcp()
 	}
 }
 
-void NetworkManager::sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData)
+// send() 성공여부 반환
+bool NetworkManager::sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData)
 {
+_mutex.lock();
+	
 	char data[COMMON::MAX_PACKET_SIZE] = { 0, };
 
 	// 헤더
@@ -43,7 +46,18 @@ void NetworkManager::sendPacket(const COMMON::PACKET_ID packetId, const short da
 		memcpy(data + COMMON::PACKET_HEADER_SIZE, pData, dataSize);
 
 	// 전송
-	send(_sock, data, dataSize + COMMON::PACKET_HEADER_SIZE, 0);
+	auto result = send(_sock, data, dataSize + COMMON::PACKET_HEADER_SIZE, 0);
+	if (result == SOCKET_ERROR)
+	{
+		ClientLogger::logThreadSafe("send() failed. packet id : " + packetId);
+		// disconnect() 해줘야할듯
+		_mutex.unlock();
+		return false;
+	}
+
+	ClientLogger::logThreadSafe("packet send success. packet id : " + packetId);
+	_mutex.unlock();
+	return true;
 }
 
 NetworkManager* NetworkManager::getInstance()
@@ -73,15 +87,4 @@ bool NetworkManager::connectTcp(std::string serverIp, int serverPort)
 	}
 	_mutex.unlock();
 	return returnVal;
-}
-
-void NetworkManager::sendPacket_LogIn(std::string authToken)
-{
-	_mutex.lock();
-	auto packetId = COMMON::PACKET_ID::CHANNEL_JOIN_REQ;
-	auto data = COMMON::PacketLoginReq{};
-	strncpy_s(data._authToken, authToken.c_str(), strlen(authToken.c_str()));
-	sendPacket(packetId, sizeof(data), (char*)&data);
-	ClientLogger::logThreadSafe("send packet success");
-	_mutex.unlock();
 }

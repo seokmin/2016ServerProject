@@ -119,7 +119,7 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 
 	if (resString == "")
 	{
-		ClientLogger::msgBox(L"로그인 서버가 응답하지 않습니다!", L"로그인 실패", true);
+		ClientLogger::msgBox(L"로그인 서버가 응답하지 않습니다!", L"로그인 실패", false);
 		_loginMenu->setEnabled(true); // 로그인 실패했으므로 다시 누를 수 있게
 		return;
 	}
@@ -149,17 +149,17 @@ void LoginScene::channelButtonClicked(DEF::ChannelInfo& targetChannel)
 	// 현재 칩으로 들어갈 수 있는 채널인지 확인
 	if (_currentChip < targetChannel.minBet || _currentChip > targetChannel.maxBet)
 	{
-		ClientLogger::msgBox(L"현재 보유 칩으로는 입장할 수 없습니다.", L"입장 실패", true);
+		ClientLogger::msgBox(L"현재 보유 칩으로는 입장할 수 없습니다.", L"입장 실패", false);
 		return;
 	}
-	auto bindFunc = [&]() {
-		// 네트워크 접속 결과가 나오면 채널버튼 다시 클릭할 수 있게
-		if (!NetworkManager::getInstance()->connectTcp(targetChannel.ip, targetChannel.port))
-			_channelsMenu->setEnabled(true);
-	};
+// 	auto bindFunc = [&]() {
+// 		// 네트워크 접속 결과가 나오면 채널버튼 다시 클릭할 수 있게
+// 		if (!NetworkManager::getInstance()->connectTcp(targetChannel.ip, targetChannel.port))
+// 			_channelsMenu->setEnabled(true);
+// 	};
 	
-	//auto newThread = std::thread(std::bind(&NetworkManager::connectTcp, NetworkManager::getInstance(), targetChannel.ip, targetChannel.port));
-	auto newThread = std::thread(bindFunc);
+	auto newThread = std::thread(std::bind(&LoginScene::connectChannel, this, targetChannel.ip, targetChannel.port));
+	//auto newThread = std::thread(bindFunc);
 	
 	newThread.detach();
 }
@@ -307,4 +307,26 @@ void LoginScene::parseChannelInfo(std::string& resLoginString, std::vector<DEF::
 
 		channelsVector.emplace_back(std::move(eachChanneInfo));
 	}
+}
+
+void LoginScene::connectChannel(std::string ip, int port)
+{
+	if (!NetworkManager::getInstance()->connectTcp(ip, port))
+	{
+		// connect 실패시
+		_channelsMenu->setEnabled(true); // 채널 접속 버튼 다시 누를 수 있게
+		return;
+	}
+	// connect 성공시
+	auto roomEnterPaket = COMMON::PacketRoomEnterReq();
+	strcpy_s(roomEnterPaket._authToken, sizeof(_authToken.c_str()), _authToken.c_str());
+	auto result = NetworkManager::getInstance()->sendPacket(COMMON::ROOM_ENTER_REQ, sizeof(roomEnterPaket), (char*)&roomEnterPaket);
+	if (result == false)
+	{
+		ClientLogger::logThreadSafe("send() 실패");
+		// 기타 send 실패시 처리
+		return;
+	}
+	// send 성공시
+	// 걍 response 기다린다.
 }

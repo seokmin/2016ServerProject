@@ -36,7 +36,7 @@ public:
 	CREATE_FUNC(LoginScene);
 
 private:
-	static enum Z_ORDER
+	enum Z_ORDER : short
 	{
 		ERR = -1,
 		BACKGROUND = 0,
@@ -52,6 +52,8 @@ private:
 
 
 	void parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector);
+
+	void connectChannel(std::string ip, int port);
 
 	Json::Reader	_reader;
 

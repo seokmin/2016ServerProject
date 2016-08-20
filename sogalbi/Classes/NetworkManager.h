@@ -7,13 +7,11 @@ public:
 
 	bool connectTcp(std::string serverIp, int serverPort);
 
-	void sendPacket_LogIn(std::string authToken);
-
+	bool sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData);
 
 private:
 	NetworkManager();
 	void	initTcp();
-	void	sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData);
 
 private:
 	static NetworkManager* _instance;
