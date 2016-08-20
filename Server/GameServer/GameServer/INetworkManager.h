@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ServerConfig.h"
-#include "Common.h"
 
 using namespace COMMON;
 using NET_ERROR_CODE=NetworkConfig::NET_ERROR_CODE;

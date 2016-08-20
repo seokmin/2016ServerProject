@@ -2,10 +2,8 @@
 
 // Connecting_with_SQLConnect.cpp
 // compile with: user32.lib odbc32.lib
-#include <windows.h>
 #include <sqlext.h>
 #include <mbstring.h>
-#include <stdio.h>
 
 #define MAX_DATA 100
 #define MYSQLSUCCESS(rc) ((rc == SQL_SUCCESS) || (rc == SQL_SUCCESS_WITH_INFO) )

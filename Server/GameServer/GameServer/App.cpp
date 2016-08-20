@@ -1,12 +1,11 @@
 #include "stdafx.h"
 #include "App.h"
-#include "DBmanager.h"
 
-ERROR_CODE App::Init()
+COMMON::ERROR_CODE App::Init()
 {
 	// [TODO] ...
 
-	return ERROR_CODE::NONE;
+	return COMMON::ERROR_CODE::NONE;
 }
 
 void App::Run()
@@ -41,9 +40,9 @@ void App::StateCheckAndSubmit()
 }
 
 
-ERROR_CODE App::LoadConfig()
+COMMON::ERROR_CODE App::LoadConfig()
 {
 	// [TODO]...
 
-	return ERROR_CODE::NONE;
+	return COMMON::ERROR_CODE::NONE;
 }

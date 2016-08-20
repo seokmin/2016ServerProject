@@ -1,14 +1,10 @@
 #pragma once
-#include <memory>
 
-#include "Common.h"
 #include "INetworkManager.h"
-#include "UserManager.h"
-#include "RoomManager.h" 
-#include "PacketProcess.h"
 #include "DBmanager.h"
-// #include "ILog.h" //[TODO]
-
+#include "PacketProcess.h"
+#include "UserManager.h"
+#include "RoomManager.h"
 
 class App
 {
@@ -16,11 +12,11 @@ public:
 	App() {};
 	~App() { Release(); };
 
-	ERROR_CODE Init();
+	COMMON::ERROR_CODE Init();
 	void Run();
 	void Stop() { m_IsReady = false; };
 
-	ERROR_CODE LoadConfig();
+	COMMON::ERROR_CODE LoadConfig();
 
 private:
 	void Release() {};

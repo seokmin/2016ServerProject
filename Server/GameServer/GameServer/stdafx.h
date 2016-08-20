@@ -7,12 +7,14 @@
 
 #include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
+//#include <stdio.h>
+//#include <tchar.h>
 
+#include <WinSock2.h>
 #include <thread>
 #include <iostream>
 #include <chrono>
+//#include <memory>
+
 
 #include "Common.h"
-

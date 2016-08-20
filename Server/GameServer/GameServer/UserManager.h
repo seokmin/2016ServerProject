@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-class User;
+
+#include "User.h"
 
 class UserManager
 {

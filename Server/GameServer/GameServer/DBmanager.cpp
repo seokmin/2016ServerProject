@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "DBmanager.h"
 #include "MysqlManager.h"
-#include <wchar.h>
 
 DBmanager::DBmanager()
 {
