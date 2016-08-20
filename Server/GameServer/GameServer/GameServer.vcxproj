@@ -146,6 +146,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="DBmanager.h" />
     <ClInclude Include="INetworkManager.h" />
+    <ClInclude Include="IOCPManager.h" />
     <ClInclude Include="MysqlManager.h" />
     <ClInclude Include="ServerConfig.h" />
     <ClInclude Include="NetworkManager_mock.h" />
@@ -160,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="DBmanager.cpp" />
+    <ClCompile Include="IOCPManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MysqlManager.cpp" />
     <ClCompile Include="NetworkManager_mock.cpp" />
