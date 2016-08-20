@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "..\..\Common\Packet.h"
+#include "..\..\Common\Common.h"
 #include "Ws2tcpip.h"
 #include "NetworkManager.h"
 #include "ClientLogger.h"

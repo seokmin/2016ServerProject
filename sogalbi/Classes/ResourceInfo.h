@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 
 namespace FOLDERNAME
@@ -6,11 +7,14 @@ namespace FOLDERNAME
 	const std::string SPRITE = "Sprites/";
 	const std::string FONT = "fonts/";
 	const std::string AUDIO = "Sounds/";
+	const std::string POKE = "Sprites/poke/";
 }
 
 namespace FILENAME
 {
 #define DEF_FILENAME(kind,name,filename) const std::string name = FOLDERNAME::kind + filename
+#define DEF_FILENAME_POKEMON(kind,filename) FOLDERNAME::kind + filename
+#define MAX_NUMBER_OF_POKEMON_AVAILABLE 5
 	namespace SPRITE
 	{
 		DEF_FILENAME(SPRITE, TABLE_BG, "tableBg.png");
@@ -25,13 +29,18 @@ namespace FILENAME
 		DEF_FILENAME(SPRITE, LOGIN_BG, "loginBg.png");
 
 		DEF_FILENAME(SPRITE, CHANNEL_LIST_BG, "channelListBg.png");
-
-		DEF_FILENAME(SPRITE, POKE_1, "poke/°ÅºÏ¿Õ.png");
-		DEF_FILENAME(SPRITE, POKE_2, "poke/³ª¿ËÀÌ.png");
-		DEF_FILENAME(SPRITE, POKE_3, "poke/¸Á³ª´¨.png");
-		DEF_FILENAME(SPRITE, POKE_4, "poke/ÇÁÅ×¶ó.png");
-		DEF_FILENAME(SPRITE, POKE_5, "poke/ÇÇÄ«Ãò.png");
+				
+		static std::string POKE_ARRAY[MAX_NUMBER_OF_POKEMON_AVAILABLE + 1] =
+		{
+			std::string("error"),
+			DEF_FILENAME_POKEMON(POKE, u8"°ÅºÏ¿Õ.png"),
+			DEF_FILENAME_POKEMON(POKE, u8"³ª¿ËÀÌ.png"),
+			DEF_FILENAME_POKEMON(POKE, u8"¸Á³ª´¨.png"),
+			DEF_FILENAME_POKEMON(POKE, u8"ÇÁÅ×¶ó.png"),
+			DEF_FILENAME_POKEMON(POKE, u8"ÇÇÄ«Ãò.png"),
+		};
 	}
+
 	namespace FONT
 	{
 		DEF_FILENAME(FONT, PIXEL, "pixel.ttf");

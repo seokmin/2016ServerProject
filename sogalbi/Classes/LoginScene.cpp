@@ -186,6 +186,14 @@ void LoginScene::popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos)
 	_passField->setEnabled(false);
 	_logoutMenu->setVisible(true);
 
+	_moneyLabel->setString(std::to_string(_currentChip));
+	_moneyLabel->setVisible(true);
+	_nameLabel->setString(_nameField->getString());
+	_nameLabel->setVisible(true);
+	int tmpPokeNum = (_pokeNum % MAX_NUMBER_OF_POKEMON_AVAILABLE) + 1;
+	_pokeImg->setSpriteFrame(FILENAME::SPRITE::POKE_ARRAY[tmpPokeNum]);
+	_pokeImg->setVisible(true);
+
 	for (auto& channel : channelInfos)
 	{
 		auto channelNode = Node::create();
@@ -221,6 +229,10 @@ void LoginScene::popDownChannelsLayer()
 	_channelsBg->setVisible(false);
 	_logoutMenu->setVisible(false);
 	_channelsMenu->removeAllChildren();
+	
+	_moneyLabel->setVisible(false);
+	_nameLabel->setVisible(false);
+	_pokeImg->setVisible(false);
 
 	// _loginMenu->setEnabled(true); // 이건 로그아웃 성공시에 한다.
 	_nameField->setEnabled(true);
@@ -292,6 +304,26 @@ void LoginScene::initLayout()
 	// 채널 선택 메뉴
 	_channelsMenu = Menu::create();
 	addChild(_channelsMenu, Z_ORDER::UI_CHANNELS_ABOVE);
+
+	// 돈 추가
+	_moneyLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 32);
+	_moneyLabel->setColor(cocos2d::Color3B::GREEN);
+	_moneyLabel->setAnchorPoint(Vec2(0, 0));
+	_moneyLabel->setPosition(1088, 84);
+	addChild(_moneyLabel, Z_ORDER::UI_ALWAYS_TOP);
+
+	// 포켓몬 추가
+	_pokeImg = Sprite::create();
+	_pokeImg->setPosition(1040, 44);
+	_pokeImg->getTexture()->setAliasTexParameters();
+	addChild(_pokeImg, Z_ORDER::UI_ALWAYS_TOP);
+
+	// 이름 추가
+	_nameLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 32);
+	_nameLabel->setColor(cocos2d::Color3B::YELLOW);
+	_nameLabel->setAnchorPoint(Vec2(0, 0));
+	_nameLabel->setPosition(1088, 25);
+	addChild(_nameLabel, Z_ORDER::UI_ALWAYS_TOP);
 }
 
 int LoginScene::parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector)
