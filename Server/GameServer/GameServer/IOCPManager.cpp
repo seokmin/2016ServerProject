@@ -2,7 +2,7 @@
 #include "IOCPManager.h"
 
 
-IOCPManager* _instance = nullptr;
+IOCPManager* IOCPManager::_instance = nullptr;
 IOCPManager* IOCPManager::GetInstance()
 {
 	if (_instance == nullptr)
