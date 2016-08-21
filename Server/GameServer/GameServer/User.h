@@ -22,6 +22,7 @@ public:
 
 	bool IsAvailableFromPool() { return (m_sessionIndex < 0); };
 	bool CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };
+	bool CheckUserWithSessionIndex(int sessionIndex) { return (m_sessionIndex == sessionIndex); };
 	int  GetCurRoomIdx() { return m_currentRoomIdx; };
 	int  GetUserIdx() { return m_userId; };
 	

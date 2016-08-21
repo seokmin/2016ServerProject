@@ -50,9 +50,20 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 	if (!m_pRefUserMgr->LoginUser(packetInfo.SessionIndex, std::string(reqPkt->_authToken)))
 		return ERROR_CODE::ROOM_ENTER_CHANNEL_FULL;
 
-	m_pRefRoomMgr->EnterUser(packetInfo.SessionIndex);
+	ERROR_CODE result = m_pRefRoomMgr->EnterUser(packetInfo.SessionIndex);
+	if (result != ERROR_CODE::NONE)
+		return result;
+	
+	// 바로 위에서 m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)이 null인지 확인하므로 두 번 확인은 안 함..
+	resPkt._roomNum = m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)->GetCurRoomIdx();
 
-	return ERROR_CODE();
+	PacketInfo sendPacket;
+	sendPacket.SessionIndex = packetInfo.SessionIndex;
+	sendPacket.PacketId = PACKET_ID::ROOM_ENTER_RES;
+	sendPacket.pRefData = (char *)&resPkt;
+	sendPacket.PacketBodySize = sizeof(resPkt);
+
+	return ERROR_CODE::NONE;
 }
 
 ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)

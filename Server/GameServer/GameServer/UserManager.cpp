@@ -50,6 +50,15 @@ bool UserManager::LogoutUser(const int sessionIndex)
 	return true;
 }
 
+std::shared_ptr<User> UserManager::GetUserBySessionIndex(int sessionIndex)
+{
+	auto iter = std::find_if(std::begin(m_userList), std::end(m_userList), [sessionIndex](auto pUser) {return pUser->CheckUserWithSessionIndex(sessionIndex); });
+	if (iter == std::end(m_userList))
+		return nullptr;
+
+	return *iter;
+}
+
 int UserManager::GetCurrentUserCount()
 {
 	return m_curUserCount;

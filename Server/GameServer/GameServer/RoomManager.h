@@ -4,6 +4,7 @@
 
 #include "Room.h"
 class User;
+class UserManager;
 
 class RoomManager
 {
@@ -11,7 +12,7 @@ public:
 	RoomManager() {};
 	~RoomManager() {};
 
-	void Init();
+	void Init(UserManager* userManager);
 	COMMON::ERROR_CODE LeavUserFromRoom(int roomid, User* pUser);
 
 	ERROR_CODE EnterUser(int sessionIndex);
@@ -19,5 +20,6 @@ public:
 private:
 	std::shared_ptr<Room> GetAvailableRoom();
 	std::vector<std::shared_ptr<Room>> m_roomList;
+	UserManager* m_pRefUserManager = nullptr;
 };
 

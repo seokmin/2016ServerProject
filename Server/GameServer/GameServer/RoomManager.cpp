@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "RoomManager.h"
+#include "UserManager.h"
 
-void RoomManager::Init()
+void RoomManager::Init(UserManager* userManager)
 {
+	m_pRefUserManager = userManager;
+
 	for (int i = 0; i < ServerConfig::MAX_ROOMCOUNT; i++)
 	{
 		auto room = std::make_shared<Room>(i);
@@ -19,7 +22,17 @@ ERROR_CODE RoomManager::EnterUser(int sessionIndex)
 		return ERROR_CODE::ROOM_ENTER_CHANNEL_FULL;
 	}
 
+	auto targetUser = m_pRefUserManager->GetUserBySessionIndex(sessionIndex);
+	if (targetUser == nullptr)
+	{
+		printf_s("해당 세션의 유저(%d)가 없어서 방에 들어갈 수 없습니다. \n", sessionIndex);
+		return ERROR_CODE::ROOM_ENTER_INVALID_SESSION_INDEX;
+	}
 
+	if (!targetRoom->EnterUser(targetUser.get()))
+	{
+		return ERROR_CODE::ROOM_ENTER_ROOM_FULL;
+	}
 
 	return ERROR_CODE::NONE;
 }

@@ -51,9 +51,9 @@ namespace LoginServer.Request
 
             Guid g = Guid.NewGuid();
             string authToken = Convert.ToBase64String(g.ToByteArray());
-            authToken = authToken.Replace("=", "");
-            authToken = authToken.Replace("+", "");
-            authToken = authToken.Replace("/", "");
+            //authToken = authToken.Replace("=", "");
+            //authToken = authToken.Replace("+", "");
+            //authToken = authToken.Replace("/", "");
 
             int affectedRows = await Data.UserRepository.SaveAuthToken(authToken, requestPacket.UserID);
 
