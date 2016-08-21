@@ -366,7 +366,7 @@ void LoginScene::connectChannel(std::string ip, int port)
 	}
 	// connect ¼º°ø½Ã
 	auto roomEnterPaket = COMMON::PacketRoomEnterReq();
-	strcpy_s(roomEnterPaket._authToken, sizeof(_authToken.c_str()), _authToken.c_str());
+	strcpy_s(roomEnterPaket._authToken, COMMON::AUTH_TOKEN_LEN+1, _authToken.c_str());
 	auto result = NetworkManager::getInstance()->sendPacket(COMMON::ROOM_ENTER_REQ, sizeof(roomEnterPaket), (char*)&roomEnterPaket);
 	if (result == false)
 	{

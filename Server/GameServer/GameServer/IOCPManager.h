@@ -14,6 +14,9 @@ struct SessionInfo
 	sockaddr_in			_sockAddr;
 	char*				_recvBuffer = nullptr;
 	bool				IsConnected() { return _socket > 0 ? true : false; }
+	~SessionInfo() {
+		auto a = 1;
+	}
 };
 
 struct IOInfo

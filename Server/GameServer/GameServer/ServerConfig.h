@@ -28,7 +28,7 @@ public:
 
 	int BackLogCount = 5;
 
-	short MAX_SESSION_RECV_BUFFER_SIZE;
+	static const short MAX_SESSION_RECV_BUFFER_SIZE = 4096;
 	short MAX_IOCP_RECV_BUFFER_SIZE;
 	//short MaxClientSendBufferSize;
 
