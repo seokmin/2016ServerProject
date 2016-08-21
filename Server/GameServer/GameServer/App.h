@@ -24,6 +24,7 @@ private:
 
 private:
 	bool m_IsReady = false;
+	bool m_dbisRunning = false;
 	const int DBSubmitInterval = 3;
 
 	//std::unique_ptr<ILog> m_pLogger;

@@ -4,6 +4,7 @@
 MySQLMangager::MySQLMangager()
 {
 	wcscpy_s(chr_ds_name, SQL_MAX_DSN_LENGTH, (SQLWCHAR *)L"mysql_seokmin_for_jb"); // odbc name
+	auto tmp = hstmt;
 }
 
 
@@ -15,12 +16,24 @@ MySQLMangager::~MySQLMangager()
 RETCODE MySQLMangager::sqlconn() {
 	SQLAllocEnv(&henv);
 	SQLAllocConnect(henv, &hdbc);
-	SQLWCHAR ConnID[] = L"next";
-	SQLWCHAR ConnPW[] = L"1234";
 	//rc = SQLConnect(hdbc, chr_ds_name, SQL_NTS, ConnID, sizeof(ConnID), ConnPW, sizeof(ConnPW));
 	rc = SQLConnect(hdbc, chr_ds_name, SQL_NTS, NULL, 0, NULL, 0);
 	// Deallocate handles, display error message, and exit.
 	if (!MYSQLSUCCESS(rc)) {
+		SQLWCHAR	SQLState[100];
+		SQLWCHAR	MessageText[100];
+		SQLINTEGER	NativeErrorPtr;
+		SQLSMALLINT TextLength;
+		SQLGetDiagRec(
+			SQL_HANDLE_DBC,
+			hdbc,
+			1,
+			SQLState,
+			&NativeErrorPtr,
+			MessageText,
+			100,
+			&TextLength);
+
 		SQLFreeConnect(henv);
 		SQLFreeEnv(henv);
 		SQLFreeConnect(hdbc);

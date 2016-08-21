@@ -14,7 +14,7 @@ DBmanager::~DBmanager()
 COMMON::ERROR_CODE DBmanager::SubmitState(int max, int count)
 {
 	//	"SELECT name, ip, port, r, g, b, minBet, maxBet FROM channel"
-	SQLWCHAR query[100];
+	SQLWCHAR query[100] = L"SHOW TABLES;";
 	SQLWCHAR result[100];
 	MySQLMangager mysql;
 	auto ret = mysql.sqlconn();
