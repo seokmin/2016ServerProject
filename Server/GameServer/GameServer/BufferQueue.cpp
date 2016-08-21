@@ -18,7 +18,7 @@ void BufferQueue::Init(NetworkSetting setting)
 	// 버퍼 풀 구성
 	for (unsigned i = 0; i < setting._maxBufferCount; ++i)
 	{
-		_bufferPool.emplace_back(new char[setting._maxBufferSize]);
+		_bufferPool.emplace_back(new char[setting._maxIocpBufferSize]);
 	}
 }
 

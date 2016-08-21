@@ -3,8 +3,9 @@
 struct NetworkSetting
 {
 	int			_portNum;
-	int			_maxBufferSize; // max iocp buffer size
+	int			_maxIocpBufferSize; // max iocp buffer size
 	unsigned	_maxBufferCount;
 	unsigned	_maxSessionCount;
+	unsigned	_maxSessionRecvBufferSize;
 	int			_backLog;
 };

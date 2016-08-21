@@ -21,11 +21,12 @@ public:
 
 	bool IsAvailableFromPool() { return (m_sessionIndex < 0); };
 	bool CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };
-
+	int  GetCurRoomIdx() { return m_currentRoomIdx; };
 
 private:
 	int m_userId = -1;
 	int m_sessionIndex = -1;
+	int m_currentRoomIdx = -1;
 	std::string m_authToken = "";
 
 	DOMAIN_STATE m_curDomain = DOMAIN_STATE::NONE;
