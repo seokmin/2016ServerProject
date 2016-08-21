@@ -65,6 +65,7 @@ void IOCPManager::ListenThreadFunc()
 		// 새로 접속한 유저가 사용할 세션을 노는 세션중에 얻어온다.
 		_sessionPoolMutex.lock();
 			auto newSessionIndex = _sessionIndexPool.front();
+			_sessionIndexPool.pop_front();
 		_sessionPoolMutex.unlock();
 		auto& newSession = _sessionPool.at(newSessionIndex);
 		ZeroMemory(&newSession, sizeof(newSession));
@@ -159,7 +160,9 @@ void IOCPManager::CreateSessionPool()
 
 	for (unsigned i = 0; i < _setting._maxSessionCount; ++i)
 	{
-		_sessionPool.emplace_back(std::move(SessionInfo{}));
+		auto newSession = SessionInfo{};
+		newSession._index = i;
+		_sessionPool.emplace_back(std::move(newSession));
 		_sessionIndexPool.push_back(i);
 	}
 }
