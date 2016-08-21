@@ -4,9 +4,14 @@
 
 #include "PacketQueue.h"
 
-// 이 함수는 sync-safe 하지 않다. 여러군데에서 동시에 부르면 결과를 보장하지 못한다.
+// 제일 앞의 결과를 보여준다
 RecvPacketInfo PacketQueue::ReadFront()
 {
+	if (_packetDeque.empty())
+	{
+		auto nullPacket = RecvPacketInfo{};
+		nullPacket.PacketId = PACKET_ID::NULL_PACKET;
+	}
 	return _packetDeque.front();
 }
 
@@ -21,7 +26,8 @@ void PacketQueue::PopFront()
 	_mutex.unlock();
 }
 
-// 이 함수는 sync-safe, thread-safe하다. 아무데서나 막 불러도 괜찮다. 현재 사용 용도는 네트워크 레이어에서 부를 용도
+// 이 함수는 sync-safe, thread-safe하다.
+// 아무데서나 막 불러도 괜찮다. 현재 사용 용도는 네트워크 레이어에서 부를 용도
 void PacketQueue::PushBack(RecvPacketInfo& recvPacket)
 {
 	// 패킷 복사

@@ -10,7 +10,6 @@ public:
 	void			PopFront();
 	void			PushBack(RecvPacketInfo& recvPacket);
 private:
-
 public:
 private:
 	std::deque<RecvPacketInfo>	_packetDeque;
