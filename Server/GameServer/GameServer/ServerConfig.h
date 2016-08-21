@@ -20,7 +20,7 @@ public:
 	static const int MAX_USERCOUNT_PER_ROOM = COMMON::MAX_USERCOUNT_PER_ROOM;
 
 	WCHAR SERVERNAME[MAX_NAME_LEN + 1] = L"testServer";
-	WCHAR IP[MAX_IP_LEN + 1] = L"10.73.38.134";
+	WCHAR IP[MAX_IP_LEN + 1] = L"127.0.0.1";
 	unsigned short Port = 34343;
 	unsigned int minBet = 100;
 	unsigned int maxBet = 1000;
