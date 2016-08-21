@@ -60,6 +60,9 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 	sendPacket.PacketId = PACKET_ID::ROOM_ENTER_RES;
 	sendPacket.pRefData = (char *)&resPkt;
 	sendPacket.PacketBodySize = sizeof(resPkt);
+	m_pSendPacketQue->PushBack(sendPacket);
+	
+
 
 	return ERROR_CODE::NONE;
 }
