@@ -9,15 +9,18 @@ COMMON::ERROR_CODE App::Init()
 	m_pDB = std::make_unique<DBmanager>();
 	m_pDB->Init();
 	
-	m_pPacketProc = std::make_unique<PacketProcess>();
 	m_pUserMgr = std::make_unique<UserManager>();
 	m_pRoomMgr = std::make_unique<RoomManager>();
+	m_pRoomMgr->Init();
 	LoadConfig();
 
 	//network init
 	m_pSendPacketQue = std::make_unique<PacketQueue>();
 	m_pRecvPacketQue = std::make_unique<PacketQueue>();
 	IOCPManager::GetInstance()->InitServer(m_pRecvPacketQue.get(), m_pSendPacketQue.get(), m_pServerConfig.get());
+
+	m_pPacketProc = std::make_unique<PacketProcess>();
+	m_pPacketProc->Init(m_pUserMgr.get(), m_pRoomMgr.get());
 
 	m_IsReady = true;
 	m_dbisRunning = true;

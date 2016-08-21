@@ -12,6 +12,7 @@ public:
 	void Init();
 
 	bool LoginUser(const int sessionIndex, std::string authToken);
+	bool LogoutUser(const int sessionIndex);
 
 	int GetCurrentUserCount();
 

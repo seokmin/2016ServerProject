@@ -14,9 +14,9 @@ public:
 	static const int MAX_PACKET_SIZE = 1024; // 최대 패킷 크기
 	static const int PACKET_HEADER_SIZE = COMMON::PACKET_HEADER_SIZE;
 
-	static const int MAX_USERCOUNT_PER_CHANNEL = 100;
-	int ExtraClientCount = 20; // 넘쳤다는걸 알려주기 위한 여유분..
-	static const int MAX_ROOMCOUNT = 20;
+	static const int MAX_USERCOUNT_PER_CHANNEL = 5000;
+	int ExtraClientCount = 100; // 넘쳤다는걸 알려주기 위한 여유분..
+	static const int MAX_ROOMCOUNT = 1000;
 	static const int MAX_USERCOUNT_PER_ROOM = COMMON::MAX_USERCOUNT_PER_ROOM;
 
 	WCHAR SERVERNAME[MAX_NAME_LEN + 1] = L"testServer";

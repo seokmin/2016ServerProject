@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UserManager.h"
+#include "Room.h"
 #include <algorithm>
 
 void UserManager::Init()
@@ -19,6 +20,25 @@ bool UserManager::LoginUser(const int sessionIndex, std::string authToken)
 
 	newUser->Init(sessionIndex, authToken);
 	++m_curUserCount;
+
+	return true;
+}
+
+bool UserManager::LogoutUser(const int sessionIndex)
+{
+	if (sessionIndex < 0 || sessionIndex >= m_userList.size())
+		return false;
+
+	std::shared_ptr<User> user = m_userList.at(sessionIndex);
+	
+	auto roomId = user->GetCurRoomIdx();
+	//User Get out of Room [TODO] 
+	//auto room = Room::GetRoomByIdx(roomId);
+	// ...
+	//room->LeaveUser(user);
+
+	user->Clear();
+	return true;
 }
 
 int UserManager::GetCurrentUserCount()

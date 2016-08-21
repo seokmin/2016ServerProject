@@ -12,5 +12,6 @@ void User::Clear()
 {
 	m_sessionIndex = -1;
 	m_authToken = "";
+	m_currentRoomIdx = -1;
 	m_curDomain = DOMAIN_STATE::NONE;
 }
