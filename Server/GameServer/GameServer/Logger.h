@@ -4,8 +4,6 @@
 class Logger
 {
 public:
-	Logger();
-	virtual ~Logger();
 	
 	enum Level {
 		INFO,
@@ -16,8 +14,17 @@ public:
 		ERROR_SIMPLE,
 	};
 
-
 	void Log(Level level, WCHAR* message, int lessageLen);
+
+	static Logger* GetInstance();
+	static void DelInstance();
+
+private:
+	static Logger* g_instance;
+	Logger(); //singleton
+	virtual ~Logger();
+
+
 private:
 	WCHAR m_levelStr[6][20];
 };

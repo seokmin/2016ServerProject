@@ -12,9 +12,8 @@ DBmanager::~DBmanager()
 {
 }
 
-COMMON::ERROR_CODE DBmanager::Init(Logger* logger)
+COMMON::ERROR_CODE DBmanager::Init()
 {
-	m_logger = logger;
 	MySQLMangager mysql;
 	SQLWCHAR result[100];
 	auto ret = mysql.sqlconn();
@@ -52,6 +51,6 @@ COMMON::ERROR_CODE DBmanager::SubmitState(int max, int count, ServerConfig* pSer
 	}
 	WCHAR levelStr[200];
 	swprintf(levelStr, L"[DB : GOOD] Server Id = %s", result);
-	m_logger->Log(Logger::INFO, levelStr, 200);
+	Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
 	return COMMON::ERROR_CODE::NONE;
 }

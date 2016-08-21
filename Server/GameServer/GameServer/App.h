@@ -1,12 +1,12 @@
 #pragma once
 
-#include "INetworkManager.h"
 #include "DBmanager.h"
 #include "PacketProcess.h"
 #include "UserManager.h"
 #include "RoomManager.h"
 #include "ServerConfig.h"
 #include "Logger.h"
+#include "INetworkManager.h"
 
 class App
 {
@@ -21,15 +21,13 @@ public:
 	COMMON::ERROR_CODE LoadConfig();
 
 private:
-	void Release() {};
+	void Release();
 	void StateCheckAndSubmit();
 
 private:
 	bool m_IsReady = false;
 	bool m_dbisRunning = false;
 	const int DBSubmitInterval = 3;
-
-	std::unique_ptr<Logger> m_pLogger;
 
 	std::unique_ptr<ServerConfig> m_pServerConfig;
 	std::unique_ptr<INetworkManager> m_pNetwork;	

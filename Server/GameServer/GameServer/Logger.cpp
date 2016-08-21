@@ -5,6 +5,29 @@
 #include <iomanip> // put_time
 #include <string>  // string
 
+Logger* Logger::g_instance = nullptr;
+
+
+Logger * Logger::GetInstance()
+{
+	if (g_instance == nullptr)
+	{
+		g_instance = new Logger();
+		return g_instance;
+	}
+	return g_instance;
+}
+
+void Logger::DelInstance()
+{
+	if (g_instance != nullptr)
+	{
+		delete g_instance;
+		g_instance = nullptr;
+	}
+	return;
+}
+
 
 Logger::Logger() : m_levelStr{
 	L"INFO",
@@ -16,7 +39,6 @@ Logger::Logger() : m_levelStr{
 }
 {
 }
-
 
 Logger::~Logger()
 {

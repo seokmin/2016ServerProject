@@ -1,4 +1,8 @@
 #pragma once
+#include <deque>
+#include <vector>
+#include <mutex>
+#include "NetworkSetting.h"
 
 struct SessionInfo
 {
@@ -23,7 +27,8 @@ struct IOInfo
 class IOCPManager
 {
 public:
-	IOCPManager*		GetInstance();
+	static IOCPManager*		GetInstance();
+	static void				DelInstance();
 	void				StartServer();
 private:
 	IOCPManager() {};
