@@ -50,7 +50,7 @@ COMMON::ERROR_CODE DBmanager::SubmitState(int max, int count, ServerConfig* pSer
 		return COMMON::ERROR_CODE::DB_ERROR;
 	}
 	WCHAR levelStr[200];
-	swprintf(levelStr, L"[DB : GOOD] Server Id = %s", result);
+	wsprintf(levelStr, L"[DB : GOOD] Server Id = %s", result);
 	Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
 	return COMMON::ERROR_CODE::NONE;
 }

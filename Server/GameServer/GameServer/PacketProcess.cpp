@@ -20,6 +20,7 @@ void PacketProcess::Init(UserManager * pUserMgr, RoomManager * pRoomMgr)
 
 	PacketFuncArray[(int)ServerConfig::PACKET_ID::NTF_SYS_CLOSE_SESSION] = &PacketProcess::NtfSysCloseSesson;
 	PacketFuncArray[(int)PACKET_ID::ROOM_ENTER_REQ] = &PacketProcess::RoomEnter;
+	PacketFuncArray[(int)PACKET_ID::ROOM_LEAVE_REQ] = &PacketProcess::RoomLeave;
 }
 
 void PacketProcess::Process(PacketInfo packetInfo)
@@ -62,7 +63,14 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 
 ERROR_CODE PacketProcess::RoomLeave(PacketInfo packetInfo)
 {
-	//[TODO] ...
+	auto reqPkt = (PacketRoomLeaveReq*)packetInfo.pRefData;
+	PacketRoomLeaveRes resPkt;
+
+	if (!m_pRefUserMgr->LogoutUser(packetInfo.SessionIndex))
+		return ERROR_CODE::ROOM_ENTER_CHANNEL_FULL;
+
+
+
 	return ERROR_CODE();
 }
 

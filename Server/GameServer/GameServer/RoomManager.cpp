@@ -10,3 +10,8 @@ void RoomManager::Init()
 	}
 
 }
+
+COMMON::ERROR_CODE RoomManager::LeavUserFromRoom(int roomid, User * pUser)
+{
+	return m_roomList[roomid]->LeaveRoom(pUser);
+}

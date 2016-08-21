@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "User.h"
+class RoomManager;
 
 class UserManager
 {
@@ -9,7 +10,7 @@ public:
 	UserManager() {};
 	~UserManager() {};
 
-	void Init();
+	void Init(RoomManager* roomMgr);
 
 	bool LoginUser(const int sessionIndex, std::string authToken);
 	bool LogoutUser(const int sessionIndex);
@@ -22,6 +23,9 @@ private:
 
 private:
 	std::vector<std::shared_ptr<User>> m_userList;
+
 	int m_curUserCount = 0;
+	
+	RoomManager* m_roomMgr;
 };
 
