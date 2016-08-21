@@ -11,14 +11,10 @@
 
 IOCPManager* IOCPManager::_instance = nullptr;
 
-// 채널 설정을 Json에서 읽어온다
-// TODO : 더미 데이터 넣어뒀음. json에서 읽어오게 제대로 고쳐야 함
 void IOCPManager::LoadChannelSettingFromServerConfig(ServerConfig* serverconfig)
 {
 	auto setting = NetworkSetting{};
-	setting._maxBufferCount = serverconfig->MAX_BUFFER_COUNT;
 	setting._maxSessionCount = serverconfig->MAX_USERCOUNT_PER_CHANNEL + serverconfig->ExtraClientCount;
-	setting._maxIocpBufferSize = serverconfig->MAX_IOCP_RECV_BUFFER_SIZE;
 	setting._portNum = serverconfig->Port;
 	setting._backLog = serverconfig->BackLogCount;
 	setting._maxSessionRecvBufferSize = serverconfig->MAX_SESSION_RECV_BUFFER_SIZE;
@@ -30,18 +26,64 @@ void IOCPManager::WorkerThreadFunc()
 {
 	DWORD transferedByte = 0;
 	unsigned sessionIndex = 0u;
-	IOInfo ioInfo;
+	IOInfo* ioInfo;
 
 	while (true)
 	{
 		GetQueuedCompletionStatus(_completionPort, &transferedByte,
 			(PULONG_PTR)&sessionIndex, (LPOVERLAPPED*)&ioInfo, INFINITE);
-		
-		auto sock = _sessionPool[sessionIndex]._socket;
 
-		if (ioInfo._rwMode == IOInfo::RWMode::READ)
+		auto& session = _sessionPool.at(sessionIndex);
+
+		if (ioInfo->_rwMode == IOInfo::RWMode::READ)
 		{
-			auto receivePos = ioInfo._wsaBuf.buf;
+			auto headerPos = session._recvBuffer;
+			auto receivePos = ioInfo->_wsaBuf.buf;
+			// 아직 처리 안된 데이터 양 = 끝지점 - 시작지점
+			auto totalDataSizeInBuf = receivePos + transferedByte - session._recvBuffer;
+			// 패킷으로 만들어지길 기다리는 데이터의 사이즈
+			auto remainingDataSizeInBuf = totalDataSizeInBuf;
+			
+			// 패킷 조제 루프
+			while (remainingDataSizeInBuf >= PACKET_HEADER_SIZE) 
+			{ // 헤더를 들여다 보기에 충분한 데이터가 있다면
+				// 헤더를 들여다본다
+				auto header = (PacketHeader*)headerPos;
+				auto bodySize = header->_bodySize;
+				// 패킷 하나를 온전히 만들 수 있을 때
+				if (PACKET_HEADER_SIZE + bodySize >= remainingDataSizeInBuf)
+				{
+					// 패킷을 만든다.
+					auto newPacketInfo = RecvPacketInfo{};
+					newPacketInfo.PacketId = header->_id;
+					newPacketInfo.PacketBodySize = bodySize;
+					newPacketInfo.pRefData = headerPos + PACKET_HEADER_SIZE; // 바디 위치
+					newPacketInfo.SessionIndex = sessionIndex;
+
+					// 패킷큐에 집어넣는다. 복사로 동작하므로 문제없다.
+					_recvPacketQueue->PushBack(newPacketInfo);
+
+					// 패킷을 하나 온전히 만들었으므로 다음번 헤더 자리를 지정하고, 남은 데이터 사이즈를 갱신해준다.
+					headerPos += PACKET_HEADER_SIZE + bodySize;
+					remainingDataSizeInBuf -= PACKET_HEADER_SIZE + bodySize; 
+				}
+				else // 헤더는 있는데 데이터가 모자라서 패킷 하나를 통짜로 만들 수 없을 때
+					break;
+			}
+			// 만들 수 있는 놈들은 다 패킷으로 만들었다. 남은 찌꺼기들을 버퍼의 맨 앞으로 당겨주자.
+			// 남은 찌꺼기들이라고 하더라도 시작부분은 무조건 정수리일 것이다.
+			memcpy_s(session._recvBuffer, _setting._maxSessionRecvBufferSize, headerPos, remainingDataSizeInBuf);
+
+			// 이제 만들 수 있는 패킷은 다 만들었다. Recv 걸어주자.
+			ZeroMemory(&ioInfo->_overlapped, sizeof(OVERLAPPED));
+			ioInfo->_wsaBuf.buf = session._recvBuffer + remainingDataSizeInBuf;// 아직 미완 패킷이 있을 수 있으므로 recv는 미완패킷 뒤에다가 받는다.
+			ioInfo->_wsaBuf.len = _setting._maxSessionRecvBufferSize - remainingDataSizeInBuf;
+			ioInfo->_rwMode = IOInfo::RWMode::READ;
+			DWORD recvSize = 0, flags = 0;
+			WSARecv(session._socket,	// 소켓
+				&ioInfo->_wsaBuf,		// 해당 recv에 사용할 버퍼
+				1,						// 사용할 버퍼 개수
+				&recvSize, &flags, &ioInfo->_overlapped, nullptr);
 		}
 		else // RWMode::WRITE
 		{
@@ -78,17 +120,16 @@ void IOCPManager::ListenThreadFunc()
 
 
 		auto ioInfo = new IOInfo();
-		// 해당 io에 사용할 버퍼를 버퍼 풀에서 하나 얻어온다.
-		ioInfo->_wsaBuf.buf = BufferQueue::GetInstance()->GetBufferThreadSafe();
-		ioInfo->_wsaBuf.len = _setting._maxIocpBufferSize;
-		ioInfo->_rwMode = IOInfo::RWMode::READ;
 		ZeroMemory(&ioInfo->_overlapped, sizeof(OVERLAPPED));
+		ioInfo->_wsaBuf.buf = newSession._recvBuffer;
+		ioInfo->_wsaBuf.len = _setting._maxSessionRecvBufferSize;
+		ioInfo->_rwMode = IOInfo::RWMode::READ;
 
 		// Completion Port에 새로운 세션을 등록함
 		BindSessionToIOCP(newSession);
 
 		DWORD recvSize = 0, flags = 0;
-
+		
 		// Recv 걸어놓는다. 완료되면 worker thread로 넘어감
 		WSARecv(newSession._socket,	// 소켓
 			&ioInfo->_wsaBuf,		// 해당 recv에 사용할 버퍼
@@ -131,15 +172,25 @@ HANDLE IOCPManager::CreateIOCP()
 void IOCPManager::CreateSessionPool()
 {
 	// 방어코드
-	if (_sessionPool.size() != 0)
+	if (_sessionPool.empty())
 		return;
 
 	for (unsigned i = 0; i < _setting._maxSessionCount; ++i)
 	{
 		auto newSession = SessionInfo{};
 		newSession._index = i;
+		// 세션마다 가지고 있는 버퍼를 새로 만든다
+		newSession._recvBuffer = new char[_setting._maxSessionRecvBufferSize]; 
 		_sessionPool.emplace_back(std::move(newSession));
 		_sessionIndexPool.push_back(i);
+	}
+}
+
+void IOCPManager::ReleaseSessionPool()
+{
+	for (auto& i : _sessionPool)
+	{
+		delete[] i._recvBuffer;
 	}
 }
 
