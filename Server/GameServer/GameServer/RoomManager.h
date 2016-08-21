@@ -12,7 +12,7 @@ public:
 	RoomManager() {};
 	~RoomManager() {};
 
-	void Init(UserManager* userManager);
+	void Init(UserManager* userManager, PacketQueue* sendPacketQue);
 	COMMON::ERROR_CODE LeavUserFromRoom(int roomid, User* pUser);
 
 	std::shared_ptr<Room> GetRoomById(int id);

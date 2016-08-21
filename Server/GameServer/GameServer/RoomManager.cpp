@@ -1,14 +1,16 @@
 #include "stdafx.h"
 #include "RoomManager.h"
 #include "UserManager.h"
+#include "PacketQueue.h"
 
-void RoomManager::Init(UserManager* userManager)
+void RoomManager::Init(UserManager* userManager, PacketQueue* sendPacketQue)
 {
 	m_pRefUserManager = userManager;
 
 	for (int i = 0; i < ServerConfig::MAX_ROOMCOUNT; i++)
 	{
 		auto room = std::make_shared<Room>(i);
+		room->Init(sendPacketQue);
 		m_roomList.push_back(room);
 	}
 }

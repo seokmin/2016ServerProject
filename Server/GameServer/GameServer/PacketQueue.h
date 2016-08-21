@@ -11,6 +11,10 @@ public:
 	RecvPacketInfo	ReadFront();
 	void			PopFront();
 	void			PushBack(RecvPacketInfo& recvPacket);
+	~PacketQueue()
+	{
+		auto a = 1;
+	}
 private:
 public:
 private:
