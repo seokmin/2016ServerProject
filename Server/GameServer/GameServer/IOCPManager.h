@@ -32,12 +32,12 @@ public:
 	static IOCPManager*		GetInstance();
 	static void				DelInstance();
 
-	void					InitServer(PacketQueue* recvPacketQueue, PacketQueue* sendPacketQueue, ServerConfig* serverConfig);
+	COMMON::ERROR_CODE		InitServer(PacketQueue* recvPacketQueue, PacketQueue* sendPacketQueue, ServerConfig* serverConfig);
 	COMMON::ERROR_CODE		StartServer();
 private:
 	IOCPManager() {};
 
-	void LoadChannelSettingFromServerConfig(ServerConfig* serverconfig);
+	void					LoadChannelSettingFromServerConfig(ServerConfig* serverconfig);
 	HANDLE					CreateIOCP();
 	void					CreateSessionPool();
 
@@ -45,7 +45,6 @@ private:
 	void					ListenThreadFunc();
 
 	void					BindSessionToIOCP(SessionInfo& targetSession);
-
 
 public:
 private:

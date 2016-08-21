@@ -98,8 +98,8 @@ void IOCPManager::ListenThreadFunc()
 
 COMMON::ERROR_CODE IOCPManager::StartServer()
 {
-	if (_sendPacketQueue == nullptr || _recvPacketQueue == nullptr)
-		return ERROR_CODE::IOCP_START_FAIL_INIT_FIRST;
+	if (_initialized == false)
+		return ERROR_CODE::IOCP_START_FAIL_NOT_INITIALIZED;
 
 	// 서버 소켓 활성화
 	listen(_serverSocket, _setting._backLog);
@@ -164,8 +164,11 @@ void IOCPManager::DelInstance()
 	return;
 }
 
-void IOCPManager::InitServer(PacketQueue* recvPacketQueue, PacketQueue* sendPacketQueue, ServerConfig* serverConfig)
+COMMON::ERROR_CODE IOCPManager::InitServer(PacketQueue* recvPacketQueue, PacketQueue* sendPacketQueue, ServerConfig* serverConfig)
 {
+	if (recvPacketQueue == nullptr || sendPacketQueue == nullptr)
+		return ERROR_CODE::IOCP_INIT_FAIL_DONOT_GIVEME_NULLPTR;
+
 	// 서버설정에서 채널설정을 불러온다
 	LoadChannelSettingFromServerConfig(serverConfig);
 	_recvPacketQueue = recvPacketQueue;
@@ -192,4 +195,7 @@ void IOCPManager::InitServer(PacketQueue* recvPacketQueue, PacketQueue* sendPack
 	socketAddress.sin_port = htons(_setting._portNum);
 
 	bind(_serverSocket, (sockaddr*)&socketAddress, sizeof(socketAddress));
+
+	_initialized = true;
+	return ERROR_CODE::NONE;
 }
