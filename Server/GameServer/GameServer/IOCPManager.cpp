@@ -20,6 +20,7 @@ void IOCPManager::LoadChannelSettingFromServerConfig(ServerConfig* serverconfig)
 	setting._maxSessionCount = serverconfig->MAX_USERCOUNT_PER_CHANNEL + serverconfig->ExtraClientCount;
 	setting._maxBufferSize = serverconfig->MaxClientRecvBufferSize;
 	setting._portNum = serverconfig->Port;
+	setting._backLog = serverconfig->BackLogCount;
 	
 	_setting = setting;
 }
@@ -99,36 +100,15 @@ COMMON::ERROR_CODE IOCPManager::StartServer()
 {
 	if (_sendPacketQueue == nullptr || _recvPacketQueue == nullptr)
 		return ERROR_CODE::IOCP_START_FAIL_INIT_FIRST;
-	// IOCP를 만든다.
-	_completionPort = CreateIOCP();
 
-	// 세션 풀을 만든다.
-	CreateSessionPool();
-
-	// 윈속 초기화
-	auto wsaData = WSADATA{};
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-		Beep(1000, 1000); // TODO : 에러 발생시 일단 beep 해둠. 나중에 에러처리 필요
-	// 서버 소켓 셋팅
-	// TODO : SOCK_STREAM, WSA_FLAG_OVERLAPPED의 의미는 잘 모르겠다. 주석 바람
-	_serverSocket = WSASocket(AF_INET, SOCK_STREAM, 0, nullptr, 0, WSA_FLAG_OVERLAPPED);
-	sockaddr_in socketAddress;
-	ZeroMemory(&socketAddress, sizeof(socketAddress));
-	socketAddress.sin_family = AF_INET;
-	socketAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-	socketAddress.sin_port = htons(_setting._portNum);
-
-	bind(_serverSocket, (sockaddr*)&socketAddress, sizeof(socketAddress));
 	// 서버 소켓 활성화
-	// TODO : backlog 적정값 결정 필요
-	listen(_serverSocket, 5);
+	listen(_serverSocket, _setting._backLog);
 
-	// listen 스레드를 만든다.
+	// listen 스레드 돌린다.
 	auto listenThread = std::thread(std::bind(&IOCPManager::ListenThreadFunc, this));
 	listenThread.detach();
 
-
-	// worker 스레드 풀을 만든다.
+	// worker 스레드 돌린다.
 	auto sysInfo = SYSTEM_INFO{};
 	GetSystemInfo(&sysInfo); // 시스템 정보 알아오기. 코어 개수 파악을 위함
 	auto numThread = sysInfo.dwNumberOfProcessors * 2;
@@ -186,7 +166,30 @@ void IOCPManager::DelInstance()
 
 void IOCPManager::InitServer(PacketQueue* recvPacketQueue, PacketQueue* sendPacketQueue, ServerConfig* serverConfig)
 {
+	// 서버설정에서 채널설정을 불러온다
 	LoadChannelSettingFromServerConfig(serverConfig);
 	_recvPacketQueue = recvPacketQueue;
 	_sendPacketQueue = sendPacketQueue;
+
+	// 세션 풀을 만든다.
+	CreateSessionPool();
+
+	// IOCP를 만든다.
+	_completionPort = CreateIOCP();
+
+	// 윈속 초기화
+	auto wsaData = WSADATA{};
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+		Beep(1000, 1000); // TODO : 에러 발생시 일단 beep 해둠. 나중에 에러처리 필요
+
+	// 서버 소켓 셋팅
+	// TODO : SOCK_STREAM, WSA_FLAG_OVERLAPPED의 의미는 잘 모르겠다. 주석 바람
+	_serverSocket = WSASocket(AF_INET, SOCK_STREAM, 0, nullptr, 0, WSA_FLAG_OVERLAPPED);
+	sockaddr_in socketAddress;
+	ZeroMemory(&socketAddress, sizeof(socketAddress));
+	socketAddress.sin_family = AF_INET;
+	socketAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+	socketAddress.sin_port = htons(_setting._portNum);
+
+	bind(_serverSocket, (sockaddr*)&socketAddress, sizeof(socketAddress));
 }
