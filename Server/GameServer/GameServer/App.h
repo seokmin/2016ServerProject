@@ -5,6 +5,7 @@
 #include "PacketProcess.h"
 #include "UserManager.h"
 #include "RoomManager.h"
+#include "ServerConfig.h"
 
 class App
 {
@@ -29,7 +30,7 @@ private:
 
 	//std::unique_ptr<ILog> m_pLogger;
 
-	std::unique_ptr<NetworkConfig> m_pServerConfig;
+	std::unique_ptr<ServerConfig> m_pServerConfig;
 	std::unique_ptr<INetworkManager> m_pNetwork;	
 	std::unique_ptr<DBmanager> m_pDB;
 	std::unique_ptr<PacketProcess> m_pPacketProc;

@@ -3,29 +3,35 @@
 
 using namespace COMMON;
 
-class NetworkConfig
+class ServerConfig
 {
 public:
 
 	static const int MAX_NET_ERROR_STRING_COUNT = 64;
+	static const int MAX_NAME_LEN = 19;
 	static const int MAX_IP_LEN = 32; // IP 문자열 최대 길이
 	static const int MAX_PACKET_SIZE = 1024; // 최대 패킷 크기
 	static const int PACKET_HEADER_SIZE = COMMON::PACKET_HEADER_SIZE;
 
-	unsigned short Port;
+	static const int MAX_USERCOUNT_PER_CHANNEL = 100;
+	static const int MAX_ROOMCOUNT = 20;
+	static const int MAX_USERCOUNT_PER_ROOM = COMMON::MAX_USERCOUNT_PER_ROOM;
+
+	WCHAR SERVERNAME[MAX_NAME_LEN + 1] = L"testServer";
+	WCHAR IP[MAX_IP_LEN + 1] = L"10.73.38.134";
+	unsigned short Port = 12800;
+	unsigned int minBet = 100;
+	unsigned int maxBet = 1000;
+
+
 	int BackLogCount;
 
-	int MaxClientCount;
-	int ExtraClientCount; // 가능하면 로그인에서 짜르도록 MaxClientCount + 여유분을 준비한다.
+	int ExtraClientCount = 20; // 넘쳤다는걸 알려주기 위한 여유분..
 
 	short MaxClientSockOptRecvBufferSize;
 	short MaxClientSockOptSendBufferSize;
 	short MaxClientRecvBufferSize;
 	short MaxClientSendBufferSize;
-
-	static const int MAX_USERCOUNT_PER_CHANNEL = 100;
-	static const int MAX_ROOMCOUNT = 20;
-	static const int MAX_USERCOUNT_PER_ROOM = COMMON::MAX_USERCOUNT_PER_ROOM;
 
 	// 에러 코드는 1 ~ 200까지 사용한다.
 	enum NET_ERROR_CODE : short
