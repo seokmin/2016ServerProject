@@ -6,7 +6,6 @@
 #include "RoomManager.h"
 #include "ServerConfig.h"
 #include "Logger.h"
-#include "INetworkManager.h"
 
 class App
 {
