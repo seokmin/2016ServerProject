@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "UserManager.h"
-#include "User.h"
 
 UserManager::UserManager()
 {

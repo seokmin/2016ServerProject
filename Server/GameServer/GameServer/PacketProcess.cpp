@@ -52,4 +52,3 @@ ERROR_CODE PacketProcess::LeaveAllAndLogout(User * pUser, int SessionId)
 	//[TODO] ...
 	return ERROR_CODE();
 }
-

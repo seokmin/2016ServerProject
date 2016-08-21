@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "App.h"
-#include "DBmanager.h"
 
-ERROR_CODE App::Init()
+COMMON::ERROR_CODE App::Init()
 {
 	m_pServerConfig = std::make_unique<NetworkConfig>();
 	m_pNetwork = std::make_unique<INetworkManager>();
@@ -11,7 +10,7 @@ ERROR_CODE App::Init()
 	m_pUserMgr = std::make_unique<UserManager>();
 	m_pRoomMgr = std::make_unique<RoomManager>();
 
-	return ERROR_CODE::NONE;
+	return COMMON::ERROR_CODE::NONE;
 }
 
 void App::Run()
@@ -50,9 +49,9 @@ void App::StateCheckAndSubmit()
 }
 
 
-ERROR_CODE App::LoadConfig()
+COMMON::ERROR_CODE App::LoadConfig()
 {
 	// [TODO]...
 
-	return ERROR_CODE::NONE;
+	return COMMON::ERROR_CODE::NONE;
 }

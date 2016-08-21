@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "RoomManager.h"
-#include "ServerConfig.h"
 
 RoomManager::RoomManager()
 {

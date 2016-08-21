@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Packet.h"
 #include "INetworkManager.h"
 #include "Common.h"
 

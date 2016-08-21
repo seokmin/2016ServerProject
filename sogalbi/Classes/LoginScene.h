@@ -66,6 +66,9 @@ private:
 	Menu*			_channelsMenu;
 	Sprite*			_channelsBg;
 	Label*			_channelsLabel;
+	Label*			_moneyLabel;
+	Label*			_nameLabel;
+	Sprite*			_pokeImg;
 
 	int				_currentChip = 0;
 	std::string		_authToken;

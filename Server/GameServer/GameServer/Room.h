@@ -1,6 +1,7 @@
 #pragma once
-#include "ServerConfig.h"
 class User;
+
+#include "ServerConfig.h"
 
 class Room
 {
@@ -12,4 +13,3 @@ private:
 	int m_id;
 	User* m_userList[NetworkConfig::MAX_USERCOUNT_PER_ROOM] = {nullptr, };
 };
-

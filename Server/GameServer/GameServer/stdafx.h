@@ -1,18 +1,18 @@
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but
-// are changed infrequently
-//
-
 #pragma once
+#pragma comment(lib, "Ws2_32.lib")
 
-#include "targetver.h"
+//#include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
+//#include <stdio.h>
+//#include <tchar.h>
 
 #include <thread>
 #include <iostream>
 #include <chrono>
 
-#include "Common.h"
+#include <Winsock2.h>
 
+//#include <memory>
+
+
+#include "Common.h"
