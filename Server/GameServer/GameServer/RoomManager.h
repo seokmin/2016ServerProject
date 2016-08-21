@@ -6,8 +6,8 @@
 class RoomManager
 {
 public:
-	RoomManager();
-	~RoomManager();
+	RoomManager() {};
+	~RoomManager() {};
 
 	void Init();
 

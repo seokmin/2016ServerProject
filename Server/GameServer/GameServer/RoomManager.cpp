@@ -1,15 +1,6 @@
 #include "stdafx.h"
 #include "RoomManager.h"
 
-RoomManager::RoomManager()
-{
-}
-
-
-RoomManager::~RoomManager()
-{
-}
-
 void RoomManager::Init()
 {
 	for (int i = 0; i < ServerConfig::MAX_ROOMCOUNT; i++)

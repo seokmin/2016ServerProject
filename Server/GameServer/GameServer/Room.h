@@ -6,8 +6,8 @@ class User;
 class Room
 {
 public:
-	Room(const int i);
-	~Room();
+	Room(const int i) : m_id(i) {};
+	~Room() {};
 
 private:
 	int m_id;
