@@ -19,7 +19,7 @@ public:
 
 	WCHAR SERVERNAME[MAX_NAME_LEN + 1] = L"testServer";
 	WCHAR IP[MAX_IP_LEN + 1] = L"10.73.38.134";
-	unsigned short Port = 12800;
+	unsigned short Port = 34343;
 	unsigned int minBet = 100;
 	unsigned int maxBet = 1000;
 

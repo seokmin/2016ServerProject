@@ -1,5 +1,6 @@
 #pragma once
-#include "ServerConfig.h";
+#include "ServerConfig.h"
+
 class Logger;
 class DBmanager
 {
