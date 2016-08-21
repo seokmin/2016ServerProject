@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 		ioInfo->rwMode=READ;
 
 		WSARecv(handleInfo->hClntSock,	&(ioInfo->wsaBuf),	
-			1, &recvBytes, &flags, &(ioInfo->overlapped), NULL);			
+			1, &recvBytes, &flags, &(ioInfo->overlapped), NULL);	
 	}
 	return 0;
 }
