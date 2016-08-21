@@ -84,6 +84,9 @@
     <ClInclude Include="IOCPManager.h">
       <Filter>Source Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Source Files\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="IOCPManager.cpp">
       <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

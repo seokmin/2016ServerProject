@@ -3,11 +3,12 @@
 
 COMMON::ERROR_CODE App::Init()
 {
+	m_pLogger = std::make_unique<Logger>();
 	m_pServerConfig = std::make_unique<ServerConfig>();
 	m_pNetwork = std::make_unique<INetworkManager>();
 	
 	m_pDB = std::make_unique<DBmanager>();
-	m_pDB->Init();
+	m_pDB->Init(m_pLogger.get());
 	
 	m_pPacketProc = std::make_unique<PacketProcess>();
 	m_pUserMgr = std::make_unique<UserManager>();

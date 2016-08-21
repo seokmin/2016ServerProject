@@ -63,7 +63,7 @@ RETCODE MySQLMangager::sqlexec(SQLWCHAR * query, SQLWCHAR * result) {
 			// In this example, the data is sent to the console; SQLBindCol() could be called to bind 
 			// individual rows of data and assign for a rowset.
 			swprintf_s(result, cbData, L"%ls", szData);
-			wprintf(L"result : %ls\n", szData);
+			//wprintf(L"Mysql result : %ls\n", szData);
 		}
 	}
 	return SQL_SUCCESS;

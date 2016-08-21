@@ -6,6 +6,7 @@
 #include "UserManager.h"
 #include "RoomManager.h"
 #include "ServerConfig.h"
+#include "Logger.h"
 
 class App
 {
@@ -28,7 +29,7 @@ private:
 	bool m_dbisRunning = false;
 	const int DBSubmitInterval = 3;
 
-	//std::unique_ptr<ILog> m_pLogger;
+	std::unique_ptr<Logger> m_pLogger;
 
 	std::unique_ptr<ServerConfig> m_pServerConfig;
 	std::unique_ptr<INetworkManager> m_pNetwork;	

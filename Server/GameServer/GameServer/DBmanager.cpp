@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DBmanager.h"
 #include "MysqlManager.h"
+#include "Logger.h"
 
 DBmanager::DBmanager()
 {
@@ -11,8 +12,9 @@ DBmanager::~DBmanager()
 {
 }
 
-COMMON::ERROR_CODE DBmanager::Init()
+COMMON::ERROR_CODE DBmanager::Init(Logger* logger)
 {
+	m_logger = logger;
 	MySQLMangager mysql;
 	SQLWCHAR result[100];
 	auto ret = mysql.sqlconn();
@@ -35,7 +37,7 @@ COMMON::ERROR_CODE DBmanager::SubmitState(int max, int count, ServerConfig* pSer
 	swprintf_s(query, 200,
 		L"CALL submit_server_status('%ls', '%ls', '%d', %hd, %d, %d, %d, %d, %d, %d);\n",
 		pServerConfig->SERVERNAME, pServerConfig->IP, pServerConfig->Port, 
-		100, 150, 150, //rgb
+		100, 150, 150, // rgb
 		pServerConfig->minBet, pServerConfig->maxBet, 
 		count, max // user count
 	);
@@ -48,7 +50,8 @@ COMMON::ERROR_CODE DBmanager::SubmitState(int max, int count, ServerConfig* pSer
 	{
 		return COMMON::ERROR_CODE::DB_ERROR;
 	}
-	
-	//wprintf_s(L"Serverid:%s\n", result); //result
+	WCHAR logStr[200];
+	swprintf(logStr, L"[DB : GOOD] Server Id = %s", result);
+	m_logger->Log(Logger::INFO, logStr, 200);
 	return COMMON::ERROR_CODE::NONE;
 }
