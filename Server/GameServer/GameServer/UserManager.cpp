@@ -38,6 +38,8 @@ bool UserManager::LogoutUser(const int sessionIndex)
 	//room->LeaveUser(user);
 
 	user->Clear();
+	--m_curUserCount;
+
 	return true;
 }
 
