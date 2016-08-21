@@ -23,7 +23,12 @@ void PacketQueue::PopFront()
 		return;
 	_mutex.lock();
 	auto packet2Delete = _packetDeque.front();
-	delete[] packet2Delete.pRefData;
+	_packetDeque.pop_front();
+	if (packet2Delete.pRefData != nullptr)
+	{
+		delete[] packet2Delete.pRefData;
+		packet2Delete.pRefData = nullptr;
+	}
 	_mutex.unlock();
 }
 
