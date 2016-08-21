@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <vector>
 
+#include "ServerConfig.h"
 #include "NetworkSetting.h"
 #include "BufferQueue.h"
 #include "PacketQueue.h"
@@ -12,13 +13,14 @@ IOCPManager* IOCPManager::_instance = nullptr;
 
 // 채널 설정을 Json에서 읽어온다
 // TODO : 더미 데이터 넣어뒀음. json에서 읽어오게 제대로 고쳐야 함
-void IOCPManager::LoadChannelSettingFromJson()
+void IOCPManager::LoadChannelSettingFromServerConfig(ServerConfig* serverconfig)
 {
 	auto setting = NetworkSetting{};
-	setting._maxBufferCount = 10000;
-	setting._maxBufferSize = 1024 * 4; // byte
-	setting._maxSessionCount = 5000;
-	setting._portNum = 34343;
+	setting._maxBufferCount = serverconfig->MAX_BUFFER_COUNT;
+	setting._maxSessionCount = serverconfig->MAX_USERCOUNT_PER_CHANNEL + serverconfig->ExtraClientCount;
+	setting._maxBufferSize = serverconfig->MaxClientRecvBufferSize;
+	setting._portNum = serverconfig->Port;
+	setting._backLog = serverconfig->BackLogCount;
 	
 	_setting = setting;
 }
@@ -38,11 +40,11 @@ void IOCPManager::WorkerThreadFunc()
 
 		if (ioInfo._rwMode == IOInfo::RWMode::READ)
 		{
-
+			auto receivePos = ioInfo._wsaBuf.buf;
 		}
-		else
+		else // RWMode::READ
 		{
-
+			
 		}
 	}
 }
@@ -94,47 +96,19 @@ void IOCPManager::ListenThreadFunc()
 	}
 }
 
-void IOCPManager::StartServer(PacketQueue* recvPacketQueue)
+COMMON::ERROR_CODE IOCPManager::StartServer()
 {
-	// 채널 셋팅 읽어오는 부분
-	LoadChannelSettingFromJson();
+	if (_initialized == false)
+		return ERROR_CODE::IOCP_START_FAIL_NOT_INITIALIZED;
 
-	// 패킷처리 부분과 공유할 recvPacketQueue를 설정한다
-	if (recvPacketQueue == nullptr)
-		;//에러다
-	else
-		_recvPacketQueue = recvPacketQueue;
-
-	// IOCP를 만든다.
-	_completionPort = CreateIOCP();
-
-	// 세션 풀을 만든다.
-	CreateSessionPool();
-
-	// 윈속 초기화
-	auto wsaData = WSADATA{};
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-		Beep(1000, 1000); // TODO : 에러 발생시 일단 beep 해둠. 나중에 에러처리 필요
-	// 서버 소켓 셋팅
-	// TODO : SOCK_STREAM, WSA_FLAG_OVERLAPPED의 의미는 잘 모르겠다. 주석 바람
-	_serverSocket = WSASocket(AF_INET, SOCK_STREAM, 0, nullptr, 0, WSA_FLAG_OVERLAPPED);
-	sockaddr_in socketAddress;
-	ZeroMemory(&socketAddress, sizeof(socketAddress));
-	socketAddress.sin_family = AF_INET;
-	socketAddress.sin_addr.s_addr = htonl(INADDR_ANY);
-	socketAddress.sin_port = htons(_setting._portNum);
-
-	bind(_serverSocket, (sockaddr*)&socketAddress, sizeof(socketAddress));
 	// 서버 소켓 활성화
-	// TODO : backlog 적정값 결정 필요
-	listen(_serverSocket, 5);
+	listen(_serverSocket, _setting._backLog);
 
-	// listen 스레드를 만든다.
+	// listen 스레드 돌린다.
 	auto listenThread = std::thread(std::bind(&IOCPManager::ListenThreadFunc, this));
 	listenThread.detach();
 
-
-	// worker 스레드 풀을 만든다.
+	// worker 스레드 돌린다.
 	auto sysInfo = SYSTEM_INFO{};
 	GetSystemInfo(&sysInfo); // 시스템 정보 알아오기. 코어 개수 파악을 위함
 	auto numThread = sysInfo.dwNumberOfProcessors * 2;
@@ -145,6 +119,7 @@ void IOCPManager::StartServer(PacketQueue* recvPacketQueue)
 		auto workerThread = std::thread(std::bind(&IOCPManager::WorkerThreadFunc,this));
 		workerThread.detach();
 	}
+	return ERROR_CODE::NONE;
 }
 
 HANDLE IOCPManager::CreateIOCP()
@@ -187,4 +162,40 @@ void IOCPManager::DelInstance()
 		_instance = nullptr;
 	}
 	return;
+}
+
+COMMON::ERROR_CODE IOCPManager::InitServer(PacketQueue* recvPacketQueue, PacketQueue* sendPacketQueue, ServerConfig* serverConfig)
+{
+	if (recvPacketQueue == nullptr || sendPacketQueue == nullptr)
+		return ERROR_CODE::IOCP_INIT_FAIL_DONOT_GIVEME_NULLPTR;
+
+	// 서버설정에서 채널설정을 불러온다
+	LoadChannelSettingFromServerConfig(serverConfig);
+	_recvPacketQueue = recvPacketQueue;
+	_sendPacketQueue = sendPacketQueue;
+
+	// 세션 풀을 만든다.
+	CreateSessionPool();
+
+	// IOCP를 만든다.
+	_completionPort = CreateIOCP();
+
+	// 윈속 초기화
+	auto wsaData = WSADATA{};
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+		Beep(1000, 1000); // TODO : 에러 발생시 일단 beep 해둠. 나중에 에러처리 필요
+
+	// 서버 소켓 셋팅
+	// TODO : SOCK_STREAM, WSA_FLAG_OVERLAPPED의 의미는 잘 모르겠다. 주석 바람
+	_serverSocket = WSASocket(AF_INET, SOCK_STREAM, 0, nullptr, 0, WSA_FLAG_OVERLAPPED);
+	sockaddr_in socketAddress;
+	ZeroMemory(&socketAddress, sizeof(socketAddress));
+	socketAddress.sin_family = AF_INET;
+	socketAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+	socketAddress.sin_port = htons(_setting._portNum);
+
+	bind(_serverSocket, (sockaddr*)&socketAddress, sizeof(socketAddress));
+
+	_initialized = true;
+	return ERROR_CODE::NONE;
 }

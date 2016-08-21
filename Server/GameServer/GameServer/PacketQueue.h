@@ -1,4 +1,6 @@
 #pragma once
+#include <mutex>
+#include <deque>
 
 using namespace COMMON;
 
@@ -10,7 +12,6 @@ public:
 	void			PopFront();
 	void			PushBack(RecvPacketInfo& recvPacket);
 private:
-
 public:
 private:
 	std::deque<RecvPacketInfo>	_packetDeque;

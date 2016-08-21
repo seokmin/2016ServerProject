@@ -15,9 +15,6 @@
     <Filter Include="Source Files\User">
       <UniqueIdentifier>{4d9b42eb-1fcf-456c-b732-3f0956647449}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\MockLayer">
-      <UniqueIdentifier>{8ee5c4f8-8f2e-4a94-97cd-19aa5c4c891e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Room">
       <UniqueIdentifier>{6ff901f4-602e-4a0b-9fa6-eb92d6f8df2c}</UniqueIdentifier>
     </Filter>
@@ -51,9 +48,6 @@
     <ClInclude Include="DBmanager.h">
       <Filter>Source Files\DB</Filter>
     </ClInclude>
-    <ClInclude Include="INetworkManager.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="UserManager.h">
       <Filter>Source Files\User</Filter>
     </ClInclude>
@@ -74,9 +68,6 @@
     </ClInclude>
     <ClInclude Include="PacketProcess.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkManager_mock.h">
-      <Filter>Source Files\MockLayer</Filter>
     </ClInclude>
     <ClInclude Include="IOCPManager.h">
       <Filter>Source Files\Network</Filter>
@@ -100,9 +91,6 @@
     </ClCompile>
     <ClCompile Include="App.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkManager_mock.cpp">
-      <Filter>Source Files\MockLayer</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files\windows</Filter>

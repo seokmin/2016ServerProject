@@ -57,6 +57,7 @@ namespace COMMON
 	// 21 이상에서 시작해야함.
 	enum PACKET_ID : short
 	{
+		NULL_PACKET = 0,
 		ROOM_ENTER_REQ = 21,
 		ROOM_ENTER_RES = 22,
 

@@ -1,11 +1,11 @@
 #include "stdafx.h"
+
+#include "IOCPManager.h"
 #include "App.h"
 
 COMMON::ERROR_CODE App::Init()
 {
 	m_pServerConfig = std::make_unique<ServerConfig>();
-	m_pNetwork = std::make_unique<INetworkManager>();
-	
 	m_pDB = std::make_unique<DBmanager>();
 	m_pDB->Init();
 	
@@ -13,6 +13,11 @@ COMMON::ERROR_CODE App::Init()
 	m_pUserMgr = std::make_unique<UserManager>();
 	m_pRoomMgr = std::make_unique<RoomManager>();
 	LoadConfig();
+
+	//network init
+	m_pSendPacketQue = std::make_unique<PacketQueue>();
+	m_pRecvPacketQue = std::make_unique<PacketQueue>();
+	IOCPManager::GetInstance()->InitServer(m_pRecvPacketQue.get(), m_pSendPacketQue.get(), m_pServerConfig.get());
 
 	m_IsReady = true;
 	m_dbisRunning = true;
@@ -26,20 +31,19 @@ void App::Run()
 		StateCheckAndSubmit(); //every 3 seconds, submit serverstatus to DB,
 	});
 
+	IOCPManager::GetInstance()->StartServer();
+
 	while (m_IsReady)
 	{
-		m_pNetwork->Run();
 
 		while (true)
 		{
-			auto packetInfo = m_pNetwork->GetPacketInfo();
-
-			if (packetInfo.PacketId == 0)
-			{
+			auto& packet = m_pRecvPacketQue.get()->ReadFront();
+			if (packet.PacketId == 0)
 				break;
-			}
 
-			m_pPacketProc->Process(packetInfo);
+			m_pPacketProc->Process(packet);
+			m_pRecvPacketQue.get()->PopFront();
 		}
 		
 		std::this_thread::sleep_for(std::chrono::milliseconds(0));
@@ -64,7 +68,7 @@ void App::StateCheckAndSubmit()
 	std::chrono::system_clock::time_point now= std::chrono::system_clock::now();;
 	std::chrono::duration<float> dur = std::chrono::duration<float>::zero();;
 	
-	while (m_dbisRunning)
+	while (m_dbisRunning && m_IsReady)
 	{
 		before = now;
 		now = std::chrono::system_clock::now();

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "INetworkManager.h"
 #include "Common.h"
 #include "ServerConfig.h"
 

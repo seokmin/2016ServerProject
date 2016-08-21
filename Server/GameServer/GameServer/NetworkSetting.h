@@ -6,4 +6,5 @@ struct NetworkSetting
 	int			_maxBufferSize; // max iocp buffer size
 	unsigned	_maxBufferCount;
 	unsigned	_maxSessionCount;
+	int			_backLog;
 };

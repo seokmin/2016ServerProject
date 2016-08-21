@@ -7,6 +7,7 @@ class ServerConfig
 {
 public:
 
+	static const unsigned MAX_BUFFER_COUNT = 10000u;
 	static const int MAX_NET_ERROR_STRING_COUNT = 64;
 	static const int MAX_NAME_LEN = 19;
 	static const int MAX_IP_LEN = 32; // IP 문자열 최대 길이
@@ -14,6 +15,7 @@ public:
 	static const int PACKET_HEADER_SIZE = COMMON::PACKET_HEADER_SIZE;
 
 	static const int MAX_USERCOUNT_PER_CHANNEL = 100;
+	int ExtraClientCount = 20; // 넘쳤다는걸 알려주기 위한 여유분..
 	static const int MAX_ROOMCOUNT = 20;
 	static const int MAX_USERCOUNT_PER_ROOM = COMMON::MAX_USERCOUNT_PER_ROOM;
 
@@ -24,14 +26,11 @@ public:
 	unsigned int maxBet = 1000;
 
 
-	int BackLogCount;
+	int BackLogCount = 5;
 
-	int ExtraClientCount = 20; // 넘쳤다는걸 알려주기 위한 여유분..
 
-	short MaxClientSockOptRecvBufferSize;
-	short MaxClientSockOptSendBufferSize;
 	short MaxClientRecvBufferSize;
-	short MaxClientSendBufferSize;
+	//short MaxClientSendBufferSize;
 
 	// 에러 코드는 1 ~ 200까지 사용한다.
 	enum NET_ERROR_CODE : short
@@ -66,31 +65,6 @@ public:
 		NET_ERROR_CODE Error = NET_ERROR_CODE::NONE;
 		wchar_t Msg[MAX_NET_ERROR_STRING_COUNT] = { 0, };
 		int Value = 0;
-	};
-
-	struct ClientSession
-	{
-		bool IsConnected() { return SocketFD > 0 ? true : false; }
-
-		void Clear()
-		{
-			Seq = 0;
-			SocketFD = 0;
-			IP[0] = '\0';
-			RemainingDataSize = 0;
-			SendSize = 0;
-		}
-
-		int Index = 0;
-		long long Seq = 0;
-		int		SocketFD = 0;
-		char    IP[MAX_IP_LEN] = { 0, };
-
-		char*   pRecvBuffer = nullptr;
-		int     RemainingDataSize = 0;
-
-		char*   pSendBuffer = nullptr;
-		int     SendSize = 0;
 	};
 
 	enum SOCKET_CLOSE_CASE : short

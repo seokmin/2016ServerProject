@@ -141,13 +141,11 @@
     <ClInclude Include="BufferQueue.h" />
     <ClInclude Include="NetworkSetting.h" />
     <ClInclude Include="DBmanager.h" />
-    <ClInclude Include="INetworkManager.h" />
     <ClInclude Include="IOCPManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MysqlManager.h" />
     <ClInclude Include="PacketQueue.h" />
     <ClInclude Include="ServerConfig.h" />
-    <ClInclude Include="NetworkManager_mock.h" />
     <ClInclude Include="PacketProcess.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="RoomManager.h" />
@@ -164,7 +162,6 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MysqlManager.cpp" />
-    <ClCompile Include="NetworkManager_mock.cpp" />
     <ClCompile Include="PacketProcess.cpp" />
     <ClCompile Include="PacketQueue.cpp" />
     <ClCompile Include="Room.cpp" />
