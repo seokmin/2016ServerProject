@@ -1,7 +1,9 @@
 #include "stdafx.h"
+#include <vector>
+
 #include "NetworkSetting.h"
 #include "BufferQueue.h"
-#include <vector>
+#include "PacketQueue.h"
 
 #include "IOCPManager.h"
 
@@ -91,11 +93,16 @@ void IOCPManager::ListenThreadFunc()
 	}
 }
 
-void IOCPManager::StartServer()
+void IOCPManager::StartServer(PacketQueue* recvPacketQueue)
 {
 	// 채널 셋팅 읽어오는 부분
 	LoadChannelSettingFromJson();
 
+	// 패킷처리 부분과 공유할 recvPacketQueue를 설정한다
+	if (recvPacketQueue == nullptr)
+		;//에러다
+	else
+		_recvPacketQueue = recvPacketQueue;
 
 	// IOCP를 만든다.
 	_completionPort = CreateIOCP();

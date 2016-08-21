@@ -1,5 +1,7 @@
 #pragma once
 
+class PacketQueue;
+
 struct SessionInfo
 {
 	unsigned			_index;
@@ -17,14 +19,13 @@ struct IOInfo
 		READ = 0,
 		WRITE = 1
  	} _rwMode;
-
 };
 
 class IOCPManager
 {
 public:
 	IOCPManager*		GetInstance();
-	void				StartServer();
+	void				StartServer(PacketQueue* recvPacketQueue);
 private:
 	IOCPManager() {};
 
@@ -51,4 +52,5 @@ private:
 	std::vector<SessionInfo>	_sessionPool;
 	std::deque<int>				_sessionIndexPool;
 	std::mutex					_sessionPoolMutex;
+	PacketQueue*				_recvPacketQueue;
 };
