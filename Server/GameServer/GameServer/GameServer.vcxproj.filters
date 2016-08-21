@@ -84,6 +84,9 @@
     <ClInclude Include="PacketQueue.h">
       <Filter>Source Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Common\ErrorCode.h">
+      <Filter>Source Files\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

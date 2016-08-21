@@ -15,3 +15,9 @@ void User::Clear()
 	m_currentRoomIdx = -1;
 	m_curDomain = DOMAIN_STATE::NONE;
 }
+
+void User::EnterRoom(int roomIdx)
+{
+	m_curDomain = DOMAIN_STATE::ROOM;
+	m_currentRoomIdx = roomIdx;
+}

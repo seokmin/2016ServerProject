@@ -49,7 +49,7 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 	if (!m_pRefUserMgr->LoginUser(packetInfo.SessionIndex, std::string(reqPkt->_authToken)))
 		return ERROR_CODE::ROOM_ENTER_CHANNEL_FULL;
 
-
+	m_pRefRoomMgr->EnterUser(packetInfo.SessionIndex);
 
 	return ERROR_CODE();
 }

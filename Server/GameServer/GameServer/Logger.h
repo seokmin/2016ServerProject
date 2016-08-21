@@ -11,7 +11,7 @@ public:
 		WARNING,
 		EXCEPTION,
 		ERROR_NORMAL,
-		ERROR_SIMPLE,
+		ERROR_FATAL,
 	};
 
 	void Log(Level level, WCHAR* message, int lessageLen);

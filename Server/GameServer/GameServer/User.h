@@ -18,6 +18,7 @@ public:
 
 	void Init(int sessionIndex, std::string authToken);
 	void Clear();
+	void EnterRoom(int roomIdx);
 
 	bool IsAvailableFromPool() { return (m_sessionIndex < 0); };
 	bool CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };

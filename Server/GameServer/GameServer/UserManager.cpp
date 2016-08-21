@@ -14,6 +14,8 @@ void UserManager::Init()
 
 bool UserManager::LoginUser(const int sessionIndex, std::string authToken)
 {
+	//TODO: DB에서 체크해야 함.
+
 	std::shared_ptr<User> newUser = GetAvailableUserFromPool();
 	if (newUser == nullptr)
 		return false;

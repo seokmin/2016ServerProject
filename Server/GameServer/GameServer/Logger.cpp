@@ -35,7 +35,7 @@ Logger::Logger() : m_levelStr{
 	L"WARNING",
 	L"EXCEPTION",
 	L"ERROR_NORMAL",
-	L"ERROR_SIMPLE",
+	L"ERROR_FATAL",
 }
 {
 }
@@ -44,7 +44,7 @@ Logger::~Logger()
 {
 }
 
-void Logger::Log(Level level, WCHAR * message, int lessageLen)
+void Logger::Log(Level level, WCHAR * message, int messageLen)
 {
 #ifdef _DEBUG
 	m_mutex.lock();
