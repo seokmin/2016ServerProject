@@ -72,9 +72,6 @@
     <ClInclude Include="IOCPManager.h">
       <Filter>Source Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="BufferQueue.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="NetworkSetting.h">
       <Filter>Source Files\Network</Filter>
     </ClInclude>
@@ -120,9 +117,6 @@
       <Filter>Source Files\Room</Filter>
     </ClCompile>
     <ClCompile Include="IOCPManager.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="BufferQueue.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="Logger.cpp">
