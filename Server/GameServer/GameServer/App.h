@@ -6,6 +6,7 @@
 #include "RoomManager.h"
 #include "ServerConfig.h"
 #include "Logger.h"
+#include "PacketQueue.h"
 
 class App
 {
@@ -29,9 +30,10 @@ private:
 	const int DBSubmitInterval = 3;
 
 	std::unique_ptr<ServerConfig> m_pServerConfig;
-	std::unique_ptr<INetworkManager> m_pNetwork;	
 	std::unique_ptr<DBmanager> m_pDB;
 	std::unique_ptr<PacketProcess> m_pPacketProc;
 	std::unique_ptr<UserManager> m_pUserMgr;
 	std::unique_ptr<RoomManager> m_pRoomMgr;
+	std::unique_ptr<PacketQueue> m_pRecvPacketQue;
+	std::unique_ptr<PacketQueue> m_pSendPacketQue;
 };
