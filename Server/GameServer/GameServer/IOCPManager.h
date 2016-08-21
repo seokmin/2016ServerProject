@@ -14,6 +14,9 @@ struct SessionInfo
 	sockaddr_in			_sockAddr;
 	char*				_recvBuffer = nullptr;
 	bool				IsConnected() { return _socket > 0 ? true : false; }
+	~SessionInfo() {
+		auto a = 1;
+	}
 };
 
 struct IOInfo
@@ -25,6 +28,7 @@ struct IOInfo
 		READ = 0,
 		WRITE = 1
  	} _rwMode;
+	unsigned			_sessionIndex;
 };
 
 class IOCPManager
@@ -46,7 +50,7 @@ private:
 	void					WorkerThreadFunc();
 	void					ListenThreadFunc();
 
-	void					BindSessionToIOCP(SessionInfo& targetSession);
+	void BindSessionToIOCP(SessionInfo* targetSession);
 
 public:
 private:
@@ -58,7 +62,7 @@ private:
 	HANDLE					_completionPort;
 	SOCKET					_serverSocket;
 
-	std::vector<SessionInfo>	_sessionPool;
+	std::vector<SessionInfo*>	_sessionPool;
 	std::deque<int>				_sessionIndexPool;
 	std::mutex					_sessionPoolMutex;
 	PacketQueue*				_recvPacketQueue = nullptr;
