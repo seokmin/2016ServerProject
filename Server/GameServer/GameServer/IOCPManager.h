@@ -5,6 +5,7 @@
 #include "NetworkSetting.h"
 
 class PacketQueue;
+class ServerConfig;
 
 struct SessionInfo
 {
@@ -30,11 +31,13 @@ class IOCPManager
 public:
 	static IOCPManager*		GetInstance();
 	static void				DelInstance();
-	void					StartServer(PacketQueue* recvPacketQueue);
+
+	void					InitServer(PacketQueue* recvPacketQueue, PacketQueue* sendPacketQueue, ServerConfig* serverConfig);
+	COMMON::ERROR_CODE		StartServer();
 private:
 	IOCPManager() {};
 
-	void					LoadChannelSettingFromJson();
+	void LoadChannelSettingFromServerConfig(ServerConfig* serverconfig);
 	HANDLE					CreateIOCP();
 	void					CreateSessionPool();
 
@@ -57,5 +60,6 @@ private:
 	std::vector<SessionInfo>	_sessionPool;
 	std::deque<int>				_sessionIndexPool;
 	std::mutex					_sessionPoolMutex;
-	PacketQueue*				_recvPacketQueue;
+	PacketQueue*				_recvPacketQueue = nullptr;
+	PacketQueue*				_sendPacketQueue = nullptr;
 };

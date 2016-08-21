@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <vector>
 
+#include "ServerConfig.h"
 #include "NetworkSetting.h"
 #include "BufferQueue.h"
 #include "PacketQueue.h"
@@ -12,13 +13,13 @@ IOCPManager* IOCPManager::_instance = nullptr;
 
 // 채널 설정을 Json에서 읽어온다
 // TODO : 더미 데이터 넣어뒀음. json에서 읽어오게 제대로 고쳐야 함
-void IOCPManager::LoadChannelSettingFromJson()
+void IOCPManager::LoadChannelSettingFromServerConfig(ServerConfig* serverconfig)
 {
 	auto setting = NetworkSetting{};
-	setting._maxBufferCount = 10000;
-	setting._maxBufferSize = 1024 * 4; // byte
-	setting._maxSessionCount = 5000;
-	setting._portNum = 34343;
+	setting._maxBufferCount = serverconfig->MAX_BUFFER_COUNT;
+	setting._maxSessionCount = serverconfig->MAX_USERCOUNT_PER_CHANNEL + serverconfig->ExtraClientCount;
+	setting._maxBufferSize = serverconfig->MaxClientRecvBufferSize;
+	setting._portNum = serverconfig->Port;
 	
 	_setting = setting;
 }
@@ -94,17 +95,10 @@ void IOCPManager::ListenThreadFunc()
 	}
 }
 
-void IOCPManager::StartServer(PacketQueue* recvPacketQueue)
+COMMON::ERROR_CODE IOCPManager::StartServer()
 {
-	// 채널 셋팅 읽어오는 부분
-	LoadChannelSettingFromJson();
-
-	// 패킷처리 부분과 공유할 recvPacketQueue를 설정한다
-	if (recvPacketQueue == nullptr)
-		;//에러다
-	else
-		_recvPacketQueue = recvPacketQueue;
-
+	if (_sendPacketQueue == nullptr || _recvPacketQueue == nullptr)
+		return ERROR_CODE::IOCP_START_FAIL_INIT_FIRST;
 	// IOCP를 만든다.
 	_completionPort = CreateIOCP();
 
@@ -145,6 +139,7 @@ void IOCPManager::StartServer(PacketQueue* recvPacketQueue)
 		auto workerThread = std::thread(std::bind(&IOCPManager::WorkerThreadFunc,this));
 		workerThread.detach();
 	}
+	return ERROR_CODE::NONE;
 }
 
 HANDLE IOCPManager::CreateIOCP()
@@ -187,4 +182,11 @@ void IOCPManager::DelInstance()
 		_instance = nullptr;
 	}
 	return;
+}
+
+void IOCPManager::InitServer(PacketQueue* recvPacketQueue, PacketQueue* sendPacketQueue, ServerConfig* serverConfig)
+{
+	LoadChannelSettingFromServerConfig(serverConfig);
+	_recvPacketQueue = recvPacketQueue;
+	_sendPacketQueue = sendPacketQueue;
 }

@@ -40,6 +40,8 @@ namespace COMMON
 		ROOM_EMOTION_INVALID_ROOM_INDEX = 303,
 
 		DB_ERROR = 310,
+
+		IOCP_START_FAIL_INIT_FIRST = 401,
 	};
 	/*
 	Result Status
