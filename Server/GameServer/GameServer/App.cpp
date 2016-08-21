@@ -11,6 +11,7 @@ COMMON::ERROR_CODE App::Init()
 	
 	m_pUserMgr = std::make_unique<UserManager>();
 	m_pRoomMgr = std::make_unique<RoomManager>();
+	m_pUserMgr->Init(m_pRoomMgr.get());
 	m_pRoomMgr->Init(m_pUserMgr.get());
 	
 	//network init

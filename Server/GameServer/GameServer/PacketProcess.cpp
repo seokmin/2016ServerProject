@@ -49,10 +49,14 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 	if (!m_pRefUserMgr->LoginUser(packetInfo.SessionIndex, std::string(reqPkt->_authToken)))
 		return ERROR_CODE::ROOM_ENTER_CHANNEL_FULL;
 
+	printf_s("유저(%d)정보가 정상적으로 잘 등록됬음 \n", packetInfo.SessionIndex);
+
 	ERROR_CODE result = m_pRefRoomMgr->EnterUser(packetInfo.SessionIndex);
 	if (result != ERROR_CODE::NONE)
 		return result;
-	
+
+	printf_s("유저(%d)가 방(%d)에 들어갔음 \n", packetInfo.SessionIndex, m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)->GetCurRoomIdx());
+
 	// 바로 위에서 m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)이 null인지 확인하므로 두 번 확인은 안 함..
 	resPkt._roomNum = m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)->GetCurRoomIdx();
 	

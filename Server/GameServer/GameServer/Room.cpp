@@ -93,9 +93,7 @@ User * Room::GetUserBySessionIndex(int sessionIndex)
 		if (m_userList[i] != nullptr)
 		{
 			if (m_userList[i]->CheckUserWithSessionIndex(sessionIndex))
-				continue;
-
-			return m_userList[i];
+				return m_userList[i];
 		}
 	}
 }
