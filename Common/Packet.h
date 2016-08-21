@@ -4,6 +4,56 @@
 namespace COMMON
 {
 
+	const auto MAX_PACKET_SIZE = 1024;
+	const auto MAX_USER_ID_LEN = 5;
+	const auto MAX_USER_PW_LEN = 10;
+	const auto AUTH_TOKEN_LEN = 20;
+	const auto MAX_ROOM_CAPTION_LEN = 15;
+	const auto MAX_HAND = 2; // maximum hands by split
+
+	struct CardInfo
+	{
+		enum class CardShape {
+			EMPTY = 0, // 카드 없음
+
+			SPADE = 1,
+			DIAMOND = 2,
+			HEART = 3,
+			CLOVER = 4,
+		} _shape;
+
+		short _number; // J = 11, Q = 12, K = 13
+	};
+
+
+	struct HandInfo
+	{
+		CardInfo _cardList[10];
+		enum HandState {
+			CURRENT = 0,
+			BURST = 1,
+			STAND = 2,
+			BLACKJACK = 3,
+		} _handState;
+		bool _isDoubledown;
+	};
+
+	struct DealerInfo
+	{
+		CardInfo _openedCardList[11];
+		int _hiddenCard;  // How many hidden cards is there? maybe 0 or 1;
+	};
+
+	struct UserInfo
+	{
+		int _pokeNum; // 1 ~ 151
+		wchar_t _name[MAX_USER_ID_LEN + 1];
+		int _totalMony;
+		int _betMoney;
+		HandInfo _hands[MAX_HAND];
+	};
+
+
 	// 21 이상에서 시작해야함.
 	enum PACKET_ID : short
 	{
@@ -35,12 +85,6 @@ namespace COMMON
 
 		MAX = 255,
 	};
-
-	const auto MAX_PACKET_SIZE = 1024;
-	const auto MAX_USER_ID_LEN = 5;
-	const auto MAX_USER_PW_LEN = 10;
-	const auto AUTH_TOKEN_LEN = 20;
-	const auto MAX_ROOM_CAPTION_LEN = 15;
 
 	struct PacketHeader
 	{
@@ -95,48 +139,6 @@ namespace COMMON
 	struct PacketRoomLeaveNtf
 	{
 		int _slotNum;
-	};
-
-	const int MAX_HAND = 2; // maximum hands by split
-	struct DealerInfo
-	{
-		CardInfo _openedCardList[11];
-		int _hiddenCard;  // How many hidden cards is there? maybe 0 or 1;
-	};
-
-	struct UserInfo
-	{
-		int _pokeNum; // 1 ~ 151
-		wchar_t _name[MAX_USER_ID_LEN + 1];
-		int _totalMony;
-		int _betMoney;
-		HandInfo _hands[MAX_HAND];
-	};
-
-	struct HandInfo
-	{
-		CardInfo _cardList[10];
-		enum HandState {
-			CURRENT = 0,
-			BURST = 1,
-			STAND = 2,
-			BLACKJACK = 3,
-		} _handState; 
-		bool _isDoubledown;
-	};
-
-	struct CardInfo
-	{
-		enum class CardShape {
-			EMPTY = 0, // 카드 없음
-
-			SPADE = 1,
-			DIAMOND = 2,
-			HEART = 3,
-			CLOVER = 4,
-		} _shape;
-
-		short _number; // J = 11, Q = 12, K = 13
 	};
 
 	// 이건 서버에서만 쓰지 않을까요?

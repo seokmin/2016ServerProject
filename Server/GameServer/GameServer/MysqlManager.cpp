@@ -3,7 +3,7 @@
 
 MySQLMangager::MySQLMangager()
 {
-	wcscpy_s(chr_ds_name, SQL_MAX_DSN_LENGTH, (SQLWCHAR *)L"mysql_unicode"); // odbc name
+	wcscpy_s(chr_ds_name, SQL_MAX_DSN_LENGTH, (SQLWCHAR *)L"mysql_seokmin_for_jb"); // odbc name
 }
 
 
@@ -15,8 +15,10 @@ MySQLMangager::~MySQLMangager()
 RETCODE MySQLMangager::sqlconn() {
 	SQLAllocEnv(&henv);
 	SQLAllocConnect(henv, &hdbc);
+	SQLWCHAR ConnID[] = L"next";
+	SQLWCHAR ConnPW[] = L"1234";
+	//rc = SQLConnect(hdbc, chr_ds_name, SQL_NTS, ConnID, sizeof(ConnID), ConnPW, sizeof(ConnPW));
 	rc = SQLConnect(hdbc, chr_ds_name, SQL_NTS, NULL, 0, NULL, 0);
-
 	// Deallocate handles, display error message, and exit.
 	if (!MYSQLSUCCESS(rc)) {
 		SQLFreeConnect(henv);
@@ -70,7 +72,9 @@ void MySQLMangager::error_out() {
 	SWORD cbmsg;
 
 	while (SQLError(0, 0, hstmt, szSQLSTATE, &nErr, msg, sizeof(msg), &cbmsg) == SQL_SUCCESS) {
-		swprintf_s(szData, sizeof(szData), L"Error:\nSQLSTATE=%ls, Native error=%ld, msg='%ls'", szSQLSTATE, nErr, msg);
-		MessageBox(NULL, szData, L"ODBC Error", MB_OK);
+		wprintf_s(L"Error:\nSQLSTATE=%ls, Native error=%ld, msg='%ls'", szSQLSTATE, nErr, msg);
+
+		//swprintf_s(szData, sizeof(szData), L"Error:\nSQLSTATE=%ls, Native error=%ld, msg='%ls'", szSQLSTATE, nErr, msg);
+		//MessageBox(NULL, szData, L"ODBC Error", MB_OK);
 	}
 }

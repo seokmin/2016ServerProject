@@ -44,7 +44,7 @@ ERROR_CODE PacketProcess::RoomChat(PacketInfo packetInfo)
 
 COMMON::ERROR_CODE PacketProcess::RoomChange(PacketInfo packetInfo)
 {
-
+	return ERROR_CODE();
 }
 
 ERROR_CODE PacketProcess::LeaveAllAndLogout(User * pUser, int SessionId)

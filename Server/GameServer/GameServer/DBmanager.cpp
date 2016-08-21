@@ -14,7 +14,7 @@ DBmanager::~DBmanager()
 
 COMMON::ERROR_CODE DBmanager::SubmitState(int max, int count)
 {
-	/*멀티스레드로 바꾸고 싶으면 이 부분을 고치시오*/
+	//	"SELECT name, ip, port, r, g, b, minBet, maxBet FROM channel"
 	SQLWCHAR query[100];
 	SQLWCHAR result[100];
 	MySQLMangager mysql;

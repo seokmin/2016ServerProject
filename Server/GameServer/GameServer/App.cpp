@@ -4,13 +4,23 @@
 
 ERROR_CODE App::Init()
 {
-	// [TODO] ...
+	m_pServerConfig = std::make_unique<NetworkConfig>();
+	m_pNetwork = std::make_unique<INetworkManager>();
+	m_pDB = std::make_unique<DBmanager>();
+	m_pPacketProc = std::make_unique<PacketProcess>();
+	m_pUserMgr = std::make_unique<UserManager>();
+	m_pRoomMgr = std::make_unique<RoomManager>();
 
 	return ERROR_CODE::NONE;
 }
 
 void App::Run()
 {
+	StateCheckAndSubmit(); //every 3 seconds, submit serverstatus to DB,
+	/*std::thread logicThread([&]() {
+	
+	});
+*/
 	while (m_IsReady)
 	{
 		m_pNetwork->Run();
@@ -27,14 +37,13 @@ void App::Run()
 			m_pPacketProc->Process(packetInfo);
 		}
 		
-		StateCheckAndSubmit();
-		
 		std::this_thread::sleep_for(std::chrono::milliseconds(0));
 	}
 }
 
 void App::StateCheckAndSubmit()
 {
+	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 	int curUserCount = m_pUserMgr->GetCurrentUserCount();
 	m_pDB->SubmitState(m_pServerConfig->MAX_USERCOUNT_PER_CHANNEL, curUserCount);
 	return;

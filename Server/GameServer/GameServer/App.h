@@ -28,6 +28,8 @@ private:
 
 private:
 	bool m_IsReady = false;
+	const int DBSubmitInterval = 3;
+
 	//std::unique_ptr<ILog> m_pLogger;
 
 	std::unique_ptr<NetworkConfig> m_pServerConfig;
