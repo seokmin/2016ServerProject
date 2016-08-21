@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "Room.h"
+class User;
 
 class RoomManager
 {
@@ -11,6 +12,7 @@ public:
 	~RoomManager() {};
 
 	void Init();
+	COMMON::ERROR_CODE LeavUserFromRoom(int roomid, User* pUser);
 
 	ERROR_CODE EnterUser(int sessionIndex);
 

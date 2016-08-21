@@ -37,3 +37,8 @@ std::shared_ptr<Room> RoomManager::GetAvailableRoom()
 
 	return nullptr;
 }
+
+COMMON::ERROR_CODE RoomManager::LeavUserFromRoom(int roomid, User * pUser)
+{
+	return m_roomList[roomid]->LeaveRoom(pUser);
+}
