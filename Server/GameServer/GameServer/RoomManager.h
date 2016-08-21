@@ -15,6 +15,8 @@ public:
 	void Init(UserManager* userManager);
 	COMMON::ERROR_CODE LeavUserFromRoom(int roomid, User* pUser);
 
+	std::shared_ptr<Room> GetRoomById(int id);
+
 	ERROR_CODE EnterUser(int sessionIndex);
 
 private:

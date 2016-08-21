@@ -4,6 +4,7 @@
 #include "User.h"
 #include "UserManager.h"
 
+#include "Room.h"
 #include "RoomManager.h"
 
 #include "IOCPManager.h"
@@ -54,7 +55,10 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 	
 	// 바로 위에서 m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)이 null인지 확인하므로 두 번 확인은 안 함..
 	resPkt._roomNum = m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)->GetCurRoomIdx();
+	
+	auto targetRoom = m_pRefRoomMgr->GetRoomById(resPkt._roomNum);
 
+	// Res 보냄
 	PacketInfo sendPacket;
 	sendPacket.SessionIndex = packetInfo.SessionIndex;
 	sendPacket.PacketId = PACKET_ID::ROOM_ENTER_RES;
@@ -62,7 +66,8 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 	sendPacket.PacketBodySize = sizeof(resPkt);
 	m_pSendPacketQue->PushBack(sendPacket);
 	
-
+	// Notify
+	targetRoom->NotifyEnterUserInfo(packetInfo.SessionIndex);
 
 	return ERROR_CODE::NONE;
 }

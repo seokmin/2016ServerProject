@@ -55,3 +55,8 @@ COMMON::ERROR_CODE RoomManager::LeavUserFromRoom(int roomid, User * pUser)
 {
 	return m_roomList[roomid]->LeaveRoom(pUser);
 }
+
+std::shared_ptr<Room> RoomManager::GetRoomById(int id)
+{
+	return m_roomList[id];
+}

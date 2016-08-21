@@ -1,13 +1,19 @@
 #pragma once
-class User;
 
 #include "ServerConfig.h"
 
+class User;
+class PacketQueue;
+
 class Room
 {
+	using PacketInfo = RecvPacketInfo;
+
 public:
 	Room(const int i) : m_id(i) {};
 	~Room() {};
+
+	void Init(PacketQueue* sendPacketQue);
 
 	bool EnterUser(User* user);
 
@@ -15,11 +21,20 @@ public:
 
 	int GetCurrentUserCount() { return m_currentUserCount; };
 
-	COMMON::ERROR_CODE LeaveRoom(User* pUser);
+	ERROR_CODE LeaveRoom(User* pUser);
+
+	void NotifyEnterUserInfo(int sessionIndex);
+
 
 private:
 	int m_id;
 	User* m_userList[ServerConfig::MAX_USERCOUNT_PER_ROOM] = {nullptr, };
 	int m_currentUserCount = 0;
+	PacketQueue* m_pSendPacketQue = nullptr;
+
+
+private:
+	User* GetUserBySessionIndex(int sessionIndex);
+	int GetUserSeatBySessionIndex(int sessionIndex);
 
 };
