@@ -30,6 +30,8 @@ int Room::GetAvailableSeat()
 COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 {
 	int targetPos = -1;
+
+	//find user
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM ; i++)
 	{
 		if (m_userList[i] == pUser)
@@ -38,10 +40,12 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 			break;
 		}
 	}
+
+	//Kick out User
 	if (targetPos == -1)
 		return COMMON::ERROR_CODE::ROOM_LEAVE_NOT_MEMBER;
 	else
-		m_userList[targetPos] = nullptr;
+		m_userList[targetPos] = nullptr; 
 
 	return	COMMON::ERROR_CODE::NONE;
 }

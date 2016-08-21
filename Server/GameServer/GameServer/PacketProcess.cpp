@@ -6,12 +6,16 @@
 
 #include "RoomManager.h"
 
+#include "IOCPManager.h"
 
 
-void PacketProcess::Init(UserManager * pUserMgr, RoomManager * pRoomMgr)
+
+void PacketProcess::Init(UserManager * pUserMgr, RoomManager * pRoomMgr, PacketQueue* pRecvPacketQue, PacketQueue* pSendPacketQue)
 {
 	m_pRefUserMgr = pUserMgr;
 	m_pRefRoomMgr = pRoomMgr;
+	m_pRecvPacketQue = pRecvPacketQue;
+	m_pSendPacketQue = pSendPacketQue;
 
 	for (int i = 0; i < PACKET_ID::MAX; ++i)
 	{
@@ -34,12 +38,6 @@ void PacketProcess::Process(PacketInfo packetInfo)
 	}
 	
 	(this->*PacketFuncArray[packetId])(packetInfo);
-}
-
-ERROR_CODE PacketProcess::NtfSysCloseSesson(PacketInfo packetInfo)
-{
-	//[TODO] ...
-	return ERROR_CODE();
 }
 
 ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
@@ -66,17 +64,28 @@ ERROR_CODE PacketProcess::RoomLeave(PacketInfo packetInfo)
 	auto reqPkt = (PacketRoomLeaveReq*)packetInfo.pRefData;
 	PacketRoomLeaveRes resPkt;
 
+	//방에서 나가면 자동으로 로그아웃
 	if (!m_pRefUserMgr->LogoutUser(packetInfo.SessionIndex))
-		return ERROR_CODE::ROOM_ENTER_CHANNEL_FULL;
+	{
+		NtfSysCloseSesson(packetInfo);
+		return ERROR_CODE::ROOM_LEAVE_NOT_MEMBER;
+	}
 
-
+	resPkt.SetErrCode(ERROR_CODE::NONE);
+	
+	PacketInfo sendPacketInfo;
+	sendPacketInfo.PacketId = PACKET_ID::ROOM_LEAVE_RES;
+	sendPacketInfo.SessionIndex = packetInfo.SessionIndex;
+	sendPacketInfo.PacketBodySize = sizeof(resPkt);
+	sendPacketInfo.pRefData = (char*)&resPkt;
+	m_pSendPacketQue->PushBack(sendPacketInfo);
 
 	return ERROR_CODE();
 }
 
 ERROR_CODE PacketProcess::RoomChat(PacketInfo packetInfo)
 {
-	//[TODO] ...
+	//???? roomchat 우리 없이 가자고 하지 않음?
 	return ERROR_CODE();
 }
 
@@ -85,8 +94,14 @@ ERROR_CODE PacketProcess::RoomChange(PacketInfo packetInfo)
 	return ERROR_CODE();
 }
 
-ERROR_CODE PacketProcess::LeaveAllAndLogout(User * pUser, int SessionId)
+
+ERROR_CODE PacketProcess::NtfSysCloseSesson(PacketInfo packetInfo)
 {
-	//[TODO] ...
+	PacketInfo sendPacketInfo;
+	sendPacketInfo.SessionIndex = packetInfo.SessionIndex;
+	sendPacketInfo.PacketId = PACKET_ID::CLOSE_SESSION;
+	sendPacketInfo.PacketBodySize = 0;
+	sendPacketInfo.pRefData = nullptr;
+	m_pSendPacketQue->PushBack(packetInfo);
 	return ERROR_CODE();
 }

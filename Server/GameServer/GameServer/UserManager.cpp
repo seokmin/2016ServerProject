@@ -37,16 +37,19 @@ bool UserManager::LogoutUser(const int sessionIndex)
 	
 	auto roomId = user->GetCurRoomIdx();
 	auto ret = m_roomMgr->LeavUserFromRoom(roomId, user.get());
+
+	user->Clear(); //delete user infomation
+	--m_curUserCount;
+
 	if (ret != ERROR_CODE::NONE)
 	{
 		WCHAR errStr[100];
 		wsprintf(errStr, L"방에 그런 사람 없습니다. RoomId:%d UserId:%d\n", roomId, user->GetUserIdx());
 		Logger::GetInstance()->Log(Logger::WARNING, errStr, 100);
+
 		return false;
 	}
-	user->Clear();
-	--m_curUserCount;
-
+	
 	return true;
 }
 
