@@ -49,8 +49,9 @@ private:
 
 	void					WorkerThreadFunc();
 	void					ListenThreadFunc();
+	void					SendThreadFunc();
 
-	void BindSessionToIOCP(SessionInfo* targetSession);
+	void					BindSessionToIOCP(SessionInfo* targetSession);
 
 public:
 private:

@@ -139,6 +139,19 @@ void IOCPManager::ListenThreadFunc()
 	}
 }
 
+void IOCPManager::SendThreadFunc()
+{
+	while (true)
+	{
+		auto packetToSend = _sendPacketQueue->ReadFront();
+		if(packetToSend.PacketId == PACKET_ID::NULL_PACKET)
+			continue;
+		auto targetSession = _sessionPool.at(packetToSend.SessionIndex);
+		send(targetSession->_socket, targetSession->_recvBuffer, PACKET_HEADER_SIZE + packetToSend.PacketBodySize, 0);
+		_sendPacketQueue->PopFront();
+	}
+}
+
 COMMON::ERROR_CODE IOCPManager::StartServer()
 {
 	if (_initialized == false)
@@ -162,6 +175,11 @@ COMMON::ERROR_CODE IOCPManager::StartServer()
 		auto workerThread = std::thread(std::bind(&IOCPManager::WorkerThreadFunc,this));
 		workerThread.detach();
 	}
+
+	// send 스레드 돌린다.
+	auto sendThread = std::thread(std::bind(&IOCPManager::SendThreadFunc, this));
+	sendThread.detach();
+
 	return ERROR_CODE::NONE;
 }
 
