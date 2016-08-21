@@ -25,16 +25,17 @@ void IOCPManager::LoadChannelSettingFromServerConfig(ServerConfig* serverconfig)
 void IOCPManager::WorkerThreadFunc()
 {
 	DWORD transferedByte = 0;
-	SessionInfo* pSession = nullptr;
+	int *a = nullptr;
 	IOInfo* ioInfo;
 
 	while (true)
 	{
 		GetQueuedCompletionStatus(_completionPort, &transferedByte,
-			(PULONG_PTR)&pSession, (LPOVERLAPPED*)&ioInfo, INFINITE);
+			(PULONG_PTR)&a, (LPOVERLAPPED*)&ioInfo, INFINITE);
 
-		auto sessionIndex = pSession->_index;
-		
+		auto sessionIndex = ioInfo->_sessionIndex;
+		SessionInfo* pSession = _sessionPool.at(sessionIndex);
+
 		if (ioInfo->_rwMode == IOInfo::RWMode::READ)
 		{
 			auto headerPos = pSession->_recvBuffer;
@@ -110,19 +111,20 @@ void IOCPManager::ListenThreadFunc()
 		// 새로 접속한 유저가 사용할 세션을 노는 세션중에 얻어온다.
 		_sessionPoolMutex.lock();
 			auto newSessionIndex = _sessionIndexPool.front();
-			_sessionIndexPool.pop_front();
+		_sessionIndexPool.pop_front();
 		_sessionPoolMutex.unlock();
-		auto& newSession = _sessionPool.at(newSessionIndex);
+		auto newSession = _sessionPool.at(newSessionIndex);
 		// 세션에 새로운 클라 정보 기입
-		newSession._sockAddr = clientAddr;
-		newSession._socket = newSocket;
+		newSession->_sockAddr = clientAddr;
+		newSession->_socket = newSocket;
 
 
 		auto ioInfo = new IOInfo();
 		ZeroMemory(&ioInfo->_overlapped, sizeof(OVERLAPPED));
-		ioInfo->_wsaBuf.buf = newSession._recvBuffer;
+		ioInfo->_wsaBuf.buf = newSession->_recvBuffer;
 		ioInfo->_wsaBuf.len = _setting._maxSessionRecvBufferSize;
 		ioInfo->_rwMode = IOInfo::RWMode::READ;
+		ioInfo->_sessionIndex = newSessionIndex;
 
 		// Completion Port에 새로운 세션을 등록함
 		BindSessionToIOCP(newSession);
@@ -130,7 +132,7 @@ void IOCPManager::ListenThreadFunc()
 		DWORD recvSize = 0, flags = 0;
 		
 		// Recv 걸어놓는다. 완료되면 worker thread로 넘어감
-		WSARecv(newSession._socket,	// 소켓
+		WSARecv(newSession->_socket,	// 소켓
 			&ioInfo->_wsaBuf,		// 해당 recv에 사용할 버퍼
 			1,						// 사용할 버퍼 개수
 			&recvSize,&flags,&ioInfo->_overlapped,nullptr);
@@ -176,10 +178,10 @@ void IOCPManager::CreateSessionPool()
 
 	for (unsigned i = 0; i < _setting._maxSessionCount; ++i)
 	{
-		auto newSession = SessionInfo();
-		newSession._index = i;
+		auto newSession = new SessionInfo();
+		newSession->_index = i;
 		// 세션마다 가지고 있는 버퍼를 새로 만든다
-		newSession._recvBuffer = new char[_setting._maxSessionRecvBufferSize]; 
+		newSession->_recvBuffer = new char[_setting._maxSessionRecvBufferSize]; 
 		_sessionPool.push_back(newSession);
 		_sessionIndexPool.push_back(i);
 	}
@@ -189,13 +191,14 @@ void IOCPManager::ReleaseSessionPool()
 {
 	for (auto& i : _sessionPool)
 	{
-		delete[] i._recvBuffer;
+		delete[] i->_recvBuffer;
+		// TODO :: Session pool 릴리즈
 	}
 }
 
-void IOCPManager::BindSessionToIOCP(SessionInfo& targetSession)
+void IOCPManager::BindSessionToIOCP(SessionInfo* targetSession)
 {
-	CreateIoCompletionPort((HANDLE)targetSession._socket, _completionPort, (DWORD)&targetSession, 0);
+	CreateIoCompletionPort((HANDLE)targetSession->_socket, _completionPort, (ULONG_PTR)nullptr, 0);
 }
 
 IOCPManager* IOCPManager::GetInstance()
