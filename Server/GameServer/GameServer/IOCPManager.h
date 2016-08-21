@@ -9,9 +9,10 @@ class ServerConfig;
 
 struct SessionInfo
 {
-	unsigned			_index;
-	SOCKET				_socket;
+	unsigned			_index = 0;
+	SOCKET				_socket = -1;
 	sockaddr_in			_sockAddr;
+	char*				_recvBuffer = nullptr;
 	bool				IsConnected() { return _socket > 0 ? true : false; }
 };
 
@@ -40,6 +41,7 @@ private:
 	void					LoadChannelSettingFromServerConfig(ServerConfig* serverconfig);
 	HANDLE					CreateIOCP();
 	void					CreateSessionPool();
+	void					ReleaseSessionPool();
 
 	void					WorkerThreadFunc();
 	void					ListenThreadFunc();

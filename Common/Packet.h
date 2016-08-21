@@ -84,6 +84,7 @@ namespace COMMON
 		GAME_EMOTION_RES = 122,
 		GAME_EMOTION_NTF = 123,
 
+		CLOSE_SESSION = 254,
 		MAX = 255,
 	};
 

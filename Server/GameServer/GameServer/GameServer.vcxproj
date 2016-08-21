@@ -139,7 +139,6 @@
     <ClInclude Include="..\..\..\Common\ErrorCode.h" />
     <ClInclude Include="..\..\..\Common\Packet.h" />
     <ClInclude Include="App.h" />
-    <ClInclude Include="BufferQueue.h" />
     <ClInclude Include="NetworkSetting.h" />
     <ClInclude Include="DBmanager.h" />
     <ClInclude Include="IOCPManager.h" />
@@ -157,7 +156,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
-    <ClCompile Include="BufferQueue.cpp" />
     <ClCompile Include="DBmanager.cpp" />
     <ClCompile Include="IOCPManager.cpp" />
     <ClCompile Include="Logger.cpp" />

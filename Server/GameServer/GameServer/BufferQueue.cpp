@@ -15,11 +15,6 @@ void BufferQueue::Init(NetworkSetting setting)
 	// 방어코드
 	if (_bufferPool.size() != 0)
 		return;
-	// 버퍼 풀 구성
-	for (unsigned i = 0; i < setting._maxBufferCount; ++i)
-	{
-		_bufferPool.emplace_back(new char[setting._maxIocpBufferSize]);
-	}
 }
 
 // 사용할 버퍼를 풀에서 하나 얻어온다.

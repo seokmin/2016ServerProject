@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "ServerConfig.h"
+#include "PacketQueue.h"
 
 using namespace COMMON;
 class ITcpNetwork;
@@ -26,13 +27,15 @@ public:
 	PacketProcess() {};
 	~PacketProcess() {};
 
-	void Init(UserManager* pUserMgr, RoomManager* pRoomMgr);
+	void Init(UserManager* pUserMgr, RoomManager* pRoomMgr, PacketQueue* pRecvPacketQue, PacketQueue* pSendPacketQue);
 
 	void Process(PacketInfo packetInfo);
 
 private:
 	UserManager* m_pRefUserMgr;
 	RoomManager* m_pRefRoomMgr;
+	PacketQueue* m_pSendPacketQue;
+	PacketQueue* m_pRecvPacketQue;
 
 private:
 	ERROR_CODE NtfSysCloseSesson(PacketInfo packetInfo);
@@ -43,5 +46,4 @@ private:
 	ERROR_CODE RoomChat(PacketInfo packetInfo);
 	ERROR_CODE RoomChange(PacketInfo packetInfo);
 	
-	ERROR_CODE LeaveAllAndLogout(User* pUser, int SessionId);
 };
