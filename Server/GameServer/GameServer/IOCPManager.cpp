@@ -175,3 +175,13 @@ IOCPManager* IOCPManager::GetInstance()
 		_instance = new IOCPManager();
 	return _instance;
 }
+
+void IOCPManager::DelInstance()
+{
+	if (_instance != nullptr)
+	{
+		delete _instance;
+		_instance = nullptr;
+	}
+	return;
+}

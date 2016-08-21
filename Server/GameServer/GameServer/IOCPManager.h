@@ -1,4 +1,8 @@
 #pragma once
+#include <deque>
+#include <vector>
+#include <mutex>
+#include "NetworkSetting.h"
 
 class PacketQueue;
 
@@ -24,19 +28,20 @@ struct IOInfo
 class IOCPManager
 {
 public:
-	IOCPManager*		GetInstance();
-	void				StartServer(PacketQueue* recvPacketQueue);
+	static IOCPManager*		GetInstance();
+	static void				DelInstance();
+	void					StartServer();
 private:
 	IOCPManager() {};
 
-	void				LoadChannelSettingFromJson();
-	HANDLE				CreateIOCP();
-	void				CreateSessionPool();
+	void					LoadChannelSettingFromJson();
+	HANDLE					CreateIOCP();
+	void					CreateSessionPool();
 
-	void				WorkerThreadFunc();
-	void				ListenThreadFunc();
+	void					WorkerThreadFunc();
+	void					ListenThreadFunc();
 
-	void				BindSessionToIOCP(SessionInfo& targetSession);
+	void					BindSessionToIOCP(SessionInfo& targetSession);
 
 
 public:
