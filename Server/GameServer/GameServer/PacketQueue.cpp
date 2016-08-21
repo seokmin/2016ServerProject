@@ -11,6 +11,7 @@ RecvPacketInfo PacketQueue::ReadFront()
 	{
 		auto nullPacket = RecvPacketInfo{};
 		nullPacket.PacketId = PACKET_ID::NULL_PACKET;
+		return nullPacket;
 	}
 	return _packetDeque.front();
 }

@@ -40,11 +40,11 @@ void IOCPManager::WorkerThreadFunc()
 
 		if (ioInfo._rwMode == IOInfo::RWMode::READ)
 		{
-
+			auto receivePos = ioInfo._wsaBuf.buf;
 		}
-		else
+		else // RWMode::READ
 		{
-
+			
 		}
 	}
 }
