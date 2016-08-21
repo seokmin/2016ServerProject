@@ -10,7 +10,7 @@ RoomManager::~RoomManager()
 {
 }
 
-void RoomManager::init()
+void RoomManager::Init()
 {
 	for (int i = 0; i < NetworkConfig::MAX_ROOMCOUNT; i++)
 	{
