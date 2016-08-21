@@ -1,5 +1,5 @@
 #pragma once
-#include "Common.h"
+#include <mutex>
 
 class Logger
 {
@@ -27,5 +27,6 @@ private:
 
 private:
 	WCHAR m_levelStr[6][20];
+	std::mutex m_mutex;
 };
 

@@ -46,9 +46,26 @@ Logger::~Logger()
 
 void Logger::Log(Level level, WCHAR * message, int lessageLen)
 {
+#ifdef _DEBUG
+	m_mutex.lock();
 
 	auto now = std::chrono::system_clock::now();
 	std::time_t t = std::chrono::system_clock::to_time_t(now);
 	std::cout << std::put_time(std::localtime(&t), "%F %T");
 	std::wcout << L"\t[" << m_levelStr[level] << L"]" << message << std::endl;
+
+	m_mutex.unlock();
+#else
+	if (level > Level::EXCEPTION)
+	{
+		m_mutex.lock();
+
+		auto now = std::chrono::system_clock::now();
+		std::time_t t = std::chrono::system_clock::to_time_t(now);
+		std::cout << std::put_time(std::localtime(&t), "%F %T");
+		std::wcout << L"\t[" << m_levelStr[level] << L"]" << message << std::endl;
+
+		m_mutex.unlock();
+	}
+#endif
 }
