@@ -30,7 +30,7 @@ class IOCPManager
 public:
 	static IOCPManager*		GetInstance();
 	static void				DelInstance();
-	void					StartServer();
+	void					StartServer(PacketQueue* recvPacketQueue);
 private:
 	IOCPManager() {};
 
