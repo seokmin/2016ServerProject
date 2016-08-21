@@ -18,9 +18,10 @@ void IOCPManager::LoadChannelSettingFromServerConfig(ServerConfig* serverconfig)
 	auto setting = NetworkSetting{};
 	setting._maxBufferCount = serverconfig->MAX_BUFFER_COUNT;
 	setting._maxSessionCount = serverconfig->MAX_USERCOUNT_PER_CHANNEL + serverconfig->ExtraClientCount;
-	setting._maxBufferSize = serverconfig->MaxClientRecvBufferSize;
+	setting._maxIocpBufferSize = serverconfig->MAX_IOCP_RECV_BUFFER_SIZE;
 	setting._portNum = serverconfig->Port;
 	setting._backLog = serverconfig->BackLogCount;
+	setting._maxSessionRecvBufferSize = serverconfig->MAX_SESSION_RECV_BUFFER_SIZE;
 	
 	_setting = setting;
 }
@@ -42,7 +43,7 @@ void IOCPManager::WorkerThreadFunc()
 		{
 			auto receivePos = ioInfo._wsaBuf.buf;
 		}
-		else // RWMode::READ
+		else // RWMode::WRITE
 		{
 			
 		}
@@ -79,7 +80,7 @@ void IOCPManager::ListenThreadFunc()
 		auto ioInfo = new IOInfo();
 		// 해당 io에 사용할 버퍼를 버퍼 풀에서 하나 얻어온다.
 		ioInfo->_wsaBuf.buf = BufferQueue::GetInstance()->GetBufferThreadSafe();
-		ioInfo->_wsaBuf.len = _setting._maxBufferSize;
+		ioInfo->_wsaBuf.len = _setting._maxIocpBufferSize;
 		ioInfo->_rwMode = IOInfo::RWMode::READ;
 		ZeroMemory(&ioInfo->_overlapped, sizeof(OVERLAPPED));
 

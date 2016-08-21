@@ -28,8 +28,8 @@ public:
 
 	int BackLogCount = 5;
 
-
-	short MaxClientRecvBufferSize;
+	short MAX_SESSION_RECV_BUFFER_SIZE;
+	short MAX_IOCP_RECV_BUFFER_SIZE;
 	//short MaxClientSendBufferSize;
 
 	// 에러 코드는 1 ~ 200까지 사용한다.
