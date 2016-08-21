@@ -9,7 +9,7 @@ public:
 	RoomManager();
 	~RoomManager();
 
-	void init();
+	void Init();
 
 private:
 	std::vector<std::shared_ptr<Room>> m_roomList;

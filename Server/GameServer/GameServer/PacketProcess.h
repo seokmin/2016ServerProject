@@ -2,6 +2,7 @@
 
 #include "INetworkManager.h"
 #include "Common.h"
+#include "ServerConfig.h"
 
 using namespace COMMON;
 class ITcpNetwork;
@@ -30,10 +31,10 @@ public:
 	void Process(PacketInfo packetInfo);
 
 private:
-	ILog* m_pRefLogger;
 	TcpNet* m_pRefNetwork;
 	UserManager* m_pRefUserMgr;
 	LobbyManager* m_pRefLobbyMgr;
+	ILog* m_pRefLogger;
 
 private:
 	ERROR_CODE NtfSysCloseSesson(PacketInfo packetInfo);

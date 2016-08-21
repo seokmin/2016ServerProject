@@ -14,7 +14,7 @@ int main()
 		app.Run(); }
 	);
 
-	std::cout << "press any key to exit...";
+	std::cout << "press any key to exit..." << std::endl;;
 	getchar();
 
 	app.Stop();

@@ -3,7 +3,8 @@
 
 MySQLMangager::MySQLMangager()
 {
-	wcscpy_s(chr_ds_name, SQL_MAX_DSN_LENGTH, (SQLWCHAR *)L"mysql_unicode"); // odbc name
+	wcscpy_s(chr_ds_name, SQL_MAX_DSN_LENGTH, (SQLWCHAR *)L"mysql_seokmin_for_jb"); // odbc name
+	auto tmp = hstmt;
 }
 
 
@@ -15,10 +16,24 @@ MySQLMangager::~MySQLMangager()
 RETCODE MySQLMangager::sqlconn() {
 	SQLAllocEnv(&henv);
 	SQLAllocConnect(henv, &hdbc);
+	//rc = SQLConnect(hdbc, chr_ds_name, SQL_NTS, ConnID, sizeof(ConnID), ConnPW, sizeof(ConnPW));
 	rc = SQLConnect(hdbc, chr_ds_name, SQL_NTS, NULL, 0, NULL, 0);
-
 	// Deallocate handles, display error message, and exit.
 	if (!MYSQLSUCCESS(rc)) {
+		SQLWCHAR	SQLState[100];
+		SQLWCHAR	MessageText[100];
+		SQLINTEGER	NativeErrorPtr;
+		SQLSMALLINT TextLength;
+		SQLGetDiagRec(
+			SQL_HANDLE_DBC,
+			hdbc,
+			1,
+			SQLState,
+			&NativeErrorPtr,
+			MessageText,
+			100,
+			&TextLength);
+
 		SQLFreeConnect(henv);
 		SQLFreeEnv(henv);
 		SQLFreeConnect(hdbc);
@@ -48,7 +63,7 @@ RETCODE MySQLMangager::sqlexec(SQLWCHAR * query, SQLWCHAR * result) {
 			// In this example, the data is sent to the console; SQLBindCol() could be called to bind 
 			// individual rows of data and assign for a rowset.
 			swprintf_s(result, cbData, L"%ls", szData);
-			wprintf(L"%ls\n", szData);
+			//wprintf(L"Mysql result : %ls\n", szData);
 		}
 	}
 	return SQL_SUCCESS;
@@ -70,7 +85,9 @@ void MySQLMangager::error_out() {
 	SWORD cbmsg;
 
 	while (SQLError(0, 0, hstmt, szSQLSTATE, &nErr, msg, sizeof(msg), &cbmsg) == SQL_SUCCESS) {
-		swprintf_s(szData, sizeof(szData), L"Error:\nSQLSTATE=%ls, Native error=%ld, msg='%ls'", szSQLSTATE, nErr, msg);
-		MessageBox(NULL, szData, L"ODBC Error", MB_OK);
+		wprintf_s(L"Error:\nSQLSTATE=%ls, Native error=%ld, msg='%ls'", szSQLSTATE, nErr, msg);
+
+		//swprintf_s(szData, sizeof(szData), L"Error:\nSQLSTATE=%ls, Native error=%ld, msg='%ls'", szSQLSTATE, nErr, msg);
+		//MessageBox(NULL, szData, L"ODBC Error", MB_OK);
 	}
 }

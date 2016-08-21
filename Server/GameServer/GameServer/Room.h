@@ -11,5 +11,5 @@ public:
 
 private:
 	int m_id;
-	User* m_userList[NetworkConfig::MAX_USERCOUNT_PER_ROOM] = {nullptr, };
+	User* m_userList[ServerConfig::MAX_USERCOUNT_PER_ROOM] = {nullptr, };
 };
