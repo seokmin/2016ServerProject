@@ -9,8 +9,9 @@ class ITcpNetwork;
 class ILog;
 
 class UserManager;
-class LobbyManager;
 class User;
+
+class RoomManager;
 
 #define CHECK_START  ERROR_CODE __result=ERROR_CODE::NONE;
 #define CHECK_ERROR(f) __result=f; goto CHECK_ERR;
@@ -26,15 +27,13 @@ public:
 	PacketProcess() {};
 	~PacketProcess() {};
 
-	void Init(TcpNet* pNetwork, UserManager* pUserMgr, LobbyManager* pLobbyMgr, ILog* pLogger);
+	void Init(UserManager* pUserMgr, RoomManager* pRoomMgr);
 
 	void Process(PacketInfo packetInfo);
 
 private:
-	TcpNet* m_pRefNetwork;
 	UserManager* m_pRefUserMgr;
-	LobbyManager* m_pRefLobbyMgr;
-	ILog* m_pRefLogger;
+	RoomManager* m_pRefRoomMgr;
 
 private:
 	ERROR_CODE NtfSysCloseSesson(PacketInfo packetInfo);

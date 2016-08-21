@@ -42,9 +42,6 @@
     <ClInclude Include="..\..\..\Common\Common.h">
       <Filter>Source Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Common\ErrorCode.h">
-      <Filter>Source Files\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Common\Packet.h">
       <Filter>Source Files\Common</Filter>
     </ClInclude>

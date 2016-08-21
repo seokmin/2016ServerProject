@@ -4,14 +4,14 @@
 #include "User.h"
 #include "UserManager.h"
 
+#include "RoomManager.h"
 
 
-void PacketProcess::Init(TcpNet * pNetwork, UserManager * pUserMgr, LobbyManager * pLobbyMgr, ILog * pLogger)
+
+void PacketProcess::Init(UserManager * pUserMgr, RoomManager * pRoomMgr)
 {
-	m_pRefNetwork = pNetwork;
 	m_pRefUserMgr = pUserMgr;
-	m_pRefLobbyMgr = pLobbyMgr;
-	m_pRefLogger = pLogger;
+	m_pRefRoomMgr = pRoomMgr;
 
 	for (int i = 0; i < PACKET_ID::MAX; ++i)
 	{
@@ -46,7 +46,10 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 	auto reqPkt = (PacketRoomEnterReq*)packetInfo.pRefData;
 	PacketRoomEnterRes resPkt;
 
-	m_pRefUserMgr->LoginUser(reqPkt->_authToken);
+	if (!m_pRefUserMgr->LoginUser(packetInfo.SessionIndex, std::string(reqPkt->_authToken)))
+		return ERROR_CODE::ROOM_ENTER_CHANNEL_FULL;
+
+
 
 	return ERROR_CODE();
 }

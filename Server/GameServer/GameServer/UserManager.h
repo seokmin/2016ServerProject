@@ -6,20 +6,21 @@
 class UserManager
 {
 public:
-	UserManager();
-	~UserManager();
+	UserManager() {};
+	~UserManager() {};
 
-	void Init(ServerConfig*);
+	void Init();
 
-	void LoginUser(const char* authToken);
+	bool LoginUser(const int sessionIndex, std::string authToken);
 
 	int GetCurrentUserCount();
-	std::shared_ptr<User> GetAvailableUserPool();
 
-	
+private:
+	std::shared_ptr<User> GetAvailableUserFromPool();
+	std::shared_ptr<User> GetUserByAuthToken(std::string authToken);
 
 private:
 	std::vector<std::shared_ptr<User>> m_userList;
-	ServerConfig* m_pRefServerConfig = nullptr;
+	int m_curUserCount = 0;
 };
 

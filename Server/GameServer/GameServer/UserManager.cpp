@@ -1,39 +1,47 @@
 #include "stdafx.h"
 #include "UserManager.h"
+#include <algorithm>
 
-UserManager::UserManager()
+void UserManager::Init()
 {
-}
-
-
-UserManager::~UserManager()
-{
-}
-
-void UserManager::Init(ServerConfig* ServerConfig)
-{
-	m_pRefServerConfig = ServerConfig;
-
-	for (int i = 0; i < m_pRefServerConfig->MAX_USERCOUNT_PER_CHANNEL; ++i)
+	for (int i = 0; i < ServerConfig::MAX_USERCOUNT_PER_CHANNEL; ++i)
 	{
 		auto user = std::make_shared<User>(i);
 		m_userList.push_back(user);
 	}
 }
 
-void UserManager::LoginUser(const char * authToken)
+bool UserManager::LoginUser(const int sessionIndex, std::string authToken)
 {
+	std::shared_ptr<User> newUser = GetAvailableUserFromPool();
+	if (newUser == nullptr)
+		return false;
 
+	newUser->Init(sessionIndex, authToken);
+	++m_curUserCount;
 }
 
 int UserManager::GetCurrentUserCount()
 {
-	return (int)m_userList.size();
+	return m_curUserCount;
 }
 
-std::shared_ptr<User> UserManager::GetAvailableUserPool()
+std::shared_ptr<User> UserManager::GetAvailableUserFromPool()
 {
-	return std::shared_ptr<User>();
+	auto iter = std::find_if(std::begin(m_userList), std::end(m_userList), [](auto pUser) {return pUser->IsAvailableFromPool(); });
+	if (iter == std::end(m_userList))
+		return nullptr;
+
+	return *iter;
+}
+
+std::shared_ptr<User> UserManager::GetUserByAuthToken(std::string authToken)
+{
+	auto iter = std::find_if(std::begin(m_userList), std::end(m_userList), [authToken](auto pUser) {return pUser->CheckUserWithAuthToken(authToken); });
+	if (iter == std::end(m_userList))
+		return nullptr;
+
+	return *iter;
 }
 
 
