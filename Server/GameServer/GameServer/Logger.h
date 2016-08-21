@@ -19,6 +19,5 @@ public:
 
 	void Log(Level level, WCHAR* message, int lessageLen);
 private:
-	WCHAR logStr[6][20];
 };
 
