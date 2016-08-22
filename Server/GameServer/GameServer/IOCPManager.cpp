@@ -139,6 +139,7 @@ void IOCPManager::ListenThreadFunc()
 	}
 }
 
+// TODO : 비효율적으로 계속 루프를 돌고 있는데, 패킷 큐에 데이터가 들어올 때 send부분을 호출하게 콜백 방식으로 동작하게 바꿀 것임
 void IOCPManager::SendThreadFunc()
 {
 	while (true)

@@ -30,6 +30,7 @@ namespace FILENAME
 
 		DEF_FILENAME(SPRITE, CHANNEL_LIST_BG, "channelListBg.png");
 				
+		// 1번부터 시작
 		static std::string POKE_ARRAY[MAX_NUMBER_OF_POKEMON_AVAILABLE + 1] =
 		{
 			std::string("error"),

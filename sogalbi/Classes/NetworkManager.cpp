@@ -33,8 +33,8 @@ void NetworkManager::initTcp()
 // send() 성공여부 반환
 bool NetworkManager::sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData)
 {
-_mutex.lock();
-	
+	_mutex.lock();
+
 	char data[COMMON::MAX_PACKET_SIZE] = { 0, };
 
 	// 헤더
@@ -60,6 +60,15 @@ _mutex.lock();
 	return true;
 }
 
+void NetworkManager::recvPacket(std::function<void(const COMMON::PACKET_ID, const short, char*)> callbackFunc)
+{
+	auto recvThread = [&]()
+	{
+		recv(_sock, _recvBuffer, sizeof(_recvBuffer), 0);
+		recvPacketProcess();
+	};
+}
+
 NetworkManager* NetworkManager::getInstance()
 {
 	if (_instance == nullptr)
@@ -77,8 +86,8 @@ bool NetworkManager::connectTcp(std::string serverIp, int serverPort)
 	serverAddr.sin_family = AF_INET;
 	inet_pton(AF_INET, serverIp.c_str(), static_cast<void*>(&serverAddr.sin_addr.s_addr));
 	serverAddr.sin_port = htons(serverPort);
-	
-	auto result = connect(_sock,(SOCKADDR*)&serverAddr, sizeof(serverAddr));
+
+	auto result = connect(_sock, (SOCKADDR*)&serverAddr, sizeof(serverAddr));
 	if (result == SOCKET_ERROR)
 	{
 		ClientLogger::msgBox(L"해당 채널이 응답하지 않습니다.");
