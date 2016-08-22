@@ -9,12 +9,12 @@ public:
 
 	bool	sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData);
 
-	void	recvPacket(std::function<void(const COMMON::PACKET_ID,const short, char*)> callbackFunc);
+	void	setRecvCallback(std::function<void(const COMMON::PACKET_ID,const short, char*)> callbackFunc);
 
 private:
 	NetworkManager();
 	void	initTcp();
-	void	recvPacketProcess();
+	COMMON::RecvPacketInfo createPacketFromRecvBuffer();
 
 private:
 	static NetworkManager* _instance;

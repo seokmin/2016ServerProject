@@ -30,6 +30,18 @@ void NetworkManager::initTcp()
 	}
 }
 
+COMMON::RecvPacketInfo NetworkManager::createPacketFromRecvBuffer()
+{
+	auto receivedSize = recv(_sock, _recvBuffer, sizeof(_recvBuffer), 0);
+	auto remainingDataSizeInBuf = receivedSize;
+	
+	// 헤더를 읽을 수 있을 때
+	while (remainingDataSizeInBuf >= COMMON::PACKET_HEADER_SIZE)
+	{
+
+	}
+}
+
 // send() 성공여부 반환
 bool NetworkManager::sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData)
 {
@@ -60,12 +72,12 @@ bool NetworkManager::sendPacket(const COMMON::PACKET_ID packetId, const short da
 	return true;
 }
 
-void NetworkManager::recvPacket(std::function<void(const COMMON::PACKET_ID, const short, char*)> callbackFunc)
+void NetworkManager::setRecvCallback(std::function<void(const COMMON::PACKET_ID, const short, char*)> callbackFunc)
 {
+	// TODO : 짜는 중
 	auto recvThread = [&]()
 	{
-		recv(_sock, _recvBuffer, sizeof(_recvBuffer), 0);
-		recvPacketProcess();
+		createPacketFromRecvBuffer();
 	};
 }
 
