@@ -4,6 +4,7 @@
 #include "User.h"
 #include "UserManager.h"
 
+#include "Room.h"
 #include "RoomManager.h"
 
 #include "IOCPManager.h"
@@ -49,9 +50,31 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 	if (!m_pRefUserMgr->LoginUser(packetInfo.SessionIndex, std::string(reqPkt->_authToken)))
 		return ERROR_CODE::ROOM_ENTER_CHANNEL_FULL;
 
-	m_pRefRoomMgr->EnterUser(packetInfo.SessionIndex);
+	printf_s("유저(%d)정보가 정상적으로 잘 등록됬음 \n", packetInfo.SessionIndex);
 
-	return ERROR_CODE();
+	ERROR_CODE result = m_pRefRoomMgr->EnterUser(packetInfo.SessionIndex);
+	if (result != ERROR_CODE::NONE)
+		return result;
+
+	printf_s("유저(%d)가 방(%d)에 들어갔음 \n", packetInfo.SessionIndex, m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)->GetCurRoomIdx());
+
+	// 바로 위에서 m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)이 null인지 확인하므로 두 번 확인은 안 함..
+	resPkt._roomNum = m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)->GetCurRoomIdx();
+	
+	auto targetRoom = m_pRefRoomMgr->GetRoomById(resPkt._roomNum);
+
+	// Res 보냄
+	PacketInfo sendPacket;
+	sendPacket.SessionIndex = packetInfo.SessionIndex;
+	sendPacket.PacketId = PACKET_ID::ROOM_ENTER_RES;
+	sendPacket.pRefData = (char *)&resPkt;
+	sendPacket.PacketBodySize = sizeof(resPkt);
+	m_pSendPacketQue->PushBack(sendPacket);
+	
+	// Notify
+	targetRoom->NotifyEnterUserInfo(packetInfo.SessionIndex);
+
+	return ERROR_CODE::NONE;
 }
 
 ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)

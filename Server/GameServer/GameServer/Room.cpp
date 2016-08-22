@@ -1,6 +1,15 @@
 #include "stdafx.h"
-#include "Room.h"
+
 #include "User.h"
+#include "IOCPManager.h"
+#include "PacketQueue.h"
+
+#include "Room.h"
+
+void Room::Init(PacketQueue* sendPacketQue)
+{
+	m_pSendPacketQue = sendPacketQue;
+}
 
 bool Room::EnterUser(User* user)
 {
@@ -48,4 +57,55 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 		m_userList[targetPos] = nullptr; 
 
 	return	COMMON::ERROR_CODE::NONE;
+}
+
+// sessionIndex = µé¾î¿Â º»ÀÎ -> »©°í ³ª¸ÓÁöÇÑÅ× º¸³¿
+void Room::NotifyEnterUserInfo(int sessionIndex)
+{
+	auto enterUser = GetUserBySessionIndex(sessionIndex);
+
+	PacketRoomEnterNtf pkt;
+	pkt._enterUser = enterUser->GetUserInfo();
+	pkt._slotNum = GetUserSeatBySessionIndex(sessionIndex);
+
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] == nullptr) continue;
+
+		if (m_userList[i]->CheckUserWithSessionIndex(sessionIndex))
+			continue;
+
+		// Res º¸³¿
+		PacketInfo sendPacket;
+		sendPacket.SessionIndex = m_userList[i]->GetSessionIndex();
+		sendPacket.PacketId = PACKET_ID::ROOM_ENTER_USER_NTF;
+		sendPacket.pRefData = (char *)&pkt;
+		sendPacket.PacketBodySize = sizeof(pkt);
+		m_pSendPacketQue->PushBack(sendPacket);
+	}
+
+}
+
+User * Room::GetUserBySessionIndex(int sessionIndex)
+{
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] != nullptr)
+		{
+			if (m_userList[i]->CheckUserWithSessionIndex(sessionIndex))
+				return m_userList[i];
+		}
+	}
+}
+
+int Room::GetUserSeatBySessionIndex(int sessionIndex)
+{
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] != nullptr)
+		{
+			if (m_userList[i]->CheckUserWithSessionIndex(sessionIndex))
+				return i;
+		}
+	}
 }

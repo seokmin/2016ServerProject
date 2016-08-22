@@ -22,7 +22,7 @@ bool UserManager::LoginUser(const int sessionIndex, std::string authToken)
 	if (newUser == nullptr)
 		return false;
 
-	newUser->Init(sessionIndex, authToken);
+	newUser->Init(sessionIndex, authToken, L"임시이름", 1, 100);
 	++m_curUserCount;
 
 	return true;
@@ -51,6 +51,15 @@ bool UserManager::LogoutUser(const int sessionIndex)
 	}
 	
 	return true;
+}
+
+std::shared_ptr<User> UserManager::GetUserBySessionIndex(int sessionIndex)
+{
+	auto iter = std::find_if(std::begin(m_userList), std::end(m_userList), [sessionIndex](auto pUser) {return pUser->CheckUserWithSessionIndex(sessionIndex); });
+	if (iter == std::end(m_userList))
+		return nullptr;
+
+	return *iter;
 }
 
 int UserManager::GetCurrentUserCount()

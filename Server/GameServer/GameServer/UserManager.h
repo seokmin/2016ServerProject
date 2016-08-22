@@ -15,6 +15,8 @@ public:
 	bool LoginUser(const int sessionIndex, std::string authToken);
 	bool LogoutUser(const int sessionIndex);
 
+	std::shared_ptr<User> GetUserBySessionIndex(int sessionIndex);
+
 	int GetCurrentUserCount();
 
 	std::shared_ptr<User> GetUserBySessionId(int sessionIdx);

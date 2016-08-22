@@ -7,7 +7,7 @@ namespace COMMON
 	const auto MAX_PACKET_SIZE = 1024;
 	const auto MAX_USER_ID_LEN = 5;
 	const auto MAX_USER_PW_LEN = 10;
-	const auto AUTH_TOKEN_LEN = 20;
+	const auto AUTH_TOKEN_LEN = 45;
 	const auto MAX_ROOM_CAPTION_LEN = 15;
 	const auto MAX_HAND = 2; // maximum hands by split
 
