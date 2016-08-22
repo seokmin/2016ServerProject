@@ -89,7 +89,7 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; i++)
 	{
 		User* pUser = room->GetUserInfo(i);
-		UserInfo uInfo = pUser->GetInfo();
+		UserInfo uInfo = pUser->GetUserInfo();
 		resPkt._users[i] = uInfo;
 	}
 	resPkt._dealerinfo = DealerInfo();

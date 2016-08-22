@@ -87,7 +87,7 @@ std::shared_ptr<User> UserManager::GetUserByAuthToken(std::string authToken)
 
 std::shared_ptr<User> UserManager::GetUserBySessionId(int sessionIdx)
 {
-	auto iter = std::find_if(std::begin(m_userList), std::end(m_userList), [sessionIdx](auto pUser) {return pUser->GetUserSessionIdx() == sessionIdx; });
+	auto iter = std::find_if(std::begin(m_userList), std::end(m_userList), [sessionIdx](auto pUser) {return pUser->GetSessionIndex() == sessionIdx; });
 	if (iter == std::end(m_userList))
 		return nullptr;
 	return *iter;
