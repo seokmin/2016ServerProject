@@ -17,10 +17,11 @@ public:
 
 	int GetCurrentUserCount();
 
+	std::shared_ptr<User> GetUserBySessionId(int sessionIdx);
 private:
 	std::shared_ptr<User> GetAvailableUserFromPool();
 	std::shared_ptr<User> GetUserByAuthToken(std::string authToken);
-
+	
 private:
 	std::vector<std::shared_ptr<User>> m_userList;
 

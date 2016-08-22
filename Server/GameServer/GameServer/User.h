@@ -24,6 +24,8 @@ public:
 	bool CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };
 	int  GetCurRoomIdx() { return m_currentRoomIdx; };
 	int  GetUserIdx() { return m_userId; };
+	int  GetUserSessionIdx() { return m_sessionIndex; };
+	UserInfo GetInfo();
 	
 private:
 	int m_userId = -1;
@@ -32,5 +34,6 @@ private:
 	std::string m_authToken = "";
 
 	DOMAIN_STATE m_curDomain = DOMAIN_STATE::NONE;
+	int m_money = 0;
 };
 

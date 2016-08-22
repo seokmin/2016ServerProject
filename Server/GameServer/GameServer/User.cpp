@@ -21,3 +21,13 @@ void User::EnterRoom(int roomIdx)
 	m_curDomain = DOMAIN_STATE::ROOM;
 	m_currentRoomIdx = roomIdx;
 }
+
+UserInfo User::GetInfo()
+{
+	//[Todo::] make UserINfo
+	UserInfo info;
+	//info._totalMony = ;
+	//info._betMoney = ;
+	//info._pokeNum = ;
+	return UserInfo{0,};
+}

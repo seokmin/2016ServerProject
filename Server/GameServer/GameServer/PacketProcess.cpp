@@ -24,6 +24,7 @@ void PacketProcess::Init(UserManager * pUserMgr, RoomManager * pRoomMgr, PacketQ
 
 	PacketFuncArray[(int)ServerConfig::PACKET_ID::NTF_SYS_CLOSE_SESSION] = &PacketProcess::NtfSysCloseSesson;
 	PacketFuncArray[(int)PACKET_ID::ROOM_ENTER_REQ] = &PacketProcess::RoomEnter;
+	PacketFuncArray[(int)PACKET_ID::ROOM_ENTER_USER_LIST_REQ] = &PacketProcess::RoomUserList;
 	PacketFuncArray[(int)PACKET_ID::ROOM_LEAVE_REQ] = &PacketProcess::RoomLeave;
 }
 
@@ -55,8 +56,31 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 
 ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 {
-	//[TODO] ...
-	return ERROR_CODE();
+	auto reqPkt = (PacketRoomUserlistReq*)packetInfo.pRefData;
+	PacketRoomUserlistRes resPkt;
+	
+
+	auto user = m_pRefUserMgr->GetUserBySessionId(packetInfo.SessionIndex);
+	auto roomId = user->GetCurRoomIdx();
+	auto room = m_pRefRoomMgr->GetRoomByRoomId(roomId);
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; i++)
+	{
+		User* pUser = room->GetUserInfo(i);
+		UserInfo uInfo = pUser->GetInfo();
+		resPkt._users[i] = uInfo;
+	}
+	resPkt._dealerinfo = DealerInfo();
+	resPkt._roomNum = roomId;
+	resPkt._errorCode = ERROR_CODE::NONE;
+
+	PacketInfo sendPacket;
+	sendPacket.SessionIndex = packetInfo.SessionIndex;
+	sendPacket.PacketId = PACKET_ID::ROOM_ENTER_USER_LIST_RES;
+	sendPacket.PacketBodySize = sizeof(PacketRoomUserlistRes);
+	sendPacket.pRefData = (char*)&resPkt;
+	m_pSendPacketQue->PushBack(sendPacket);
+
+	return ERROR_CODE::NONE;
 }
 
 ERROR_CODE PacketProcess::RoomLeave(PacketInfo packetInfo)
@@ -91,6 +115,7 @@ ERROR_CODE PacketProcess::RoomChat(PacketInfo packetInfo)
 
 ERROR_CODE PacketProcess::RoomChange(PacketInfo packetInfo)
 {
+	// TODO 
 	return ERROR_CODE();
 }
 
