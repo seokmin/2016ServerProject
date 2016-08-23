@@ -87,7 +87,8 @@ void NetworkManager::setRecvCallback(std::function<void(const COMMON::PACKET_ID,
 {
 	using namespace COMMON;
 	// TODO : 짜는 중
-	std::thread(std::bind(&NetworkManager::recvAndGivePacketsToCallbackFuncThread,this,callbackFunc));
+	auto newThread = std::thread(std::bind(&NetworkManager::recvAndGivePacketsToCallbackFuncThread,this,callbackFunc));
+	newThread.detach();
 }
 
 // send() 성공여부 반환
