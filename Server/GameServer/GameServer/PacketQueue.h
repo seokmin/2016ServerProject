@@ -11,6 +11,7 @@ public:
 	RecvPacketInfo	ReadFront();
 	void			PopFront();
 	void			PushBack(RecvPacketInfo& recvPacket);
+	bool			IsEmpty();
 private:
 public:
 private:

@@ -30,8 +30,9 @@ public:
 	void logoutButtonClicked(Ref* pSender);
 	void logoutResponseArrived(network::HttpClient* sender, network::HttpResponse* response);
 
-
 	void channelButtonClicked(DEF::ChannelInfo& clickChannel);
+
+	void recvPacketProcess();
 
 	CREATE_FUNC(LoginScene);
 

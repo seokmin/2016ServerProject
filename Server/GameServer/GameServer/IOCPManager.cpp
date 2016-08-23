@@ -18,7 +18,7 @@ void IOCPManager::LoadChannelSettingFromServerConfig(ServerConfig* serverconfig)
 	setting._portNum = serverconfig->Port;
 	setting._backLog = serverconfig->BackLogCount;
 	setting._maxSessionRecvBufferSize = serverconfig->MAX_SESSION_RECV_BUFFER_SIZE;
-	
+
 	_setting = setting;
 }
 
@@ -44,9 +44,9 @@ void IOCPManager::WorkerThreadFunc()
 			auto totalDataSizeInBuf = receivePos + transferedByte - pSession->_recvBuffer;
 			// 패킷으로 만들어지길 기다리는 데이터의 사이즈
 			auto remainingDataSizeInBuf = totalDataSizeInBuf;
-			
+
 			// 패킷 조제 루프
-			while (remainingDataSizeInBuf >= PACKET_HEADER_SIZE) 
+			while (remainingDataSizeInBuf >= PACKET_HEADER_SIZE)
 			{ // 헤더를 들여다 보기에 충분한 데이터가 있다면
 				// 헤더를 들여다본다
 				auto header = (PacketHeader*)headerPos;
@@ -66,7 +66,7 @@ void IOCPManager::WorkerThreadFunc()
 
 					// 패킷을 하나 온전히 만들었으므로 다음번 헤더 자리를 지정하고, 남은 데이터 사이즈를 갱신해준다.
 					headerPos += PACKET_HEADER_SIZE + bodySize;
-					remainingDataSizeInBuf -= PACKET_HEADER_SIZE + bodySize; 
+					remainingDataSizeInBuf -= PACKET_HEADER_SIZE + bodySize;
 				}
 				else // 헤더는 있는데 데이터가 모자라서 패킷 하나를 통짜로 만들 수 없을 때
 					break;
@@ -88,7 +88,7 @@ void IOCPManager::WorkerThreadFunc()
 		}
 		else // RWMode::WRITE
 		{
-			
+
 		}
 	}
 }
@@ -110,7 +110,7 @@ void IOCPManager::ListenThreadFunc()
 
 		// 새로 접속한 유저가 사용할 세션을 노는 세션중에 얻어온다.
 		_sessionPoolMutex.lock();
-			auto newSessionIndex = _sessionIndexPool.front();
+		auto newSessionIndex = _sessionIndexPool.front();
 		_sessionIndexPool.pop_front();
 		_sessionPoolMutex.unlock();
 		auto newSession = _sessionPool.at(newSessionIndex);
@@ -130,23 +130,27 @@ void IOCPManager::ListenThreadFunc()
 		BindSessionToIOCP(newSession);
 
 		DWORD recvSize = 0, flags = 0;
-		
+
 		// Recv 걸어놓는다. 완료되면 worker thread로 넘어감
 		WSARecv(newSession->_socket,	// 소켓
 			&ioInfo->_wsaBuf,		// 해당 recv에 사용할 버퍼
 			1,						// 사용할 버퍼 개수
-			&recvSize,&flags,&ioInfo->_overlapped,nullptr);
+			&recvSize, &flags, &ioInfo->_overlapped, nullptr);
 	}
 }
 
-// TODO : 비효율적으로 계속 루프를 돌고 있는데, 패킷 큐에 데이터가 들어올 때 send부분을 호출하게 콜백 방식으로 동작하게 바꿀 것임
+// TODO : 비효율적으로 계속 루프를 돌고 있는데, 패킷 큐에 데이터가 들어올 때 WsaSend를 호출하게 바꿀 것임
 void IOCPManager::SendThreadFunc()
 {
 	while (true)
 	{
-		auto packetToSend = _sendPacketQueue->ReadFront();
-		if(packetToSend.PacketId == PACKET_ID::NULL_PACKET)
+		if (_sendPacketQueue->IsEmpty())
+		{
+			// 우선 작업이 있는 다른 스레드가 있으면 양보한다
+			std::this_thread::sleep_for(std::chrono::milliseconds(0));
 			continue;
+		}
+		auto packetToSend = _sendPacketQueue->ReadFront();
 		auto targetSession = _sessionPool.at(packetToSend.SessionIndex);
 		send(targetSession->_socket, targetSession->_recvBuffer, PACKET_HEADER_SIZE + packetToSend.PacketBodySize, 0);
 		_sendPacketQueue->PopFront();
@@ -173,7 +177,7 @@ COMMON::ERROR_CODE IOCPManager::StartServer()
 	for (auto i = 0u; i < numThread; ++i)
 	{
 		// 각 클라이언트에 붙을 worker 스레드
-		auto workerThread = std::thread(std::bind(&IOCPManager::WorkerThreadFunc,this));
+		auto workerThread = std::thread(std::bind(&IOCPManager::WorkerThreadFunc, this));
 		workerThread.detach();
 	}
 
@@ -200,7 +204,7 @@ void IOCPManager::CreateSessionPool()
 		auto newSession = new SessionInfo();
 		newSession->_index = i;
 		// 세션마다 가지고 있는 버퍼를 새로 만든다
-		newSession->_recvBuffer = new char[_setting._maxSessionRecvBufferSize]; 
+		newSession->_recvBuffer = new char[_setting._maxSessionRecvBufferSize];
 		_sessionPool.push_back(newSession);
 		_sessionIndexPool.push_back(i);
 	}

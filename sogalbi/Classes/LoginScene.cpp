@@ -166,16 +166,15 @@ void LoginScene::channelButtonClicked(DEF::ChannelInfo& targetChannel)
 		_channelsMenu->setEnabled(true);
 		return;
 	}
-// 	auto bindFunc = [&]() {
-// 		// 네트워크 접속 결과가 나오면 채널버튼 다시 클릭할 수 있게
-// 		if (!NetworkManager::getInstance()->connectTcp(targetChannel.ip, targetChannel.port))
-// 			_channelsMenu->setEnabled(true);
-// 	};
 	
 	auto newThread = std::thread(std::bind(&LoginScene::connectChannel, this, targetChannel.ip, targetChannel.port));
-	//auto newThread = std::thread(bindFunc);
 	
 	newThread.detach();
+}
+
+void LoginScene::recvPacketProcess()
+{
+	ClientLogger::msgBox(L"패킷 도착!");
 }
 
 void LoginScene::popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos)
@@ -358,7 +357,7 @@ int LoginScene::parseChannelInfo(std::string& resLoginString, std::vector<DEF::C
 
 void LoginScene::connectChannel(std::string ip, int port)
 {
-	if (!NetworkManager::getInstance()->connectTcp(ip, port))
+	if (!NetworkManager::getInstance()->connectTcp(ip, port,std::bind(&LoginScene::recvPacketProcess,this)))
 	{
 		// connect 실패시
 		_channelsMenu->setEnabled(true); // 채널 접속 버튼 다시 누를 수 있게
