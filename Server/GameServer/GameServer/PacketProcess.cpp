@@ -44,7 +44,7 @@ void PacketProcess::Process(PacketInfo packetInfo)
 
 ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 {
-	auto reqPkt = (PacketRoomEnterReq*)packetInfo.pRefData;
+  	auto reqPkt = (PacketRoomEnterReq*)packetInfo.pRefData;
 	PacketRoomEnterRes resPkt;
 
 	if (!m_pRefUserMgr->LoginUser(packetInfo.SessionIndex, std::string(reqPkt->_authToken)))
@@ -153,7 +153,7 @@ ERROR_CODE PacketProcess::NtfSysCloseSesson(PacketInfo packetInfo)
 	if (outUser == nullptr)
 	{
 		printf_s("유저(%d)가 접속이 끊겼는데 목록에 없다!? \n", sId);
-		return;
+		return ERROR_CODE::ROOM_LEAVE_NOT_MEMBER;
 	}
 
 	// 만약 유저가 방에 들어 있었으면..
@@ -175,5 +175,6 @@ ERROR_CODE PacketProcess::NtfSysCloseSesson(PacketInfo packetInfo)
 	sendPacketInfo.PacketBodySize = 0;
 	sendPacketInfo.pRefData = nullptr;
 	m_pSendPacketQue->PushBack(packetInfo);
-	return ERROR_CODE();
+
+	return ERROR_CODE::NONE;
 }

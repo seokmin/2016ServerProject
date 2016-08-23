@@ -99,6 +99,8 @@ User * Room::GetUserBySessionIndex(int sessionIndex)
 				return m_userList[i];
 		}
 	}
+
+	return nullptr;
 }
 
 int Room::GetUserSeatBySessionIndex(int sessionIndex)
@@ -111,4 +113,6 @@ int Room::GetUserSeatBySessionIndex(int sessionIndex)
 				return i;
 		}
 	}
+
+	return -1;
 }
