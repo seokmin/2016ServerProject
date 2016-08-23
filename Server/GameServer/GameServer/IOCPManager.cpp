@@ -152,7 +152,7 @@ void IOCPManager::SendThreadFunc()
 		}
 		auto packetToSend = _sendPacketQueue->ReadFront();
 		auto targetSession = _sessionPool.at(packetToSend.SessionIndex);
-		send(targetSession->_socket, targetSession->_recvBuffer, PACKET_HEADER_SIZE + packetToSend.PacketBodySize, 0);
+		send(targetSession->_socket, packetToSend.pRefData, PACKET_HEADER_SIZE + packetToSend.PacketBodySize, 0);
 		_sendPacketQueue->PopFront();
 	}
 }
