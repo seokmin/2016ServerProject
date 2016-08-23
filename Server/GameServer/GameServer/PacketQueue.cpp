@@ -7,7 +7,7 @@
 // 제일 앞의 결과를 보여준다
 RecvPacketInfo PacketQueue::ReadFront()
 {
-	if (_packetDeque.empty())
+	if (this->IsEmpty())
 	{
 		auto nullPacket = RecvPacketInfo{};
 		nullPacket.PacketId = PACKET_ID::NULL_PACKET;
@@ -47,4 +47,9 @@ void PacketQueue::PushBack(RecvPacketInfo& recvPacket)
 	_mutex.lock();
 	_packetDeque.push_back(copiedPacket);
 	_mutex.unlock();
+}
+
+bool PacketQueue::IsEmpty()
+{
+	return _packetDeque.empty();
 }

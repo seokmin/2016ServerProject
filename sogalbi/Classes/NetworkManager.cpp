@@ -40,6 +40,7 @@ COMMON::RecvPacketInfo NetworkManager::createPacketFromRecvBuffer()
 	{
 
 	}
+	return COMMON::RecvPacketInfo{};
 }
 
 // send() 성공여부 반환
