@@ -150,9 +150,12 @@ void IOCPManager::SendThreadFunc()
 			std::this_thread::sleep_for(std::chrono::milliseconds(0));
 			continue;
 		}
+		// send를 해도 되는 상황인지 확인해서 안되는 상황이면 다음으로 미룬다.
 		auto packetToSend = _sendPacketQueue->ReadFront();
 		auto targetSession = _sessionPool.at(packetToSend.SessionIndex);
-		send(targetSession->_socket, packetToSend.pRefData, PACKET_HEADER_SIZE + packetToSend.PacketBodySize, 0);
+		auto headerToSend = PacketHeader{(PACKET_ID)packetToSend.PacketId,packetToSend.PacketBodySize};
+		send(targetSession->_socket, (char*)&headerToSend, PACKET_HEADER_SIZE, 0);
+		send(targetSession->_socket, packetToSend.pRefData, packetToSend.PacketBodySize, 0);
 		_sendPacketQueue->PopFront();
 	}
 }
