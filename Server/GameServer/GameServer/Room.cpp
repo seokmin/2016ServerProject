@@ -55,6 +55,9 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 		return COMMON::ERROR_CODE::ROOM_LEAVE_NOT_MEMBER;
 	else
 		m_userList[targetPos] = nullptr; 
+	
+	// 유저의 상태/방정보도 나가도록 해줘야 함
+	pUser->LeaveRoom();
 
 	return	COMMON::ERROR_CODE::NONE;
 }

@@ -89,6 +89,8 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; i++)
 	{
 		User* pUser = room->GetUserInfo(i);
+		if (pUser == nullptr) continue;
+
 		UserInfo uInfo = pUser->GetUserInfo();
 		resPkt._users[i] = uInfo;
 	}
@@ -145,6 +147,28 @@ ERROR_CODE PacketProcess::RoomChange(PacketInfo packetInfo)
 
 ERROR_CODE PacketProcess::NtfSysCloseSesson(PacketInfo packetInfo)
 {
+	int sId = packetInfo.SessionIndex;
+	std::shared_ptr<User> outUser = m_pRefUserMgr->GetUserBySessionIndex(sId);
+
+	if (outUser == nullptr)
+	{
+		printf_s("유저(%d)가 접속이 끊겼는데 목록에 없다!? \n", sId);
+		return;
+	}
+
+	// 만약 유저가 방에 들어 있었으면..
+	if (outUser->IsCurDomainRoom())
+	{
+		int outRoomId = outUser->GetCurRoomIdx();
+		m_pRefRoomMgr->LeavUserFromRoom(outRoomId, outUser.get());
+
+		// 사실 룸에서 나왔으면 여기로 와야 정상.
+		if (outUser->IsCurDomainLogin())
+		{
+			outUser->Clear();
+		}
+	}
+
 	PacketInfo sendPacketInfo;
 	sendPacketInfo.SessionIndex = packetInfo.SessionIndex;
 	sendPacketInfo.PacketId = PACKET_ID::CLOSE_SESSION;

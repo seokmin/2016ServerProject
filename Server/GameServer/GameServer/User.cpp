@@ -45,6 +45,12 @@ void User::EnterRoom(int roomIdx)
 	m_currentRoomIdx = roomIdx;
 }
 
+void User::LeaveRoom()
+{
+	m_currentRoomIdx = -1;
+	m_curDomain = DOMAIN_STATE::LOGIN;
+}
+
 COMMON::UserInfo User::GetUserInfo()
 {
 	COMMON::UserInfo userInfo;

@@ -20,18 +20,21 @@ public:
 	void Init(int sessionIndex, std::string authToken, std::wstring userName, int pokeNum, int totalMoney);
 	void Clear();
 	void EnterRoom(int roomIdx);
+	void LeaveRoom();
 
 	COMMON::UserInfo GetUserInfo();
 
-	bool IsAvailableFromPool() { return m_sessionIndex < 0; };
-	bool CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };
-	bool CheckUserWithSessionIndex(int sessionIndex) { return (m_sessionIndex == sessionIndex); };
-	int  GetCurRoomIdx() { return m_currentRoomIdx; };
-	int  GetUserIdx() { return m_userId; };
-	int	 GetPokeNum() { return m_pokeNum; };
+	bool				IsAvailableFromPool() { return m_sessionIndex < 0; };
+	bool				CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };
+	bool				CheckUserWithSessionIndex(int sessionIndex) { return (m_sessionIndex == sessionIndex); };
+	int					GetCurRoomIdx() { return m_currentRoomIdx; };
+	int					GetUserIdx() { return m_userId; };
+	int					GetPokeNum() { return m_pokeNum; };
 	std::wstring		GetName() { return m_userName; };
 	int					GetTotalMoney() { return m_totalMoney; };
 	int					GetSessionIndex() { return m_sessionIndex; };
+	bool				IsCurDomainRoom() { return m_curDomain == DOMAIN_STATE::ROOM; };
+	bool				IsCurDomainLogin() { return m_curDomain == DOMAIN_STATE::LOGIN; };
 
 private:
 	void InitHand();
