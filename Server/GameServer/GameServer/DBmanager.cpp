@@ -56,13 +56,20 @@ void DBmanager::DBThreadWorker()
 {
 	DWORD ret;
 
+	int index = GetThreadIndex();
+
 	while (true)
 	{
-		int index = GetThreadIndex();
 
 		ret = WaitForSingleObject(hDBEvent[index], INFINITE);
 		
-		if (ret == WAIT_FAILED) break;
+		if (ret == WAIT_FAILED)
+		{
+			WCHAR levelStr[200];
+			wsprintf(levelStr, L"DB 쓰레드(%d)의 죽음을 알리지 말라..", index);
+			Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
+			break;
+		}
 
 		if (m_jobQ[index].empty())
 		{

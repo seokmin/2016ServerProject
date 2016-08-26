@@ -90,7 +90,7 @@ void App::StateCheckAndSubmit()
 
 		dur = std::chrono::duration<float>::zero();
 
-		//int curUserCount = m_pUserMgr->GetCurrentUserCount(); //[TODO]
+		//int curUserCount = m_pUserMgr->`(); //[TODO]
 		int curUserCount = 1;
 		m_pDB->SubmitState(m_pServerConfig->MAX_USERCOUNT_PER_CHANNEL, curUserCount, m_pServerConfig.get());		
 	}
