@@ -4,7 +4,7 @@
 void User::Init(std::string authToken, std::wstring userName, int pokeNum, int totalMoney)
 {
 	m_authToken = authToken;
-	m_curDomain = DOMAIN_STATE::LOGIN;
+	m_curDomain = DOMAIN_STATE::ROOM; // 방에 들어간 다음 DB 결과가 리턴되서..ㅜㅜ
 	m_userName = userName;
 	m_pokeNum = pokeNum;
 	m_totalMoney = totalMoney;
