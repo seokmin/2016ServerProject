@@ -4,16 +4,17 @@
 
 bool Player::init()
 {
-	_nameTag = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::NAMETAG);
-	_nameTagBack = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::NAMETAG_BACK);
-	_nameLabel = Label::createWithTTF("NULL", FILENAME::FONT::SOYANON,24);
-	_pokemon = Sprite::create();
-	
-
-	addChild(_nameTag,1);
-	addChild(_nameTagBack,0);
-	addChild(_nameLabel,2);
-	addChild(_pokemon,2);
+	auto runwith = [=]() {
+		_nameTag = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::NAMETAG);
+		_nameTagBack = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::NAMETAG_BACK);
+		_nameLabel = Label::createWithTTF("NULL", FILENAME::FONT::SOYANON, 24);
+		_pokemon = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::POKE_ARRAY[1]);
+		addChild(_nameTag, 1);
+		addChild(_nameTagBack, 0);
+		addChild(_nameLabel, 2);
+		addChild(_pokemon, 2);
+	};
+	Director::getInstance()->getScheduler()->performFunctionInCocosThread(runwith);
 
 	return true;
 }

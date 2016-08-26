@@ -2473,8 +2473,8 @@ const LargestInt Value::maxLargestInt = LargestInt(LargestUInt(-1) / 2);
 const LargestUInt Value::maxLargestUInt = LargestUInt(-1);
 
 #if !defined(JSON_USE_INT64_DOUBLE_CONVERSION)
-template <typename T, typename U>
-static inline bool InRange(double d, T min, U max) {
+template <typename T, typename UI>
+static inline bool InRange(double d, T min, UI max) {
   // The casts can lose precision, but we are looking only for
   // an approximate range. Might fail on edge cases though. ~cdunn
   //return d >= static_cast<double>(min) && d <= static_cast<double>(max);
@@ -2489,8 +2489,8 @@ template <typename T> static inline double integerToDouble(T value) {
   return static_cast<double>(value);
 }
 
-template <typename T, typename U>
-static inline bool InRange(double d, T min, U max) {
+template <typename T, typename UI>
+static inline bool InRange(double d, T min, UI max) {
   return d >= integerToDouble(min) && d <= integerToDouble(max);
 }
 #endif // if !defined(JSON_USE_INT64_DOUBLE_CONVERSION)

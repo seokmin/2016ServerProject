@@ -31,7 +31,7 @@ void NetworkManager::initTcp()
 }
 
 // 패킷 큐에서 딱 하나만 만들어서 리턴한다
-void NetworkManager::recvAndGivePacketsToCallbackFuncThread(std::function<void(const COMMON::PACKET_ID, const short, char*)> callbackFunc)
+void NetworkManager::recvAndGivePacketsToCallbackFuncThread()
 {
 	using namespace COMMON;
 
@@ -45,6 +45,10 @@ void NetworkManager::recvAndGivePacketsToCallbackFuncThread(std::function<void(c
 			break;
 		// 받을 수 있을 만큼 데이터를 받는다. 이때 채우기 시작하는 위치는 남아있던 데이터의 바로 뒤
 		auto receivedSize = recv(_sock, _recvBuffer + remainingDataSizeInRecvBuffer, sizeof(_recvBuffer), 0);
+		if (receivedSize == SOCKET_ERROR)
+			return;
+		
+		
 		// 버퍼에 남아있는 데이터의 양. 일관성을 지켜주려면 recv한 만큼 늘려주는 것이 당연.
 		remainingDataSizeInRecvBuffer += receivedSize;
 		// 다음번에 만들 패킷 위치는 recv버퍼 맨 앞부터.
@@ -61,7 +65,7 @@ void NetworkManager::recvAndGivePacketsToCallbackFuncThread(std::function<void(c
 				if (remainingDataSizeInRecvBuffer >= packetHeader->_bodySize + PACKET_HEADER_SIZE)
 				{
 					// 여기까지 왔다면 패킷을 만들 수 있는 것. 패킷을 부탁한 쪽에 넘긴다.
-					callbackFunc(packetHeader->_id, packetHeader->_bodySize, nextPacketAddress + PACKET_HEADER_SIZE);
+					_callbackFunc(packetHeader->_id, packetHeader->_bodySize, nextPacketAddress + PACKET_HEADER_SIZE);
 
 					// 다음에 만들 패킷의 주소는 지금 만든 패킷의 바로 뒤이다.
 					nextPacketAddress += PACKET_HEADER_SIZE + packetHeader->_bodySize;
@@ -85,10 +89,7 @@ void NetworkManager::recvAndGivePacketsToCallbackFuncThread(std::function<void(c
 
 void NetworkManager::setRecvCallback(std::function<void(const COMMON::PACKET_ID, const short, char*)> callbackFunc)
 {
-	using namespace COMMON;
-	// TODO : 짜는 중
-	auto newThread = std::thread(std::bind(&NetworkManager::recvAndGivePacketsToCallbackFuncThread,this,callbackFunc));
-	newThread.detach();
+	_callbackFunc = callbackFunc;
 }
 
 // send() 성공여부 반환
@@ -129,7 +130,7 @@ NetworkManager* NetworkManager::getInstance()
 }
 
 // 성공시 true, 실패시 false 반환
-bool NetworkManager::connectTcp(std::string serverIp, int serverPort, std::function<void(const COMMON::PACKET_ID, const short, char*)> recvCallback)
+bool NetworkManager::connectTcp(std::string serverIp, int serverPort)
 {
 	auto returnVal = true;
 	if (_mutex.try_lock() == false)
@@ -147,7 +148,9 @@ bool NetworkManager::connectTcp(std::string serverIp, int serverPort, std::funct
 		ClientLogger::logThreadSafe("connect() failed");
 		returnVal = false;
 	}
-	setRecvCallback(recvCallback);
+	// TODO : 짜는 중
+	auto newThread = std::thread(std::bind(&NetworkManager::recvAndGivePacketsToCallbackFuncThread, this));
+	newThread.detach();
 	_mutex.unlock();
 	return returnVal;
 }

@@ -135,7 +135,7 @@
                 <key>spriteSourceSize</key>
                 <string>{36,28}</string>
                 <key>textureRect</key>
-                <string>{{1950,1283},{36,28}}</string>
+                <string>{{1379,1305},{36,28}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -196,6 +196,21 @@
                 <string>{1280,720}</string>
                 <key>textureRect</key>
                 <string>{{1,723},{1152,576}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/chip.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{43,35}</string>
+                <key>spriteSourceSize</key>
+                <string>{43,35}</string>
+                <key>textureRect</key>
+                <string>{{1866,1283},{43,35}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -300,7 +315,7 @@
                 <key>spriteSourceSize</key>
                 <string>{40,39}</string>
                 <key>textureRect</key>
-                <string>{{1908,1283},{40,39}}</string>
+                <string>{{1953,1283},{40,39}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -345,7 +360,7 @@
                 <key>spriteSourceSize</key>
                 <string>{40,40}</string>
                 <key>textureRect</key>
-                <string>{{1866,1283},{40,40}}</string>
+                <string>{{1911,1283},{40,40}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -393,7 +408,7 @@
             <key>size</key>
             <string>{2004,1340}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:8c22c474f778ddba82110dcc81c5eac5:966f761c185b4c13b98ce5f8ad1c1b0e:1abd9b1a32dd92fa37ae3f420f34f475$</string>
+            <string>$TexturePacker:SmartUpdate:eab5a7590e744da27efd0c50dbe08a12:93705858b25560f5bc7d4de50c669606:1abd9b1a32dd92fa37ae3f420f34f475$</string>
             <key>textureFileName</key>
             <string>textures.png</string>
         </dict>

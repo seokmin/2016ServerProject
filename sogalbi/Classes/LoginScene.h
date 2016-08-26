@@ -1,6 +1,7 @@
 #pragma once
 
 #include "json/json.h"
+#include "../Common/Packet.h"
 
 namespace cocos2d
 {
@@ -32,7 +33,7 @@ public:
 
 	void channelButtonClicked(DEF::ChannelInfo& clickChannel);
 
-	void recvPacketProcess();
+	void recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, char* bodyPos);
 
 	CREATE_FUNC(LoginScene);
 
@@ -50,6 +51,8 @@ private:
 
 	void popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos);
 	void popDownChannelsLayer();
+
+	void packetProcess_RoomEnterRes(COMMON::RecvPacketInfo packetInfo);
 
 
 	int parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector);

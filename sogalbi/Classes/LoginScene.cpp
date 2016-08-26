@@ -12,6 +12,7 @@
 #include "LoginScene.h"
 #include "NetworkManager.h"
 #include "ClientLogger.h"
+#include "GameScene.h"
 
 cocos2d::Scene* LoginScene::createScene()
 {
@@ -29,6 +30,9 @@ bool LoginScene::init()
 
 	// 레이아웃
 	initLayout();
+
+	auto recvCallback = std::bind(&LoginScene::recvPacketProcess, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	NetworkManager::getInstance()->setRecvCallback(recvCallback);
 
 	// bgm
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::LOGIN_BGM.c_str(), true);
@@ -172,9 +176,21 @@ void LoginScene::channelButtonClicked(DEF::ChannelInfo& targetChannel)
 	newThread.detach();
 }
 
-void LoginScene::recvPacketProcess()
+void LoginScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, char* bodyPos)
 {
-	ClientLogger::msgBox(L"패킷 도착!");
+	auto packetInfo = COMMON::RecvPacketInfo{};
+	packetInfo.PacketId = packetId;
+	packetInfo.PacketBodySize = bodySize;
+	packetInfo.pRefData = bodyPos;
+	switch (packetId)
+	{
+	case COMMON::PACKET_ID::ROOM_ENTER_RES:
+		packetProcess_RoomEnterRes(packetInfo);
+		break;
+	default:
+		ClientLogger::msgBox(L"모르는 패킷");
+		break;
+	}
 }
 
 void LoginScene::popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos)
@@ -236,6 +252,20 @@ void LoginScene::popDownChannelsLayer()
 	// _loginMenu->setEnabled(true); // 이건 로그아웃 성공시에 한다.
 	_nameField->setEnabled(true);
 	_passField->setEnabled(true);
+}
+
+void LoginScene::packetProcess_RoomEnterRes(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	auto recvBody = (PacketRoomEnterRes*)packetInfo.pRefData;
+	if (!recvBody->_errorCode == ERROR_CODE::NONE)
+	{
+		// TODO : 에러시 처리
+		return;
+	}
+	auto gameScene = GameScene::createScene(recvBody->_roomNum);
+	Director::getInstance()->replaceScene(gameScene);
+	return;
 }
 
 void LoginScene::initLayout()
@@ -357,7 +387,7 @@ int LoginScene::parseChannelInfo(std::string& resLoginString, std::vector<DEF::C
 
 void LoginScene::connectChannel(std::string ip, int port)
 {
-	if (!NetworkManager::getInstance()->connectTcp(ip, port,std::bind(&LoginScene::recvPacketProcess,this)))
+	if (!NetworkManager::getInstance()->connectTcp(ip, port))
 	{
 		// connect 실패시
 		_channelsMenu->setEnabled(true); // 채널 접속 버튼 다시 누를 수 있게
