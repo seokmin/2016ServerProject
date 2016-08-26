@@ -5,10 +5,11 @@ class Player :
 {
 public:
 	CREATE_FUNC(Player);
-	bool init() override;
+	bool init();
 	void setAsPlayer();
 	void setNameLabel(std::string name);
 	void setPoke(std::string pokeFileName);
+	void setPoke(int pokeNum);
 	void setMoneyWhole();
 	void setMoneyBet();
 
