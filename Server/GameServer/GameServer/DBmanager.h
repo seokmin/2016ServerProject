@@ -3,18 +3,19 @@
 #include <windows.h>
 #include <queue>
 #include <sqlext.h>
+#include <mutex>
 
 class Logger;
 class MySQLMangager;
 
-class UserManager;
-class RoomManager;
 
 enum class JOB_TYPE
 {
 	NONE = 0,
 	SUBMIT_STATE = 1,
 	GET_USER_INFO_BY_AUTH = 2,
+
+	MAX = 255,
 };
 
 struct DBJob
@@ -62,7 +63,7 @@ class DBmanager
 public:
 	DBmanager() {};
 	virtual ~DBmanager();
-	COMMON::ERROR_CODE Init(int numberOfDBThread, UserManager* m_pUserMgr, RoomManager* roomMgr);
+	COMMON::ERROR_CODE Init(int numberOfDBThread);
 	void SubmitState(int max, int count, ServerConfig* serverConfig);
 
 	long GetThreadIndex();
@@ -72,7 +73,6 @@ public:
 	DBResult	FrontDBResult();
 	void		PopDBResult();
 
-	void		Process(DBResult rslt);
 	void		PushDBJob(DBJob job, int pushIndex);
 
 private:
@@ -85,7 +85,5 @@ private:
 
 	std::mutex				m_mutex;
 
-	UserManager*			m_pUserMgr;
-	RoomManager*			m_pRoomMgr;
 };
 

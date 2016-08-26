@@ -13,10 +13,12 @@ COMMON::ERROR_CODE App::Init()
 	IOCPManager::GetInstance()->InitServer(m_pRecvPacketQue.get(), m_pSendPacketQue.get(), m_pServerConfig.get());
 
 	m_pDB = std::make_unique<DBmanager>();
+	m_pDBProc = std::make_unique<DBProcess>();
 	m_pUserMgr = std::make_unique<UserManager>();
 	m_pRoomMgr = std::make_unique<RoomManager>();
 
-	m_pDB->Init(m_numberOfDBThread, m_pUserMgr.get(), m_pRoomMgr.get());
+	m_pDB->Init(m_numberOfDBThread);
+	m_pDBProc->Init(m_pUserMgr.get(), m_pRoomMgr.get(), m_pSendPacketQue.get(), m_pDB.get());
 	m_pUserMgr->Init(m_pRoomMgr.get(), m_pDB.get());
 	m_pRoomMgr->Init(m_pUserMgr.get(), m_pSendPacketQue.get());
 
@@ -56,7 +58,7 @@ void App::Run()
 				if (dbRslt._type == JOB_TYPE::NONE)
 					break;
 
-				m_pDB->Process(dbRslt);
+				m_pDBProc->Process(dbRslt);
 				m_pDB->PopDBResult();
 			}
 

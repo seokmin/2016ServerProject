@@ -45,30 +45,12 @@ void PacketProcess::Process(PacketInfo packetInfo)
 ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 {
   	auto reqPkt = (PacketRoomEnterReq*)packetInfo.pRefData;
-	PacketRoomEnterRes resPkt;
 
 	if (!m_pRefUserMgr->LoginUser(packetInfo.SessionIndex, std::string(reqPkt->_authToken)))
 		return ERROR_CODE::ROOM_ENTER_CHANNEL_FULL;
 	
-	ERROR_CODE result = m_pRefRoomMgr->EnterUser(packetInfo.SessionIndex);
-	if (result != ERROR_CODE::NONE)
-		return result;
+	// 나머지는 DB 작업이 완료된 후 DBProcess 에서..
 
-	printf_s("유저(%d)가 방(%d)에 들어갔음 \n", packetInfo.SessionIndex, m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)->GetCurRoomIdx());
-
-	// 바로 위에서 m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)이 null인지 확인하므로 두 번 확인은 안 함..
-	resPkt._roomNum = m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex)->GetCurRoomIdx();
-	
-	auto targetRoom = m_pRefRoomMgr->GetRoomById(resPkt._roomNum);
-
-	// Res 보냄
-	PacketInfo sendPacket;
-	sendPacket.SessionIndex = packetInfo.SessionIndex;
-	sendPacket.PacketId = PACKET_ID::ROOM_ENTER_RES;
-	sendPacket.pRefData = (char *)&resPkt;
-	sendPacket.PacketBodySize = sizeof(resPkt);
-	m_pSendPacketQue->PushBack(sendPacket);
-	
 	return ERROR_CODE::NONE;
 }
 
@@ -91,6 +73,8 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 		if (pUser->IsIoState())
 		{
 			m_pRecvPacketQue->PushBack(packetInfo);
+			std::this_thread::sleep_for(std::chrono::milliseconds(0));
+
 			return ERROR_CODE::ROOM_USER_LIST_USER_IS_IO_STATE;
 		}
 

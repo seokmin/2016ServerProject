@@ -7,6 +7,7 @@
 #include "ServerConfig.h"
 #include "Logger.h"
 #include "PacketQueue.h"
+#include "DBProcess.h"
 
 class App
 {
@@ -32,6 +33,7 @@ private:
 
 	std::unique_ptr<ServerConfig> m_pServerConfig;
 	std::unique_ptr<DBmanager> m_pDB;
+	std::unique_ptr<DBProcess> m_pDBProc;
 	std::unique_ptr<PacketProcess> m_pPacketProc;
 	std::unique_ptr<UserManager> m_pUserMgr;
 	std::unique_ptr<RoomManager> m_pRoomMgr;

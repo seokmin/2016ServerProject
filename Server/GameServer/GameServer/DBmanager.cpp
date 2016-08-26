@@ -2,10 +2,6 @@
 #include "DBmanager.h"
 #include "MysqlManager.h"
 #include "Logger.h"
-#include "UserManager.h"
-#include "User.h"
-#include "RoomManager.h"
-#include "Room.h"
 
 __declspec(thread) long g_nThreadIndex = 0;
 volatile long g_nThreadSeq = -1;
@@ -15,11 +11,8 @@ DBmanager::~DBmanager()
 	delete[] m_sqlMgrPool;
 }
 
-COMMON::ERROR_CODE DBmanager::Init(int numberOfDBThread, UserManager* userMgr, RoomManager* roomMgr)
+COMMON::ERROR_CODE DBmanager::Init(int numberOfDBThread)
 {
-	m_pUserMgr = userMgr;
-	m_pRoomMgr = roomMgr;
-
 	MySQLMangager mysql;
 	auto ret = mysql.sqlconn();
 	ret = mysql.sqlexec(L"USE jackblack;", 0);
@@ -63,7 +56,6 @@ void DBmanager::DBThreadWorker()
 
 	while (true)
 	{
-
 		ret = WaitForSingleObject(hDBEvent[index], INFINITE);
 		if (ret == WAIT_FAILED)
 		{
@@ -109,8 +101,6 @@ void DBmanager::DBThreadWorker()
 
 		ResetEvent(hDBEvent[index]);
 	}
-	auto a = 0;
-
 }
 
 DBResult DBmanager::FrontDBResult()
@@ -130,56 +120,6 @@ void DBmanager::PopDBResult()
 		return;
 	}
 	m_jobResultQ.pop_front();
-}
-
-void DBmanager::Process(DBResult rslt)
-{
-	switch (rslt._type)
-	{
-	case JOB_TYPE::SUBMIT_STATE :
-	{
-		WCHAR levelStr[200];
-		if (rslt._retCode != SQL_SUCCESS)
-		{
-			// 이건 안되도 돼서.. 에러만 띄우고 암것도 안 함.
-			wsprintf(levelStr, L"[DB : FAIL TO WRITE] Server Id = %s %s", rslt._result1, rslt._result2);
-		}
-		else
-		{
-			wsprintf(levelStr, L"[DB : GOOD] Server Id = %s %s", rslt._result1, rslt._result2);
-		}
-
-		Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
-	}
-	break;
-
-	case JOB_TYPE::GET_USER_INFO_BY_AUTH :
-	{
-		std::wstring wAuth(rslt._result4);
-		std::string sAuth(wAuth.begin(), wAuth.end());
-		auto user = m_pUserMgr->GetUserBySessionId(rslt._sessionIndex);
-
-		user->Init(sAuth, rslt._result1, _wtoi(rslt._result2), _wtoi(rslt._result3));
-		user->SetIoState(IO_STATE::NONE);
-
-		WCHAR levelStr[200];
-		wsprintf(levelStr, L"[LOGIC, DB : SUCCESS] User(%s) Logged In", rslt._result1);
-		Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
-
-		// Notify
-		m_pRoomMgr->GetRoomBySessionIndex(rslt._sessionIndex)->NotifyEnterUserInfo(rslt._sessionIndex);
-	}
-	break;
-
-	case JOB_TYPE::NONE :
-	{
-
-	}
-	break;
-
-	default:
-		break;
-	}
 }
 
 void DBmanager::PushDBJob(DBJob job, int pushIndex)
