@@ -20,6 +20,7 @@ bool Room::EnterUser(User* user)
 		return false;
 	}
 	user->EnterRoom(m_id);
+	user->SetCurSeat(seat);
 	m_userList[seat] = user;
 	++m_currentUserCount;
 

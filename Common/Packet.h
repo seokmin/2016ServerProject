@@ -121,7 +121,7 @@ namespace COMMON
 	static const int MAX_USERCOUNT_PER_ROOM = 5;
 	struct PacketRoomUserlistRes : PacketBase
 	{
-		int _roomNum = -1;
+		int _slot = -1;
 		DealerInfo _dealerinfo;
 		UserInfo _users[MAX_USERCOUNT_PER_ROOM];
 	};

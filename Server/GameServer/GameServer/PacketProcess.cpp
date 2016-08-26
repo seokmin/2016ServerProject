@@ -99,7 +99,7 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 		resPkt._users[i] = uInfo;
 	}
 	resPkt._dealerinfo = DealerInfo();
-	resPkt._roomNum = roomId;
+	resPkt._slot = user->GetCurSeat();
 	resPkt._errorCode = ERROR_CODE::NONE;
 
 	PacketInfo sendPacket;

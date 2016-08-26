@@ -43,8 +43,10 @@ public:
 	int					GetSessionIndex() { return m_sessionIndex; };
 	bool				IsCurDomainRoom() { return m_curDomain == DOMAIN_STATE::ROOM; };
 	bool				IsCurDomainLogin() { return m_curDomain == DOMAIN_STATE::LOGIN; };
-	bool				IsIoState() { return m_ioState == IO_STATE::ING; }
-	void				SetIoState(IO_STATE state) { m_ioState = state; }
+	bool				IsIoState() { return m_ioState == IO_STATE::ING; };
+	void				SetIoState(IO_STATE state) { m_ioState = state; };
+	void				SetCurSeat(int seat) { m_curSeat = seat; };
+	int					GetCurSeat() { return m_curSeat; };
 
 private:
 	void InitHand();
@@ -58,6 +60,7 @@ private:
 	int m_pokeNum = 0;
 	int m_totalMoney = 0;
 	int m_curBetMoney = 0;
+	int m_curSeat = -1;
 
 	COMMON::HandInfo m_hand[MAX_HAND];
 
