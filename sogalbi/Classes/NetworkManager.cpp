@@ -92,6 +92,11 @@ void NetworkManager::setRecvCallback(std::function<void(const COMMON::PACKET_ID,
 	_callbackFunc = callbackFunc;
 }
 
+void NetworkManager::disconnectTcp()
+{
+	closesocket(_sock);
+}
+
 // send() 성공여부 반환
 bool NetworkManager::sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData)
 {
