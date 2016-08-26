@@ -46,6 +46,7 @@ Logger::~Logger()
 
 void Logger::Log(Level level, WCHAR * message, int messageLen)
 {
+	std::wcout.imbue(std::locale("korean"));
 #ifdef _DEBUG
 	m_mutex.lock();
 
