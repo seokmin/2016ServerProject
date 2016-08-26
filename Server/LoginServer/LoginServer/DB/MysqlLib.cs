@@ -120,7 +120,26 @@ namespace LoginServer.DB
 
             return affectedRows;
         }
-    }    
+
+        public static async void ClearAuthToken()
+        {
+            using (MySqlConnection myConnection = new MySqlConnection(MYSQL_CONNECT_STRING))
+            {
+                myConnection.Open();
+
+                DataSet ds = new DataSet();
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("TRUNCATE auth");
+
+                MySqlCommand cmd = new MySqlCommand(sb.ToString(), myConnection);
+                await cmd.ExecuteNonQueryAsync();
+
+
+                myConnection.Close();
+            }
+        }
+    }
 
     public class DBUser
     {

@@ -49,9 +49,7 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 
 	if (!m_pRefUserMgr->LoginUser(packetInfo.SessionIndex, std::string(reqPkt->_authToken)))
 		return ERROR_CODE::ROOM_ENTER_CHANNEL_FULL;
-
-	printf_s("유저(%d)정보가 정상적으로 잘 등록됬음 \n", packetInfo.SessionIndex);
-
+	
 	ERROR_CODE result = m_pRefRoomMgr->EnterUser(packetInfo.SessionIndex);
 	if (result != ERROR_CODE::NONE)
 		return result;
@@ -81,7 +79,7 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 {
 	auto reqPkt = (PacketRoomUserlistReq*)packetInfo.pRefData;
 	PacketRoomUserlistRes resPkt;
-	ZeroMemory(&resPkt, sizeof(resPkt));
+	
 
 	auto user = m_pRefUserMgr->GetUserBySessionId(packetInfo.SessionIndex);
 	auto roomId = user->GetCurRoomIdx();

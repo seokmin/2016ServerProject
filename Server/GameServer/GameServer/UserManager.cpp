@@ -2,9 +2,11 @@
 #include "UserManager.h"
 #include "Room.h"
 #include "RoomManager.h"
+#include "DBmanager.h"
 #include <algorithm>
+#include <string>
 
-void UserManager::Init(RoomManager* roomMgr)
+void UserManager::Init(RoomManager* roomMgr, DBmanager* dbMgr)
 {
 	for (int i = 0; i < ServerConfig::MAX_USERCOUNT_PER_CHANNEL; ++i)
 	{
@@ -12,6 +14,7 @@ void UserManager::Init(RoomManager* roomMgr)
 		m_userList.push_back(user);
 	}
 	m_roomMgr = roomMgr;
+	m_pDBManager = dbMgr;
 }
 
 bool UserManager::LoginUser(const int sessionIndex, std::string authToken)
@@ -22,7 +25,20 @@ bool UserManager::LoginUser(const int sessionIndex, std::string authToken)
 	if (newUser == nullptr)
 		return false;
 
-	newUser->Init(sessionIndex, authToken, L"임시이름", 1, 100);
+	DBJob job;
+	int inputIndex = sessionIndex % 4;
+
+	std::wstring wToken;
+	wToken.assign(authToken.begin(), authToken.end());
+
+	swprintf_s(job._query, 200,
+		L"CALL GetUserInfoByAuthToken('%s');\n", wToken.c_str()
+	);
+	job._type = JOB_TYPE::GET_USER_INFO_BY_AUTH;
+	job._nResult = 4;
+
+	m_pDBManager->PushDBJob(job, inputIndex);
+
 	++m_curUserCount;
 
 	return true;

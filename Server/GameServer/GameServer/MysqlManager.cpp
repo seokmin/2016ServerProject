@@ -46,7 +46,7 @@ RETCODE MySQLMangager::sqlconn() {
 }
 
 // Execute SQL command with SQLExecDirect() ODBC API.
-RETCODE MySQLMangager::sqlexec(SQLWCHAR * query, SQLWCHAR * result) {
+RETCODE MySQLMangager::sqlexec(SQLWCHAR * query, int n_args, ...) {
 	rc = SQLExecDirect(hstmt, query, SQL_NTS);
 	if (!MYSQLSUCCESS(rc)) {  //Error
 		error_out();
@@ -58,12 +58,16 @@ RETCODE MySQLMangager::sqlexec(SQLWCHAR * query, SQLWCHAR * result) {
 		return rc;
 	}
 	else {
+		va_list ap;
+		va_start(ap, n_args);
+
 		for (rc = SQLFetch(hstmt); rc == SQL_SUCCESS; rc = SQLFetch(hstmt)) {
-			SQLGetData(hstmt, 1, SQL_C_WCHAR, szData, sizeof(szData), &cbData);
-			// In this example, the data is sent to the console; SQLBindCol() could be called to bind 
-			// individual rows of data and assign for a rowset.
-			swprintf_s(result, cbData, L"%ls", szData);
-			//wprintf(L"Mysql result : %ls\n", szData);
+			for (int i = 0; i < n_args; ++i)
+			{
+				SQLWCHAR* rslt = va_arg(ap, SQLWCHAR*);
+				SQLGetData(hstmt, i+1, SQL_C_WCHAR, rslt, MAX_DATA, &cbData);
+			}
+			//swprintf_s(result, cbData, L"%ls", szData);
 		}
 	}
 	return SQL_SUCCESS;

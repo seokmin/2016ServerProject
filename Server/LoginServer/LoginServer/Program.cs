@@ -21,6 +21,9 @@ namespace LoginServer
             {
                 Console.WriteLine("LoginServer Running.. : " + Environment.MachineName);
 
+                DB.MysqlLib.ClearAuthToken();
+                Console.WriteLine("이미 존재하는 Auth Token들 지움..");
+
                 //이 using 안에서 빠져나가면 서버 종료됨..
                 Console.ReadLine();
             }

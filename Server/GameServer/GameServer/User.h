@@ -17,7 +17,8 @@ public:
 	User(const int i) : m_userId(i) {};
 	virtual ~User() {};
 
-	void Init(int sessionIndex, std::string authToken, std::wstring userName, int pokeNum, int totalMoney);
+	void Init(std::string authToken, std::wstring userName, int pokeNum, int totalMoney);
+	void SetSessionIndex(int sessionIndex) { m_sessionIndex = sessionIndex; };
 	void Clear();
 	void EnterRoom(int roomIdx);
 	void LeaveRoom();

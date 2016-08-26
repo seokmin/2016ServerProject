@@ -24,7 +24,7 @@ public:
 
 public:
 	RETCODE sqlconn(); // Allocate env, stat, and conn
-	RETCODE sqlexec(SQLWCHAR * cmdstr, SQLWCHAR * result); // Execute SQL statement
+	RETCODE sqlexec(SQLWCHAR * cmdstr, int n_args, ...); // Execute SQL statement
 	void sqldisconn(); // Free pointers to env, stat, conn, and disconnect
 	void error_out(); // Displays errors
 };

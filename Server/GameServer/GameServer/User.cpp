@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "User.h"
 
-void User::Init(int sessionIndex, std::string authToken, std::wstring userName, int pokeNum, int totalMoney)
+void User::Init(std::string authToken, std::wstring userName, int pokeNum, int totalMoney)
 {
-	m_sessionIndex = sessionIndex;
 	m_authToken = authToken;
 	m_curDomain = DOMAIN_STATE::LOGIN;
 	m_userName = userName;

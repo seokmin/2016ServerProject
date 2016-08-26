@@ -33,7 +33,7 @@ namespace LoginServer.Request
                 }
 
                 responseResult.Pokemon = (short)createResult.Item2;
-                responseResult.Chip = 50;
+                responseResult.Chip = 300;
                 responseResult.SetResult(ERROR_CODE.REQ_LOGIN_CREATE_SUCCESS);
             }
             else

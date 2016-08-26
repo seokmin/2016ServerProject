@@ -12,8 +12,7 @@ public:
 	void			PopFront();
 	void			PushBack(RecvPacketInfo& recvPacket);
 	bool			IsEmpty();
-private:
-public:
+
 private:
 	std::deque<RecvPacketInfo>	_packetDeque;
 	std::mutex					_mutex;

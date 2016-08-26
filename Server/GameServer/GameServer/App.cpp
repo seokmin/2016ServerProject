@@ -6,17 +6,18 @@
 COMMON::ERROR_CODE App::Init()
 {
 	m_pServerConfig = std::make_unique<ServerConfig>();
-	m_pDB = std::make_unique<DBmanager>();
-	m_pDB->Init();
 	
 	//network init
 	m_pSendPacketQue = std::make_unique<PacketQueue>();
 	m_pRecvPacketQue = std::make_unique<PacketQueue>();
 	IOCPManager::GetInstance()->InitServer(m_pRecvPacketQue.get(), m_pSendPacketQue.get(), m_pServerConfig.get());
 
+	m_pDB = std::make_unique<DBmanager>();
 	m_pUserMgr = std::make_unique<UserManager>();
 	m_pRoomMgr = std::make_unique<RoomManager>();
-	m_pUserMgr->Init(m_pRoomMgr.get());
+
+	m_pDB->Init(m_numberOfDBThread, m_pUserMgr.get());
+	m_pUserMgr->Init(m_pRoomMgr.get(), m_pDB.get());
 	m_pRoomMgr->Init(m_pUserMgr.get(), m_pSendPacketQue.get());
 
 	m_pPacketProc = std::make_unique<PacketProcess>();
@@ -49,6 +50,19 @@ void App::Run()
 			m_pPacketProc->Process(packet);
 			m_pRecvPacketQue.get()->PopFront();
 		}
+
+		while (true)
+		{
+			if (m_pDB->DBResultEmpty())
+				break;
+
+			auto& dbRslt = m_pDB->FrontDBResult();
+			if (dbRslt._type == JOB_TYPE::NONE)
+				break;
+
+			m_pDB->Process(dbRslt);
+			m_pDB->PopDBResult();
+		}
 		
 		std::this_thread::sleep_for(std::chrono::milliseconds(0));
 	}
@@ -74,23 +88,13 @@ void App::StateCheckAndSubmit()
 	
 	while (m_dbisRunning && m_IsReady)
 	{
-		before = now;
-		now = std::chrono::system_clock::now();
-		std::chrono::duration<float> dt = now - before;
-		dur += dt;
-		if (dur.count() > DBSubmitInterval)
-		{
-			dur = std::chrono::duration<float>::zero();
+		std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
-			//int curUserCount = m_pUserMgr->GetCurrentUserCount(); //[TODO]
-			int curUserCount = 1;
-			ERROR_CODE result;
-			do {
-				 result = m_pDB->SubmitState(m_pServerConfig->MAX_USERCOUNT_PER_CHANNEL, curUserCount, m_pServerConfig.get());
-			} while (result != ERROR_CODE::NONE);
-		}
+		dur = std::chrono::duration<float>::zero();
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(0));
+		//int curUserCount = m_pUserMgr->GetCurrentUserCount(); //[TODO]
+		int curUserCount = 1;
+		m_pDB->SubmitState(m_pServerConfig->MAX_USERCOUNT_PER_CHANNEL, curUserCount, m_pServerConfig.get());		
 	}
 	return;
 }
