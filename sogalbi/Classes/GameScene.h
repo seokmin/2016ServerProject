@@ -14,6 +14,11 @@ public:
 	static GameScene* create(int roomNum);
 
 private:
+	void initLayout(int roomNum);
+	void recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, char* bodyPos);
+	void packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packetInfo);
+public:
+private:
 	enum Z_ORDER : short
 	{
 		ERR = -1,
@@ -24,6 +29,7 @@ private:
 		NAMETAG_TOP = 4,
 		UI_TOP = 10
 	};
-	void initLayout(int roomNum);
 	Player* _players[5];
+	COMMON::DealerInfo _dealerInfo;
+	COMMON::UserInfo _userInfo[4];
 };

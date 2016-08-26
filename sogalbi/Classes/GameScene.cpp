@@ -2,7 +2,9 @@
 #include "GameScene.h"
 #include "SimpleAudioEngine.h"
 #include "ResourceInfo.h"
+#include "NetworkManager.h"
 #include "Player.h"
+#include "ClientLogger.h"
 
 
 Scene* GameScene::createScene(int roomNum)
@@ -22,14 +24,16 @@ Scene* GameScene::createScene(int roomNum)
 
 bool GameScene::init(int roomNum)
 {
+	using namespace COMMON;
 	if (!Layer::init())
 	{
 		return false;
 	}
 
-	
 	auto tempLambda = [=]() {
 		initLayout(roomNum);
+		NetworkManager::getInstance()->setRecvCallback(CC_CALLBACK_3(GameScene::recvPacketProcess, this));
+		NetworkManager::getInstance()->sendPacket(PACKET_ID::ROOM_ENTER_USER_LIST_REQ, 0, nullptr);
 	};
 
 	// 네트워크 작업 스레딩
@@ -116,5 +120,32 @@ GameScene* GameScene::create(int roomNum)
 		delete pRet;
 		pRet = nullptr;
 		return nullptr;
+	}
+}
+
+void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, char* bodyPos)
+{
+	auto packetInfo = COMMON::RecvPacketInfo{};
+	packetInfo.PacketId = packetId;
+	packetInfo.PacketBodySize = bodySize;
+	packetInfo.pRefData = bodyPos;
+	switch (packetId)
+	{
+	case COMMON::PACKET_ID::ROOM_ENTER_USER_LIST_RES:
+		packetProcess_RoomEnterUserListRes(packetInfo);
+		break;
+	default:
+		ClientLogger::msgBox(L"모르는 패킷");
+		break;
+	}
+}
+
+void GameScene::packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	auto userList = (PacketRoomUserlistRes*)packetInfo.pRefData;
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		_players[i]->setPlayerDataWithUserInfo(userList->_users[i]);
 	}
 }

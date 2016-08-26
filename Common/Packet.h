@@ -123,7 +123,7 @@ namespace COMMON
 	{
 		int _roomNum;
 		DealerInfo _dealerinfo;
-		UserInfo _users[MAX_USERCOUNT_PER_ROOM];
+		UserInfo _users[MAX_USERCOUNT_PER_ROOM-1];
 	};
 
 	struct PacketRoomEnterNtf

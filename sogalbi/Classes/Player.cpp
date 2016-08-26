@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "..\Common\Common.h"
 #include "Player.h"
 #include "ResourceInfo.h"
 
@@ -18,6 +19,18 @@ bool Player::init()
 	return true;
 }
 
+void Player::setPlayerDataWithUserInfo(COMMON::UserInfo userInfo)
+{
+	if (userInfo._name[0] == '\0')
+		return;
+	setPoke(userInfo._pokeNum);
+	
+	char utfChar[1024];
+	int nLen = WideCharToMultiByte(CP_UTF8, 0, userInfo._name, lstrlen(userInfo._name), nullptr, 0, nullptr, nullptr);
+	WideCharToMultiByte(CP_UTF8, 0, userInfo._name, lstrlen(userInfo._name), utfChar, nLen, nullptr, nullptr);
+	setNameLabel(utfChar);
+}
+
 void Player::setAsPlayer()
 {
 	_nameTagBack->setColor(Color3B::YELLOW);
@@ -32,4 +45,11 @@ void Player::setNameLabel(std::string name)
 void Player::setPoke(std::string pokeFileName)
 {
 	_pokemon->setSpriteFrame(pokeFileName);
+}
+
+void Player::setPoke(int pokeNum)
+{
+	if (pokeNum == 0)
+		return;
+	_pokemon->setSpriteFrame(FILENAME::SPRITE::POKE_ARRAY[pokeNum]);
 }

@@ -22,7 +22,7 @@ bool UserManager::LoginUser(const int sessionIndex, std::string authToken)
 	if (newUser == nullptr)
 		return false;
 
-	newUser->Init(sessionIndex, authToken, L"임시이름", 1, 100);
+	newUser->Init(sessionIndex, authToken, L"", 1, 100);
 	++m_curUserCount;
 
 	return true;

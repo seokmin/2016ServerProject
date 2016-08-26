@@ -6,6 +6,9 @@ class Player :
 public:
 	CREATE_FUNC(Player);
 	bool init();
+
+	void setPlayerDataWithUserInfo(COMMON::UserInfo userInfo);
+
 	void setAsPlayer();
 	void setNameLabel(std::string name);
 	void setPoke(std::string pokeFileName);
