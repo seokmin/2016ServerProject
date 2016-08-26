@@ -78,6 +78,7 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 {
 	auto reqPkt = (PacketRoomUserlistReq*)packetInfo.pRefData;
+
 	PacketRoomUserlistRes resPkt;
 	
 
@@ -88,6 +89,11 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 	{
 		User* pUser = room->GetUserInfo(i);
 		if (pUser == nullptr) continue;
+		if (pUser->IsIoState())
+		{
+			m_pRecvPacketQue->PushBack(packetInfo);
+			return ERROR_CODE::ROOM_USER_LIST_USER_IS_IO_STATE;
+		}
 
 		UserInfo uInfo = pUser->GetUserInfo();
 		resPkt._users[i] = uInfo;

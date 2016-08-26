@@ -14,7 +14,7 @@ public:
 	void setPoke(std::string pokeFileName);
 	void setPoke(int pokeNum);
 	void setMoneyWhole();
-	void setMoneyBet();
+	void setMoneyBet(int bet,int whole);
 
 private:
 	Sprite* _nameTag;

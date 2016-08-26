@@ -12,6 +12,11 @@ public:
 		LOGIN = 1,
 		ROOM = 2,
 	};
+	enum class IO_STATE
+	{
+		NONE = 0,
+		ING = 1
+	};
 
 public:
 	User(const int i) : m_userId(i) {};
@@ -36,6 +41,8 @@ public:
 	int					GetSessionIndex() { return m_sessionIndex; };
 	bool				IsCurDomainRoom() { return m_curDomain == DOMAIN_STATE::ROOM; };
 	bool				IsCurDomainLogin() { return m_curDomain == DOMAIN_STATE::LOGIN; };
+	bool				IsIoState() { return m_ioState == IO_STATE::ING; }
+	void				SetIoState(IO_STATE state) { m_ioState = state; }
 
 private:
 	void InitHand();
@@ -52,7 +59,9 @@ private:
 
 	COMMON::HandInfo m_hand[MAX_HAND];
 
-	DOMAIN_STATE m_curDomain = DOMAIN_STATE::NONE;
+	DOMAIN_STATE	m_curDomain = DOMAIN_STATE::NONE;
+	IO_STATE		m_ioState = IO_STATE::NONE;
+
 	int m_money = 0;
 };
 
