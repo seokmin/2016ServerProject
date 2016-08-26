@@ -136,6 +136,7 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 		break;
 	case COMMON::PACKET_ID::ROOM_ENTER_USER_NTF:
 		packetProcess_RoomEnterUserNtf(packetInfo);
+		break;
 	default:
 		ClientLogger::msgBox(L"모르는 패킷");
 		break;
