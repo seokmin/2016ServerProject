@@ -149,8 +149,7 @@ void DBmanager::Process(DBResult rslt)
 		auto user = m_pUserMgr->GetUserBySessionId(rslt._sessionIndex);
 
 		user->Init(sAuth, rslt._result1, _wtoi(rslt._result2), _wtoi(rslt._result3));
-
-		
+		user->SetIoState(IO_STATE::NONE);
 
 		WCHAR levelStr[200];
 		wsprintf(levelStr, L"[LOGIC, DB : SUCCESS] User(%s) Logged In", rslt._result1);

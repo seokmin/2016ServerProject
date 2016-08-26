@@ -3,20 +3,22 @@
 #include "ServerConfig.h"
 #include "Common.h"
 
+enum class DOMAIN_STATE
+{
+	NONE = 0,
+	LOGIN = 1,
+	ROOM = 2,
+};
+
+enum class IO_STATE
+{
+	NONE = 0,
+	ING = 1
+};
+
 class User
 {
 public:
-	enum class DOMAIN_STATE
-	{
-		NONE = 0,
-		LOGIN = 1,
-		ROOM = 2,
-	};
-	enum class IO_STATE
-	{
-		NONE = 0,
-		ING = 1
-	};
 
 public:
 	User(const int i) : m_userId(i) {};

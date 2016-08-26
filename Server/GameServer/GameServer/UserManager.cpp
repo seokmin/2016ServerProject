@@ -37,6 +37,8 @@ bool UserManager::LoginUser(const int sessionIndex, std::string authToken)
 	job._type = JOB_TYPE::GET_USER_INFO_BY_AUTH;
 	job._nResult = 4;
 
+	newUser->SetSessionIndex(sessionIndex);
+	newUser->SetIoState(IO_STATE::ING);
 	m_pDBManager->PushDBJob(job, inputIndex);
 
 	++m_curUserCount;
