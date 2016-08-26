@@ -21,10 +21,13 @@ struct DBJob
 	JOB_TYPE	_type = JOB_TYPE::NONE;
 	SQLWCHAR	_query[200];
 	int			_nResult = 0;
+	int			_sessionIndex = -1;
 
 	void Reset()
 	{
 		_type = JOB_TYPE::NONE;
+		_nResult = 0;
+		_sessionIndex = -1;
 		memset(&_query, 0, sizeof(_query));
 	}
 };

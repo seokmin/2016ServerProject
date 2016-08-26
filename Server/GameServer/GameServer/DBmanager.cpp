@@ -89,6 +89,7 @@ void DBmanager::DBThreadWorker()
 
 		m_resultPool[index]._retCode = ret;
 		m_resultPool[index]._type = m_jobPool[index]._type;
+		m_resultPool[index]._sessionIndex = m_jobPool[index]._sessionIndex;
 		wcscpy_s(m_resultPool[index]._query, m_jobPool[index]._query);
 
 		m_jobPool[index].Reset();

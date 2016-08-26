@@ -44,24 +44,22 @@ void App::Run()
 		while (true)
 		{
 			auto& packet = m_pRecvPacketQue.get()->ReadFront();
-			if (packet.PacketId == 0)
-				break;
+			if (packet.PacketId != 0)
+			{
+				m_pPacketProc->Process(packet);
+				m_pRecvPacketQue.get()->PopFront();
+			}
 
-			m_pPacketProc->Process(packet);
-			m_pRecvPacketQue.get()->PopFront();
-		}
+			if (!m_pDB->DBResultEmpty())
+			{
+				auto& dbRslt = m_pDB->FrontDBResult();
+				if (dbRslt._type == JOB_TYPE::NONE)
+					break;
 
-		while (true)
-		{
-			if (m_pDB->DBResultEmpty())
-				break;
+				m_pDB->Process(dbRslt);
+				m_pDB->PopDBResult();
+			}
 
-			auto& dbRslt = m_pDB->FrontDBResult();
-			if (dbRslt._type == JOB_TYPE::NONE)
-				break;
-
-			m_pDB->Process(dbRslt);
-			m_pDB->PopDBResult();
 		}
 		
 		std::this_thread::sleep_for(std::chrono::milliseconds(0));

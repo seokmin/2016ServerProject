@@ -80,7 +80,7 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 	auto reqPkt = (PacketRoomUserlistReq*)packetInfo.pRefData;
 
 	PacketRoomUserlistRes resPkt;
-	
+	ZeroMemory(&resPkt, sizeof(resPkt));
 
 	auto user = m_pRefUserMgr->GetUserBySessionId(packetInfo.SessionIndex);
 	auto roomId = user->GetCurRoomIdx();

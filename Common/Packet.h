@@ -46,10 +46,10 @@ namespace COMMON
 
 	struct UserInfo
 	{
-		int _pokeNum; // 1 ~ 151
-		wchar_t _name[MAX_USER_ID_LEN + 1];
-		int _totalMony;
-		int _betMoney;
+		int _pokeNum = 0; // 1 ~ 151
+		wchar_t _name[MAX_USER_ID_LEN + 1] = L"";
+		int _totalMony = 0;
+		int _betMoney = 0;
 		HandInfo _hands[MAX_HAND];
 	};
 
@@ -121,7 +121,7 @@ namespace COMMON
 	static const int MAX_USERCOUNT_PER_ROOM = 5;
 	struct PacketRoomUserlistRes : PacketBase
 	{
-		int _roomNum;
+		int _roomNum = -1;
 		DealerInfo _dealerinfo;
 		UserInfo _users[MAX_USERCOUNT_PER_ROOM];
 	};
