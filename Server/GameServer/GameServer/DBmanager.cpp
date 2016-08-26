@@ -62,7 +62,8 @@ void DBmanager::DBThreadWorker()
 
 		ret = WaitForSingleObject(hDBEvent[index], INFINITE);
 		
-		if (ret == WAIT_FAILED) break;
+		if (ret == WAIT_FAILED) 
+			break;
 
 		if (m_jobQ[index].empty())
 		{
@@ -100,6 +101,7 @@ void DBmanager::DBThreadWorker()
 
 		ResetEvent(hDBEvent[index]);
 	}
+	auto a = 0;
 
 }
 

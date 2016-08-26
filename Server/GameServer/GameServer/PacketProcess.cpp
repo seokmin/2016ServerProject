@@ -82,7 +82,9 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 	PacketRoomUserlistRes resPkt;
 	ZeroMemory(&resPkt, sizeof(resPkt));
 
-	auto user = m_pRefUserMgr->GetUserBySessionId(packetInfo.SessionIndex);
+	auto user = m_pRefUserMgr->GetUserBySessionIndex(packetInfo.SessionIndex);
+	if (user == nullptr)
+		return ERROR_CODE::ROOM_USER_LIST_INVALID_SESSION_ID;
 	auto roomId = user->GetCurRoomIdx();
 	auto room = m_pRefRoomMgr->GetRoomByRoomId(roomId);
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; i++)
