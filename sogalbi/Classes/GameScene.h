@@ -17,6 +17,7 @@ private:
 	void initLayout(int roomNum);
 	void recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, char* bodyPos);
 	void packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packetInfo);
+	void packetProcess_RoomEnterUserNtf(COMMON::RecvPacketInfo packetInfo);
 public:
 private:
 	enum Z_ORDER : short

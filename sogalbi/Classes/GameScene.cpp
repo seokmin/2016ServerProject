@@ -134,6 +134,9 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 	case COMMON::PACKET_ID::ROOM_ENTER_USER_LIST_RES:
 		packetProcess_RoomEnterUserListRes(packetInfo);
 		break;
+	case COMMON::PACKET_ID::ROOM_ENTER_USER_NTF:
+		packetProcess_RoomEnterUserNtf(packetInfo);
+		break;
 	default:
 		ClientLogger::msgBox(L"모르는 패킷");
 		break;
@@ -150,4 +153,11 @@ void GameScene::packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packet
 	}
 	_userSlotNum = userList->_slot;
 	_players[_userSlotNum]->setAsPlayer();
+}
+
+void GameScene::packetProcess_RoomEnterUserNtf(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	auto user = (PacketRoomEnterNtf*)packetInfo.pRefData;
+	_players[user->_slotNum]->setPlayerDataWithUserInfo(user->_enterUser);
 }

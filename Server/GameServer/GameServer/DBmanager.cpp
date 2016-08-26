@@ -65,7 +65,6 @@ void DBmanager::DBThreadWorker()
 	{
 
 		ret = WaitForSingleObject(hDBEvent[index], INFINITE);
-		
 		if (ret == WAIT_FAILED)
 		{
 			WCHAR levelStr[200];
@@ -110,6 +109,7 @@ void DBmanager::DBThreadWorker()
 
 		ResetEvent(hDBEvent[index]);
 	}
+	auto a = 0;
 
 }
 
