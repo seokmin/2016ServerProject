@@ -39,6 +39,19 @@ ERROR_CODE RoomManager::EnterUser(int sessionIndex)
 	return ERROR_CODE::NONE;
 }
 
+std::shared_ptr<Room> RoomManager::GetRoomBySessionIndex(int sessionIdx)
+{
+	for (auto& room : m_roomList)
+	{
+		if (room->GetCurrentUserCount() == 0)
+			continue;
+
+		if (room->CheckUserExist(sessionIdx))
+			return room;
+	}
+	return nullptr;
+}
+
 std::shared_ptr<Room> RoomManager::GetAvailableRoom()
 {
 	int maxUserNum = ServerConfig::MAX_USERCOUNT_PER_ROOM;

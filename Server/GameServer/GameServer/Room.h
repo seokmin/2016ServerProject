@@ -20,6 +20,7 @@ public:
 	int GetAvailableSeat();
 
 	int GetCurrentUserCount() { return m_currentUserCount; };
+	bool CheckUserExist(int usrId);
 
 	ERROR_CODE LeaveRoom(User* pUser);
 

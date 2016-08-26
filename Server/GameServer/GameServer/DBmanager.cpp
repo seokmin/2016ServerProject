@@ -4,6 +4,8 @@
 #include "Logger.h"
 #include "UserManager.h"
 #include "User.h"
+#include "RoomManager.h"
+#include "Room.h"
 
 __declspec(thread) long g_nThreadIndex = 0;
 volatile long g_nThreadSeq = -1;
@@ -13,9 +15,10 @@ DBmanager::~DBmanager()
 	delete[] m_sqlMgrPool;
 }
 
-COMMON::ERROR_CODE DBmanager::Init(int numberOfDBThread, UserManager* userMgr)
+COMMON::ERROR_CODE DBmanager::Init(int numberOfDBThread, UserManager* userMgr, RoomManager* roomMgr)
 {
 	m_pUserMgr = userMgr;
+	m_pRoomMgr = roomMgr;
 
 	MySQLMangager mysql;
 	auto ret = mysql.sqlconn();
@@ -162,6 +165,9 @@ void DBmanager::Process(DBResult rslt)
 		WCHAR levelStr[200];
 		wsprintf(levelStr, L"[LOGIC, DB : SUCCESS] User(%s) Logged In", rslt._result1);
 		Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
+
+		// Notify
+		m_pRoomMgr->GetRoomBySessionIndex(rslt._sessionIndex)->NotifyEnterUserInfo(rslt._sessionIndex);
 	}
 	break;
 

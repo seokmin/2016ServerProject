@@ -8,6 +8,7 @@ class Logger;
 class MySQLMangager;
 
 class UserManager;
+class RoomManager;
 
 enum class JOB_TYPE
 {
@@ -61,7 +62,7 @@ class DBmanager
 public:
 	DBmanager() {};
 	virtual ~DBmanager();
-	COMMON::ERROR_CODE Init(int numberOfDBThread, UserManager* m_pUserMgr);
+	COMMON::ERROR_CODE Init(int numberOfDBThread, UserManager* m_pUserMgr, RoomManager* roomMgr);
 	void SubmitState(int max, int count, ServerConfig* serverConfig);
 
 	long GetThreadIndex();
@@ -85,5 +86,6 @@ private:
 	std::mutex				m_mutex;
 
 	UserManager*			m_pUserMgr;
+	RoomManager*			m_pRoomMgr;
 };
 

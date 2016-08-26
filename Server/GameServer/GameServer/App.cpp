@@ -16,7 +16,7 @@ COMMON::ERROR_CODE App::Init()
 	m_pUserMgr = std::make_unique<UserManager>();
 	m_pRoomMgr = std::make_unique<RoomManager>();
 
-	m_pDB->Init(m_numberOfDBThread, m_pUserMgr.get());
+	m_pDB->Init(m_numberOfDBThread, m_pUserMgr.get(), m_pRoomMgr.get());
 	m_pUserMgr->Init(m_pRoomMgr.get(), m_pDB.get());
 	m_pRoomMgr->Init(m_pUserMgr.get(), m_pSendPacketQue.get());
 

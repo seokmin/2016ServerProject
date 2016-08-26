@@ -69,9 +69,6 @@ ERROR_CODE PacketProcess::RoomEnter(PacketInfo packetInfo)
 	sendPacket.PacketBodySize = sizeof(resPkt);
 	m_pSendPacketQue->PushBack(sendPacket);
 	
-	// Notify
-	targetRoom->NotifyEnterUserInfo(packetInfo.SessionIndex);
-
 	return ERROR_CODE::NONE;
 }
 

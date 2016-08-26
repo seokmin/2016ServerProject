@@ -37,12 +37,26 @@ int Room::GetAvailableSeat()
 	return -1;
 }
 
+bool Room::CheckUserExist(int sessionIdx)
+{
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] == nullptr)
+			continue;
+
+		if (m_userList[i]->GetSessionIndex() == sessionIdx)
+			return true;
+	}
+
+	return false;
+}
+
 COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 {
 	int targetPos = -1;
 
 	//find user
-	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM ; i++)
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM ; ++i)
 	{
 		if (m_userList[i] == pUser)
 		{
