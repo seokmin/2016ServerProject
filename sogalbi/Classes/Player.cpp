@@ -70,6 +70,7 @@ void Player::setPoke(int pokeNum)
 {
 	if (pokeNum == 0)
 		return;
+	pokeNum = pokeNum % MAX_NUMBER_OF_POKEMON_AVAILABLE + 1;
 	_pokemon->setSpriteFrame(FILENAME::SPRITE::POKE_ARRAY[pokeNum]);
 }
 
