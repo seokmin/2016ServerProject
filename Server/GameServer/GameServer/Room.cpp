@@ -60,6 +60,8 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	// 유저의 상태/방정보도 나가도록 해줘야 함
 	pUser->LeaveRoom();
 
+	--m_currentUserCount;
+
 	return	COMMON::ERROR_CODE::NONE;
 }
 
