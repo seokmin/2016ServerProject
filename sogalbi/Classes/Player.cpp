@@ -54,6 +54,7 @@ void Player::setAsPlayer()
 {
 	_nameTagBack->setColor(Color3B::YELLOW);
 	_nameLabel->setColor(Color3B::YELLOW);
+	_moneyLabelFront->setColor(Color3B::GREEN);
 }
 
 void Player::setNameLabel(std::string name)

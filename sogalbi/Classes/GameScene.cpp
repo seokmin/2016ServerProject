@@ -148,4 +148,6 @@ void GameScene::packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packet
 	{
 		_players[i]->setPlayerDataWithUserInfo(userList->_users[i]);
 	}
+	_userSlotNum = userList->_slot;
+	_players[_userSlotNum]->setAsPlayer();
 }

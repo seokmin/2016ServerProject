@@ -32,4 +32,5 @@ private:
 	Player* _players[5];
 	COMMON::DealerInfo _dealerInfo;
 	COMMON::UserInfo _userInfo[4];
+	int				_userSlotNum;
 };
