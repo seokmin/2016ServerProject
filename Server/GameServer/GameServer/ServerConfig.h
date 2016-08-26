@@ -76,7 +76,7 @@ public:
 		SOCKET_SEND_ERROR = 5,
 	};
 
-	enum class PACKET_ID : short
+	enum PACKET_ID : short
 	{
 		NTF_SYS_CONNECT_SESSION = 2,
 		NTF_SYS_CLOSE_SESSION = 3,

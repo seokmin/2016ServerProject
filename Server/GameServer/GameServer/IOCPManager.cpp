@@ -33,11 +33,28 @@ void IOCPManager::WorkerThreadFunc()
 		GetQueuedCompletionStatus(_completionPort, &transferedByte,
 			(PULONG_PTR)&a, (LPOVERLAPPED*)&ioInfo, INFINITE);
 
+
 		auto sessionIndex = ioInfo->_sessionIndex;
 		SessionInfo* pSession = _sessionPool.at(sessionIndex);
 
+
 		if (ioInfo->_rwMode == IOInfo::RWMode::READ)
 		{
+			// 세션 끊기면 transferedByte에 0이 들어온다.
+			if (transferedByte == 0)
+			{
+				closesocket(pSession->_socket);
+				_sessionPoolMutex.lock();
+				ZeroMemory(pSession, sizeof(pSession));
+				_sessionIndexPool.push_back(sessionIndex);
+				_sessionPoolMutex.unlock();
+				auto closeSessionInfo = RecvPacketInfo{};
+				closeSessionInfo.PacketId = ServerConfig::PACKET_ID::NTF_SYS_CLOSE_SESSION;
+				closeSessionInfo.SessionIndex = sessionIndex;
+				_recvPacketQueue->PushBack(closeSessionInfo);
+				continue;
+			}
+
 			auto headerPos = pSession->_recvBuffer;
 			auto receivePos = ioInfo->_wsaBuf.buf;
 			// 아직 처리 안된 데이터 양 = 끝지점 - 시작지점
