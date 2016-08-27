@@ -25,6 +25,7 @@ public:
 	ERROR_CODE LeaveRoom(User* pUser);
 
 	void NotifyEnterUserInfo(int sessionIndex);
+	void NotifyLeaveUserInfo(int sessionIndex);
 
 
 	User* GetUserInfo(int seatNum) { return m_userList[seatNum]; };

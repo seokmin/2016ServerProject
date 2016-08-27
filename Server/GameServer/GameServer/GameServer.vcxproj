@@ -159,6 +159,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="DBmanager.cpp" />
     <ClCompile Include="DBProcess.cpp" />
+    <ClCompile Include="GamePacketProcess.cpp" />
     <ClCompile Include="IOCPManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />

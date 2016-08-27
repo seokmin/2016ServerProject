@@ -80,7 +80,7 @@ void DBProcess::Process(DBResult rslt)
 
 		WCHAR levelStr[200];
 		wsprintf(levelStr, L"[LOGIC, DB : SUCCESS] User(%s) Entered Room(%d)", rslt._result1, user->GetCurRoomIdx());
-		Logger::GetInstance()->Log(Logger::ERROR_FATAL, levelStr, 200);
+		Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
 		
 		resPkt._roomNum = user->GetCurRoomIdx();
 		

@@ -185,10 +185,14 @@ namespace COMMON
 
 	struct PacketGameStartNtf
 	{
-		int _startSlotNum;
+		int _startSlotNum; // 시작하는 사람의 자리를 알려줌
 		int _startHandNum = 0;
-		int _turnCountTime = 10;
+		int _turnCountTime = 10; // 힛, 스탠드 고를 시간 10초
+
+		HandInfo _handInfo[5]; // 각자의 핸드 0 정보. (1은 안줌~)
+		CardInfo _dealerCard; // 딜러카드 한장만 오픈
 	};
+
 	struct PacketGameChangeTurnNtf
 	{
 		int _slotNum;
@@ -197,14 +201,15 @@ namespace COMMON
 	
 	struct PacketGameChoiceReq
 	{
-		ChoiceKind _choice;
+		ChoiceKind _choice; // 스플릿, 힛, 스탠드 등 고른 행동을 알려줌
 	};
-	struct PacketGameSelectNtf
+
+	struct PacketGameChoiceNtf
 	{
 		int			_slotNum;
-		int			_handNum;
-		ChoiceKind	_choice;
-		CardInfo	_recvCard; // hit, double down일 때만 사용한다.
+		ChoiceKind	_choice; // 모두에게 노티를 줘서 화면을 바꿈
+		CardInfo	_recvCard; // hit, double down일 때만 사용한다
+		int			_handNum; // 0 또는 1 -> 스플릿일 경우 1
 	};
 
 

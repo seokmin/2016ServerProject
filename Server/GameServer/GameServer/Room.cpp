@@ -24,6 +24,11 @@ bool Room::EnterUser(User* user)
 	m_userList[seat] = user;
 	++m_currentUserCount;
 
+	// 현재 방의 시작 요청 시간을 기록하고, 노티를 보낸다.
+	// 10초 뒤에 발동하게 콜백을 걸어놓는다.
+
+
+
 	return true;
 }
 
@@ -53,6 +58,9 @@ bool Room::CheckUserExist(int sessionIdx)
 
 COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 {
+	// Notify
+	NotifyLeaveUserInfo(pUser->GetSessionIndex());
+
 	int targetPos = -1;
 
 	//find user
@@ -75,6 +83,10 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	pUser->LeaveRoom();
 
 	--m_currentUserCount;
+
+	WCHAR infoStr[100];
+	wsprintf(infoStr, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName());
+	Logger::GetInstance()->Log(Logger::INFO, infoStr, 100);
 
 	return	COMMON::ERROR_CODE::NONE;
 }
@@ -103,7 +115,30 @@ void Room::NotifyEnterUserInfo(int sessionIndex)
 		sendPacket.PacketBodySize = sizeof(pkt);
 		m_pSendPacketQue->PushBack(sendPacket);
 	}
+}
 
+void Room::NotifyLeaveUserInfo(int sessionIndex)
+{
+	auto leaveUser = GetUserBySessionIndex(sessionIndex);
+
+	PacketRoomLeaveNtf pkt;
+	pkt._slotNum = leaveUser->GetCurSeat();
+
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] == nullptr) continue;
+
+		if (m_userList[i]->CheckUserWithSessionIndex(sessionIndex))
+			continue;
+
+		// Res 보냄
+		PacketInfo sendPacket;
+		sendPacket.SessionIndex = m_userList[i]->GetSessionIndex();
+		sendPacket.PacketId = PACKET_ID::ROOM_LEAVE_USER_NTF;
+		sendPacket.pRefData = (char *)&pkt;
+		sendPacket.PacketBodySize = sizeof(pkt);
+		m_pSendPacketQue->PushBack(sendPacket);
+	}
 }
 
 User * Room::GetUserBySessionIndex(int sessionIndex)
