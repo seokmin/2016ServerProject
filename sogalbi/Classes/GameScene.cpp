@@ -137,6 +137,9 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 	case COMMON::PACKET_ID::ROOM_ENTER_USER_NTF:
 		packetProcess_RoomEnterUserNtf(packetInfo);
 		break;
+	case COMMON::PACKET_ID::ROOM_LEAVE_USER_NTF:
+		packetProcess_RoomLeaveUserNtf(packetInfo);
+		break;
 	default:
 		ClientLogger::msgBox(L"모르는 패킷");
 		break;
@@ -166,5 +169,7 @@ void GameScene::packetProcess_RoomLeaveUserNtf(COMMON::RecvPacketInfo packetInfo
 {
 	using namespace COMMON;
 	auto packet = (PacketRoomLeaveNtf*)packetInfo.pRefData;
+	if (packet->_slotNum < 0 || packet->_slotNum >= MAX_USERCOUNT_PER_ROOM)
+		return;
 	_players[packet->_slotNum]->clear();
 }
