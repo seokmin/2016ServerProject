@@ -83,8 +83,8 @@ void App::Release()
 void App::StateCheckAndSubmit()
 {
 	std::chrono::system_clock::time_point before = std::chrono::system_clock::now();
-	std::chrono::system_clock::time_point now= std::chrono::system_clock::now();;
-	std::chrono::duration<float> dur = std::chrono::duration<float>::zero();;
+	std::chrono::system_clock::time_point now= std::chrono::system_clock::now();
+	std::chrono::duration<float> dur = std::chrono::duration<float>::zero();
 	
 	while (m_dbisRunning && m_IsReady)
 	{

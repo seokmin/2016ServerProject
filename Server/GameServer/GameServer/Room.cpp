@@ -27,7 +27,20 @@ bool Room::EnterUser(User* user)
 	// 현재 방의 시작 요청 시간을 기록하고, 노티를 보낸다.
 	// 10초 뒤에 발동하게 콜백을 걸어놓는다.
 
+	if (m_currentRoomState == ROOM_STATE::NONE)
+	{
+		m_currentRoomState = ROOM_STATE::WAITING;
+		m_gameStartNotiTime = duration_cast< milliseconds >(
+			system_clock::now().time_since_epoch()
+			).count();
 
+		// Send start game notification
+	}
+	else if (m_currentRoomState == ROOM_STATE::WAITING)
+	{
+		// Do Nothing
+	}
+	
 
 	return true;
 }
@@ -89,6 +102,25 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	Logger::GetInstance()->Log(Logger::INFO, infoStr, 100);
 
 	return	COMMON::ERROR_CODE::NONE;
+}
+
+void Room::NotifyStartGame()
+{
+	PacketGameBetCounterNtf pkt;
+	pkt._countTime = 10;
+
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] == nullptr) continue;
+
+		// Res 보냄
+		PacketInfo sendPacket;
+		sendPacket.SessionIndex = m_userList[i]->GetSessionIndex();
+		sendPacket.PacketId = PACKET_ID::GAME_BET_COUNTER_NTF;
+		sendPacket.pRefData = (char *)&pkt;
+		sendPacket.PacketBodySize = sizeof(pkt);
+		m_pSendPacketQue->PushBack(sendPacket);
+	}
 }
 
 // sessionIndex = 들어온 본인 -> 빼고 나머지한테 보냄
