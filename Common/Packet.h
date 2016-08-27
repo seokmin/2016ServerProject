@@ -170,6 +170,8 @@ namespace COMMON
 	struct PacketGameBetCounterNtf
 	{
 		int _countTime = 10;
+		unsigned int minBet = 100;
+		unsigned int maxBet = 1000;
 	};
 
 	struct PacketGameBetReq
