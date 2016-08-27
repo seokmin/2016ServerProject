@@ -11,6 +11,61 @@ namespace COMMON
 	const auto MAX_ROOM_CAPTION_LEN = 15;
 	const auto MAX_HAND = 2; // maximum hands by split
 
+
+	// 21 이상에서 시작해야함.
+	enum PACKET_ID : short
+	{
+		NULL_PACKET = 0,
+		ROOM_ENTER_REQ = 21,
+		ROOM_ENTER_RES = 22,
+
+		ROOM_ENTER_USER_LIST_REQ = 25,
+		ROOM_ENTER_USER_LIST_RES = 26,
+		ROOM_ENTER_USER_NTF = 27,
+
+		ROOM_LEAVE_REQ = 31,
+		ROOM_LEAVE_RES = 32,
+		ROOM_LEAVE_USER_NTF = 33, // change나 leave나 한끗차이인데 둘다 leave user ntf는 필요하므로 묶었음
+
+		ROOM_CHANGE_REQ = 41,
+		ROOM_CHANGE_RES = 42,
+
+		GAME_BET_COUNTER_NTF = 91,
+		
+		GAME_BET_REQ = 92,
+		GAME_BET_RES = 93,
+		GAME_BET_NTF = 94,
+
+		GAME_START_NTF			= 95,
+		GAME_CHANGE_TURN_NTF	= 96,
+
+		GAME_CHOICE_REQ = 97,
+		GAME_CHOICE_NTF = 98,
+
+// 		GAME_BET_REQ = 101,
+// 		GAME_BET_RES = 102,
+// 		GAME_BET_NTF = 103,
+// 
+// 		GAME_PLAY_REQ = 111,
+// 		GAME_PLAY_RES = 112,
+// 		GAME_PLAY_NTF = 113,
+
+		GAME_EMOTION_REQ = 121,
+		GAME_EMOTION_RES = 122,
+		GAME_EMOTION_NTF = 123,
+
+		CLOSE_SESSION = 254,
+		MAX = 255,
+	};
+
+	enum class ChoiceKind
+	{
+		STAND		= 0,
+		HIT			= 1,
+		DOUBLE_DOWN = 2,
+		SPLIT		= 3
+	};
+
 	struct CardInfo
 	{
 		enum class CardShape {
@@ -24,7 +79,6 @@ namespace COMMON
 
 		short _number; // J = 11, Q = 12, K = 13
 	};
-
 
 	struct HandInfo
 	{
@@ -51,41 +105,6 @@ namespace COMMON
 		int _totalMony = 0;
 		int _betMoney = 0;
 		HandInfo _hands[MAX_HAND];
-	};
-
-
-	// 21 이상에서 시작해야함.
-	enum PACKET_ID : short
-	{
-		NULL_PACKET = 0,
-		ROOM_ENTER_REQ = 21,
-		ROOM_ENTER_RES = 22,
-
-		ROOM_ENTER_USER_LIST_REQ = 25,
-		ROOM_ENTER_USER_LIST_RES = 26,
-		ROOM_ENTER_USER_NTF = 27,
-
-		ROOM_LEAVE_REQ = 31,
-		ROOM_LEAVE_RES = 32,
-		ROOM_LEAVE_USER_NTF = 33, // change나 leave나 한끗차이인데 둘다 leave user ntf는 필요하므로 묶었음
-
-		ROOM_CHANGE_REQ = 41,
-		ROOM_CHANGE_RES = 42,
-
-		GAME_BET_REQ = 101,
-		GAME_BET_RES = 102,
-		GAME_BET_NTF = 103,
-
-		GAME_PLAY_REQ = 111,
-		GAME_PLAY_RES = 112,
-		GAME_PLAY_NTF = 113,
-
-		GAME_EMOTION_REQ = 121,
-		GAME_EMOTION_RES = 122,
-		GAME_EMOTION_NTF = 123,
-
-		CLOSE_SESSION = 254,
-		MAX = 255,
 	};
 
 	struct PacketHeader
@@ -142,6 +161,52 @@ namespace COMMON
 	{
 		int _slotNum;
 	};
+
+
+	// 게임 로직 부분
+	struct PacketGameBetCounterNtf
+	{
+		int _countTime = 10;
+	};
+
+	struct PacketGameBetReq
+	{
+		int _betMoneyReq;
+	};
+	struct PacketGameBetRes
+	{
+		int _betMoneyRes;
+	};
+	struct PacketGameBetNtf
+	{
+		int _betSlot;
+		int _betMoney;
+	};
+
+	struct PacketGameStartNtf
+	{
+		int _startSlotNum;
+		int _startHandNum = 0;
+		int _turnCountTime = 10;
+	};
+	struct PacketGameChangeTurnNtf
+	{
+		int _slotNum;
+		int _handNum = 0;
+	};
+	
+	struct PacketGameChoiceReq
+	{
+		ChoiceKind _choice;
+	};
+	struct PacketGameSelectNtf
+	{
+		int			_slotNum;
+		int			_handNum;
+		ChoiceKind	_choice;
+		CardInfo	_recvCard; // hit, double down일 때만 사용한다.
+	};
+
 
 	// 이건 서버에서만 쓰지 않을까요?
 	struct RecvPacketInfo
