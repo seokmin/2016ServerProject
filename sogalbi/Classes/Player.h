@@ -9,6 +9,8 @@ public:
 
 	void setPlayerDataWithUserInfo(COMMON::UserInfo userInfo);
 
+	void clear();
+
 	void setAsPlayer();
 	void setNameLabel(std::string name);
 	void setPoke(std::string pokeFileName);

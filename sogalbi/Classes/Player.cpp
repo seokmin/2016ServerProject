@@ -8,7 +8,7 @@ bool Player::init()
 {
 	_nameTag = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::NAMETAG);
 	_nameTagBack = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::NAMETAG_BACK);
-	_nameLabel = Label::createWithTTF("NULL", FILENAME::FONT::SOYANON,24);
+	_nameLabel = Label::createWithTTF("NULL", FILENAME::FONT::SOYANON, 24);
 	_pokemon = Sprite::create();
 
 	_moneyLabelFront = Label::createWithTTF(u8"0", FILENAME::FONT::SOYANON, 24);
@@ -39,6 +39,11 @@ void Player::setPlayerDataWithUserInfo(COMMON::UserInfo userInfo)
 {
 	if (userInfo._name[0] == '\0')
 		return;
+	_nameLabel->setVisible(true);
+	_moneyLabelBack->setVisible(true);
+	_moneyLabelFront->setVisible(true);
+	_pokemon->setVisible(true);
+
 	setPoke(userInfo._pokeNum);
 	
 	char utfChar[128];
@@ -48,6 +53,14 @@ void Player::setPlayerDataWithUserInfo(COMMON::UserInfo userInfo)
 	setNameLabel(utfChar);
 
 	setMoneyBet(userInfo._betMoney, userInfo._totalMony);
+}
+
+void Player::clear()
+{
+	_nameLabel->setVisible(false);
+	_moneyLabelBack->setVisible(false);
+	_moneyLabelFront->setVisible(false);
+	_pokemon->setVisible(false);
 }
 
 void Player::setAsPlayer()

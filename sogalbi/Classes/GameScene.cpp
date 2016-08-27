@@ -161,3 +161,10 @@ void GameScene::packetProcess_RoomEnterUserNtf(COMMON::RecvPacketInfo packetInfo
 	auto user = (PacketRoomEnterNtf*)packetInfo.pRefData;
 	_players[user->_slotNum]->setPlayerDataWithUserInfo(user->_enterUser);
 }
+
+void GameScene::packetProcess_RoomLeaveUserNtf(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	auto packet = (PacketRoomLeaveNtf*)packetInfo.pRefData;
+	_players[packet->_slotNum]->clear();
+}
