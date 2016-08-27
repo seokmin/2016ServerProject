@@ -209,7 +209,18 @@ namespace COMMON
 		int			_slotNum;
 		ChoiceKind	_choice; // 모두에게 노티를 줘서 화면을 바꿈
 		CardInfo	_recvCard; // hit, double down일 때만 사용한다
-		int			_handNum; // 0 또는 1 -> 스플릿일 경우 1
+		int			_handNum; // front hand 또는 back hand
+	};
+
+	struct PacketGameDealerResultNtf
+	{
+		DealerInfo  _dealerResult;
+		int			_plusMoney[5]; // 각  슬롯마다 번 돈
+	};
+
+	struct PacketGameAnimCompleteReq
+	{
+
 	};
 
 
