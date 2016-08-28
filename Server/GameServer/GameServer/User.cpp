@@ -23,6 +23,7 @@ void User::Clear()
 	m_curSeat = 0;
 	m_curCardNum = 0;
 	m_curHand = 0;
+	m_isSplit = false;
 
 	InitHand();
 
@@ -67,6 +68,7 @@ COMMON::UserInfo User::GetUserInfo()
 	userInfo._totalMony = m_totalMoney;
 	userInfo._betMoney = m_curBetMoney;
 	userInfo._curHand = m_curHand;
+	userInfo._isSpit = m_isSplit;
 	for (int i = 0; i < COMMON::MAX_HAND; ++i)
 	{
 		userInfo._hands[i] = m_hand[i];

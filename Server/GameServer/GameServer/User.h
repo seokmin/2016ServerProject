@@ -79,6 +79,7 @@ private:
 	int m_curSeat = -1;
 	int m_curCardNum = 0;
 	int m_curHand = 0;
+	bool m_isSplit = false;
 
 	COMMON::HandInfo m_hand[MAX_HAND];
 
