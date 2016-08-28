@@ -25,23 +25,19 @@ bool Room::EnterUser(User* user)
 	++m_currentUserCount;
 
 	// 현재 방의 시작 요청 시간을 기록하고, 노티를 보낸다.
-	// 10초 뒤에 발동하게 콜백을 걸어놓는다.
-
-	if (m_currentRoomState == ROOM_STATE::NONE)
+	if (m_currentRoomState == ROOM_STATE::NONE || m_currentRoomState == ROOM_STATE::WAITING)
 	{
-		m_currentRoomState = ROOM_STATE::WAITING;
-		m_gameStartNotiTime = duration_cast< milliseconds >(
-			system_clock::now().time_since_epoch()
-			).count();
+		SetRoomStateToWaiting();
 
 		// Send start game notification
+		NotifyStartBettingTimer();
 	}
-	else if (m_currentRoomState == ROOM_STATE::WAITING)
+	else
 	{
-		// Do Nothing
+		// 만약 이미 게임중이면 들어온 유저는 waiting으로 바꿔준다.
+		user->SetGameState(GAME_STATE::WAITING);
 	}
 	
-
 	return true;
 }
 
@@ -93,21 +89,24 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 		m_userList[targetPos] = nullptr; 
 	
 	// 유저의 상태/방정보도 나가도록 해줘야 함
-	pUser->LeaveRoom();
+	//pUser->LeaveRoom();
+	pUser->Clear();
 
 	--m_currentUserCount;
 
 	WCHAR infoStr[100];
-	wsprintf(infoStr, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName());
+	wsprintf(infoStr, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName().c_str());
 	Logger::GetInstance()->Log(Logger::INFO, infoStr, 100);
 
 	return	COMMON::ERROR_CODE::NONE;
 }
 
-void Room::NotifyStartGame()
+void Room::NotifyStartBettingTimer()
 {
 	PacketGameBetCounterNtf pkt;
 	pkt._countTime = 10;
+	pkt.minBet = ServerConfig::minBet;
+	pkt.maxBet = ServerConfig::maxBet;
 
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
@@ -121,6 +120,132 @@ void Room::NotifyStartGame()
 		sendPacket.PacketBodySize = sizeof(pkt);
 		m_pSendPacketQue->PushBack(sendPacket);
 	}
+}
+
+void Room::NotifyBetDone(int sessionIndex, int betMoney)
+{
+	PacketGameBetNtf pkt;
+
+	pkt._betMoney = betMoney;
+	pkt._betSlot = GetUserSeatBySessionIndex(sessionIndex);
+
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] == nullptr) continue;
+
+		// Res 보냄
+		PacketInfo sendPacket;
+		sendPacket.SessionIndex = m_userList[i]->GetSessionIndex();
+		sendPacket.PacketId = PACKET_ID::GAME_BET_NTF;
+		sendPacket.pRefData = (char *)&pkt;
+		sendPacket.PacketBodySize = sizeof(pkt);
+		m_pSendPacketQue->PushBack(sendPacket);
+	}
+}
+
+void Room::SetRoomStateToWaiting()
+{
+	m_currentRoomState = ROOM_STATE::WAITING;
+	m_lastActionTime = duration_cast< milliseconds >(
+		steady_clock::now().time_since_epoch()
+		).count();
+
+	// 유저는 이제 베팅을 해야하므로 betting으로 바꿔준다.
+	for (auto& user : m_userList)
+	{
+		user->SetGameState(GAME_STATE::BETTING);
+	}
+}
+
+ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
+{
+	User* user = GetUserBySessionIndex(sessionIndex);
+
+	// 상태가 베팅이 아닌데 감히 베팅을 하려 하다니..
+	if (user->GetGameState() != GAME_STATE::BETTING)
+	{
+		return ERROR_CODE::ROOM_GAME_NOT_IN_PROPER_STATE;
+	}
+
+	// 유저의 돈을 갈취한 뒤..
+	auto ret = user->ApplyBet(betMoney);
+	if (ret != ERROR_CODE::NONE)
+		return ret;
+
+	// 표현할 수 있게 베팅 정보를 노티한다.
+	NotifyBetDone(sessionIndex, betMoney);
+
+	// 베팅이 들어온 시점에서 방 안의 유저가 모두 베팅완료라면 게임 시작
+	bool flag = true;
+	for (auto& user : m_userList)
+	{
+		if (user == nullptr)
+		{
+			continue;
+		}
+
+		if (user->GetGameState() != GAME_STATE::BET_DONE &&
+			user->GetGameState() != GAME_STATE::WAITING)
+		{
+			flag = false;
+		}
+	}
+	if (flag)
+	{
+		NotifyStartGame();
+	}
+
+	return ERROR_CODE::NONE;
+}
+
+void Room::NotifyStartGame()
+{
+	PacketGameStartNtf pkt;
+
+	bool flag = true;
+	HandInfo handInfo[5];
+	int seat = 0;
+	for (auto& user : m_userList)
+	{
+		if (user == nullptr)
+			continue;
+		else if (flag)
+		{
+			flag = false;
+			user->SetGameState(GAME_STATE::ACTIONING);
+			pkt._startSlotNum = user->GetCurSeat();
+		}
+		else
+			user->SetGameState(GAME_STATE::ACTION_WAITING);
+
+		// TODO : 유저 핸드 생성 / 나눠주기
+
+		++seat;
+	}
+
+
+	pkt._startHandNum = 0;
+	pkt._turnCountTime = 10;
+
+	
+	// TODO: 시작 정보 추가
+
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] == nullptr) continue;
+
+		// Res 보냄
+		PacketInfo sendPacket;
+		sendPacket.SessionIndex = m_userList[i]->GetSessionIndex();
+		sendPacket.PacketId = PACKET_ID::GAME_BET_COUNTER_NTF;
+		sendPacket.pRefData = (char *)&pkt;
+		sendPacket.PacketBodySize = sizeof(pkt);
+		m_pSendPacketQue->PushBack(sendPacket);
+	}
+}
+
+void Room::NotifyChangeTurn()
+{
 }
 
 // sessionIndex = 들어온 본인 -> 빼고 나머지한테 보냄

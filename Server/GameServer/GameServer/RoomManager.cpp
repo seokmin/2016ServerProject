@@ -52,6 +52,62 @@ std::shared_ptr<Room> RoomManager::GetRoomBySessionIndex(int sessionIdx)
 	return nullptr;
 }
 
+void RoomManager::RunPostTimeAction()
+{
+	for (auto& room : m_roomList)
+	{
+		// 유저가 0이면 그냥 나감..
+		if (room->GetCurrentUserCount() == 0)
+			continue;
+
+		switch (room->GetCurrentRoomState())
+		{
+		case ROOM_STATE::NONE :
+		{
+			// 여기까지 왔는데 상태가 NONE일 수는 없음.
+			WCHAR errStr[100];
+			wsprintf(errStr, L"룸(%d)의 상태가 NONE인 거에 접근했음!", room->GetRoomId());
+			Logger::GetInstance()->Log(Logger::INFO, errStr, 100);
+			break;
+		}
+		break;
+
+		case ROOM_STATE::WAITING :
+		{
+			// 게임을 시작하려고 기다리는 중이면..
+			// 그리고 10초가 넘게 이 상태였으면
+			// "자 이제 게임을 시작하지"
+
+			auto nowTime = duration_cast< milliseconds >(
+				steady_clock::now().time_since_epoch()
+				).count();
+
+			if (room->GetLastActionTime() - nowTime > 10 * 1000)
+			{
+				room->NotifyStartGame();
+			}
+		}
+		break;
+
+		case ROOM_STATE::INGAME :
+		{
+			// 이 경우는 행동을 결정한 시간이 지나도 상태가 그대로일 때..
+
+			auto nowTime = duration_cast< milliseconds >(
+				steady_clock::now().time_since_epoch()
+				).count();
+
+			if (room->GetLastActionTime() - nowTime > 10 * 1000)
+			{
+				room->NotifyChangeTurn();
+			}
+		}
+		break;
+
+		}
+	}
+}
+
 std::shared_ptr<Room> RoomManager::GetAvailableRoom()
 {
 	int maxUserNum = ServerConfig::MAX_USERCOUNT_PER_ROOM;

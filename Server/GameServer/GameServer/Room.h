@@ -29,23 +29,33 @@ public:
 
 	int GetAvailableSeat();
 
-	int GetCurrentUserCount() { return m_currentUserCount; };
 	bool CheckUserExist(int usrId);
 
 	ERROR_CODE LeaveRoom(User* pUser);
 
 	void NotifyEnterUserInfo(int sessionIndex);
 	void NotifyLeaveUserInfo(int sessionIndex);
+	void NotifyStartBettingTimer();
+	void NotifyBetDone(int sessionIdx, int betMoney);
 	void NotifyStartGame();
+	void NotifyChangeTurn();
 
-
+	void SetRoomStateToWaiting();
+	ERROR_CODE ApplyBet(int sessionIndex, int betMoney);
+	
+	int GetCurrentUserCount() { return m_currentUserCount; };
 	User* GetUserInfo(int seatNum) { return m_userList[seatNum]; };
+	ROOM_STATE GetCurrentRoomState() { return m_currentRoomState; };
+	int GetRoomId() { return m_id; };
+	int GetLastActionTime() { return m_lastActionTime; };
+
+
 private:
 	int				m_id;
 	User*			m_userList[ServerConfig::MAX_USERCOUNT_PER_ROOM] = {nullptr, };
 	int				m_currentUserCount = 0;
 	PacketQueue*	m_pSendPacketQue = nullptr;
-	int				m_gameStartNotiTime;
+	unsigned int	m_lastActionTime;
 
 	ROOM_STATE		m_currentRoomState = ROOM_STATE::NONE;
 

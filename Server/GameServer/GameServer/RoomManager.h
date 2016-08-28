@@ -21,6 +21,11 @@ public:
 	Room* GetRoomByRoomId(int roomId) { return m_roomList[roomId].get(); };
 
 	std::shared_ptr<Room> GetRoomBySessionIndex(int sessioIdx);
+
+	void RunPostTimeAction();
+
+
+
 private:
 	std::shared_ptr<Room> GetAvailableRoom();
 	std::vector<std::shared_ptr<Room>> m_roomList;

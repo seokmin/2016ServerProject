@@ -16,6 +16,17 @@ enum class IO_STATE
 	ING = 1
 };
 
+enum class GAME_STATE
+{
+	NONE = 0,
+	WAITING = 1,
+	BETTING = 2,
+	BET_DONE = 3,
+	ACTION_WAITING = 4,
+	ACTIONING = 5,
+	ACTION_DONE = 6,
+};
+
 class User
 {
 public:
@@ -31,6 +42,7 @@ public:
 	void LeaveRoom();
 
 	COMMON::UserInfo GetUserInfo();
+	ERROR_CODE ApplyBet(int betMoney);
 
 	bool				IsAvailableFromPool() { return m_sessionIndex < 0; };
 	bool				CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };
@@ -47,6 +59,8 @@ public:
 	void				SetIoState(IO_STATE state) { m_ioState = state; };
 	void				SetCurSeat(int seat) { m_curSeat = seat; };
 	int					GetCurSeat() { return m_curSeat; };
+	void				SetGameState(GAME_STATE state) { m_gameState = state; };
+	GAME_STATE			GetGameState() { return m_gameState; };
 
 private:
 	void InitHand();
@@ -66,7 +80,6 @@ private:
 
 	DOMAIN_STATE	m_curDomain = DOMAIN_STATE::NONE;
 	IO_STATE		m_ioState = IO_STATE::NONE;
-
-	int m_money = 0;
+	GAME_STATE		m_gameState = GAME_STATE::NONE;
 };
 
