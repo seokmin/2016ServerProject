@@ -267,6 +267,8 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 		auto& player = _players[i];
 		if(player->isActivated() == false)
 			continue;
+		player->_hand[0]->setVisible(true);
+		player->_hand[1]->setVisible(false);
 		auto cards = packet->_handInfo[i]._cardList;
 		player->_hand[0]->pushCard(cards[0]);
 		player->_hand[0]->pushCard(cards[1]);

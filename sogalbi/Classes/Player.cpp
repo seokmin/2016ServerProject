@@ -85,7 +85,7 @@ void Player::setPlayerDataWithUserInfo(COMMON::UserInfo userInfo)
 
 	// 핸드부분
 	int curHandNum = 0;
-	if (userInfo._curHand)
+	if (userInfo._curHand == 0)
 	{
 		curHandNum = 0;
 		_hand[0]->setVisible(true);
@@ -105,6 +105,7 @@ void Player::setPlayerDataWithUserInfo(COMMON::UserInfo userInfo)
 			_hand[i]->pushCard(card);
 		}
 	}
+	setValueLabel(_hand[curHandNum]->getHandValue());
 }
 
 void Player::clear()
