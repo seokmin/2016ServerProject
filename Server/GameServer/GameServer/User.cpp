@@ -101,3 +101,8 @@ void User::SetHand(int hand, CardInfo card)
 	m_hand[hand]._cardList[m_curCardNum]._number = card._number;
 	++m_curCardNum;
 }
+
+void User::SetHandState(int hand, COMMON::HandInfo::HandState state)
+{
+	m_hand[hand]._handState = state;
+}

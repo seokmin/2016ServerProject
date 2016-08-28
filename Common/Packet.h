@@ -209,6 +209,8 @@ namespace COMMON
 		ChoiceKind	_choice; // 모두에게 노티를 줘서 화면을 바꿈
 		CardInfo	_recvCard; // hit, double down일 때만 사용한다
 		int			_handNum; // front hand 또는 back hand
+		int			_betMoney; // 초이스 후 걸게되는 돈 (더블다운/스플릿)
+		int			_currentMoney; // 초이스 후 남는 돈
 	};
 
 	struct PacketGameDealerResultNtf

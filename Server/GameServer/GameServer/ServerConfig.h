@@ -25,6 +25,8 @@ public:
 	static const unsigned int minBet = 0;
 	static const unsigned int maxBet = 10000;
 
+	static const unsigned int bettingTime = 15;
+	static const unsigned int waitingTime = 10;
 
 	int BackLogCount = 5;
 

@@ -26,6 +26,18 @@ void Dealer::Init(Room* room)
 			}
 		}
 	}
+
+	// 블랙젝인지 체크하고, 블랙젝이면 핸드 상태를 바꿔줌
+	for (int i = 0; i < 5; ++i)
+	{
+		User* user = m_pRoom->GetUserInfo(i);
+		if (user == nullptr) continue;
+
+		if (user->GetHand(0)._cardList[0]._number + user->GetHand(0)._cardList[1]._number == 21)
+		{
+			user->SetHandState(0, COMMON::HandInfo::HandState::BLACKJACK);
+		}
+	}
 }
 
 void Dealer::Clear()

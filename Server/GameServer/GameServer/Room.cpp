@@ -114,7 +114,7 @@ void Room::NotifyStartBettingTimer()
 		return;
 	
 	PacketGameBetCounterNtf pkt;
-	pkt._countTime = 10;
+	pkt._countTime = ServerConfig::bettingTime;
 	pkt.minBet = ServerConfig::minBet;
 	pkt.maxBet = ServerConfig::maxBet;
 
@@ -222,6 +222,29 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 	return ERROR_CODE::NONE;
 }
 
+std::tuple<int, int> Room::GetNextPlayerSeatAndHand()
+{
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		User* user = m_userList[i];
+		if (user == nullptr)
+			continue;
+
+		for (int hand = 0; hand < MAX_HAND; ++hand)
+		{
+			if (hand > 0 && !(user->IsSplit))
+				continue;
+
+			if (user->GetHand(hand)._handState != COMMON::HandInfo::HandState::CURRENT)
+				continue;
+
+			return std::make_tuple(i, hand);
+		}
+	}
+
+	return std::tuple<int, int>(-1, -1);
+}
+
 void Room::NotifyStartGame()
 {
 	// 2초 뒤에 (카드 나눠주는게 끝나면) 첫 번째 유저부터 게임 시작
@@ -243,6 +266,7 @@ void Room::NotifyStartGame()
 			flag = false;
 			m_userList[i]->SetGameState(GAME_STATE::ACTIONING);
 			pkt._startSlotNum = m_userList[i]->GetCurSeat();
+
 		}
 		else
 			m_userList[i]->SetGameState(GAME_STATE::ACTION_WAITING);
@@ -279,6 +303,32 @@ void Room::NotifyStartGame()
 
 void Room::NotifyChangeTurn()
 {
+	PacketGameChangeTurnNtf pkt;
+	
+	std::tuple<int, int> SeatNhand = GetNextPlayerSeatAndHand();
+	
+	if (std::get<0>(SeatNhand) == -1 || std::get<1>(SeatNhand) == -1)
+	{
+		NotifyEndOfGame();
+		return;
+	}
+
+	pkt._slotNum = std::get<0>(SeatNhand);
+	pkt._handNum = std::get<1>(SeatNhand);
+	pkt._waitingTime = ServerConfig::waitingTime;
+
+	// Res 보냄
+	PacketInfo sendPacket;
+	sendPacket.SessionIndex = m_userList[std::get<0>(SeatNhand)]->GetSessionIndex();
+	sendPacket.PacketId = PACKET_ID::GAME_CHANGE_TURN_NTF;
+	sendPacket.pRefData = (char *)&pkt;
+	sendPacket.PacketBodySize = sizeof(pkt);
+	m_pSendPacketQue->PushBack(sendPacket);
+}
+
+void Room::NotifyEndOfGame()
+{
+	//TODO: end
 }
 
 // sessionIndex = 들어온 본인 -> 빼고 나머지한테 보냄

@@ -42,6 +42,7 @@ public:
 	void NotifyBetDone(int sessionIdx, int betMoney);
 	void NotifyStartGame();
 	void NotifyChangeTurn();
+	void NotifyEndOfGame();
 
 	void SetRoomStateToWaiting();
 	COMMON::DealerInfo GetDealerInfo();
@@ -52,6 +53,8 @@ public:
 	ROOM_STATE GetCurrentRoomState() { return m_currentRoomState; };
 	int GetRoomId() { return m_id; };
 	int GetLastActionTime() { return m_lastActionTime; };
+
+	std::tuple<int, int> GetNextPlayerSeatAndHand();
 
 
 private:

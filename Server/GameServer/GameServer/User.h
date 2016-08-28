@@ -30,8 +30,6 @@ enum class GAME_STATE
 class User
 {
 public:
-
-public:
 	User(const int i) : m_userId(i) {};
 	virtual ~User() {};
 
@@ -44,6 +42,7 @@ public:
 	COMMON::UserInfo GetUserInfo();
 	ERROR_CODE ApplyBet(int betMoney);
 	void SetHand(int hand, CardInfo card);
+	void SetHandState(int hand, COMMON::HandInfo::HandState state);
 
 	bool				IsAvailableFromPool() { return m_sessionIndex < 0; };
 	bool				CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };
@@ -63,6 +62,7 @@ public:
 	void				SetGameState(GAME_STATE state) { m_gameState = state; };
 	GAME_STATE			GetGameState() { return m_gameState; };
 	COMMON::HandInfo	GetHand(int num) { return m_hand[num]; };
+	bool				IsSplit(){ return m_isSplit; };
 
 private:
 	void InitHand();
