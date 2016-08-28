@@ -47,6 +47,11 @@ bool Player::init()
 	_hand[1] = Hand::create();
 	_hand[1]->setVisible(false);
 
+	// Ä«µå ¹ë·ù
+	_valueLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 48);
+	addChild(_valueLabel, 3);
+	_valueLabel->setPositionY(200);
+
 	return true;
 }
 
@@ -124,4 +129,11 @@ void Player::initCounter()
 {
 	_timer->stopAllActions();
 	_timer->setPercentage(0.f);
+}
+
+void Player::setValueLabel(std::pair<int, int> values)
+{
+	auto valueString = std::string{};
+	if(values.first == values.second)
+		
 }

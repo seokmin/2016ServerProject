@@ -165,6 +165,9 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 	case COMMON::PACKET_ID::GAME_BET_NTF:
 		packetProcess_GameBetNtf(packetInfo);
 		break;
+	case COMMON::PACKET_ID::GAME_START_NTF:
+		packetProcess_GameStartNtf(packetInfo);
+		break;
 	default:
 		ClientLogger::msgBox(L"모르는 패킷");
 		break;
@@ -243,4 +246,22 @@ void GameScene::packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo)
 	betUser->setMoneyBet(packet->_betMoney, betUser->getMoneyWhole() - packet->_betMoney);
 	betUser->setAlreadyBet(true);
 	betUser->initCounter();
+}
+
+void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	
+	auto packet = (PacketGameStartNtf*)packetInfo.pRefData;
+
+	for (int i = 0; i < 5; ++i)
+	{
+		auto& player = _players[i];
+		if(player->isActivated() == false)
+			continue;
+		auto cards = packet->_handInfo[i]._cardList;
+		player->_hand[0]->pushCard(cards[0]);
+		player->_hand[0]->pushCard(cards[1]);
+	}
+
 }

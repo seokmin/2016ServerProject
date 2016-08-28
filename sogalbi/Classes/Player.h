@@ -28,6 +28,7 @@ public:
 
 	bool isAlreadyBet() { return _isAlreadyBet; }
 	void setAlreadyBet(bool val) { _isAlreadyBet = val; }
+	void setValueLabel(std::pair<int, int> values);
 
 private:
 
@@ -43,6 +44,8 @@ private:
 	Label* _nameLabel;
 	Label* _moneyLabelFront;
 	Label* _moneyLabelBack;
+	
+	Label* _valueLabel;
 	
 
 	unsigned _money;
