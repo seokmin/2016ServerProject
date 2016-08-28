@@ -62,6 +62,7 @@ public:
 	int					GetCurSeat() { return m_curSeat; };
 	void				SetGameState(GAME_STATE state) { m_gameState = state; };
 	GAME_STATE			GetGameState() { return m_gameState; };
+	COMMON::HandInfo	GetHand(int num) { return m_hand[num]; };
 
 private:
 	void InitHand();
@@ -77,6 +78,7 @@ private:
 	int m_curBetMoney = 0;
 	int m_curSeat = -1;
 	int m_curCardNum = 0;
+	int m_curHand = 0;
 
 	COMMON::HandInfo m_hand[MAX_HAND];
 

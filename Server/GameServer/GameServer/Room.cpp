@@ -5,10 +5,16 @@
 #include "PacketQueue.h"
 
 #include "Room.h"
+#include "Dealer.h"
 
 void Room::Init(PacketQueue* sendPacketQue)
 {
 	m_pSendPacketQue = sendPacketQue;
+
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		m_userList[i] = nullptr;
+	}
 }
 
 bool Room::EnterUser(User* user)
@@ -89,6 +95,8 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	//pUser->LeaveRoom();
 
 	--m_currentUserCount;
+	if (m_currentUserCount == 0)
+		m_currentRoomState = ROOM_STATE::NONE;
 
 	WCHAR infoStr[100];
 	wsprintf(infoStr, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName().c_str());
@@ -104,7 +112,7 @@ void Room::NotifyStartBettingTimer()
 	// 방의 상태가  waiting이 아니면 노티를 보내면 안됨
 	if (m_currentRoomState != ROOM_STATE::WAITING)
 		return;
-
+	
 	PacketGameBetCounterNtf pkt;
 	pkt._countTime = 10;
 	pkt.minBet = ServerConfig::minBet;
@@ -162,6 +170,18 @@ void Room::SetRoomStateToWaiting()
 	}
 }
 
+COMMON::DealerInfo Room::GetDealerInfo()
+{
+	COMMON::DealerInfo dInfo;
+	
+	for (int i = 0; i < 8; ++i)
+	{
+		dInfo._openedCardList[i] = m_dealer.GetCard(i);
+	}
+
+	return dInfo;
+}
+
 ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 {
 	User* user = GetUserBySessionIndex(sessionIndex);
@@ -205,34 +225,41 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 
 void Room::NotifyStartGame()
 {
+	m_currentRoomState = ROOM_STATE::INGAME;
+
 	PacketGameStartNtf pkt;
 
 	bool flag = true;
-	HandInfo handInfo[5];
-	for (auto& user : m_userList)
+	for (int i=0; i<MAX_USERCOUNT_PER_ROOM; ++i)
 	{
-		if (user == nullptr)
+		if (m_userList[i] == nullptr)
 			continue;
 		else if (flag)
 		{
 			// 가장 앞 슬롯의 유저에게 턴을 주고 시작위치라고 표시한다
 			flag = false;
-			user->SetGameState(GAME_STATE::ACTIONING);
-			pkt._startSlotNum = user->GetCurSeat();
+			m_userList[i]->SetGameState(GAME_STATE::ACTIONING);
+			pkt._startSlotNum = m_userList[i]->GetCurSeat();
 		}
 		else
-			user->SetGameState(GAME_STATE::ACTION_WAITING);
+			m_userList[i]->SetGameState(GAME_STATE::ACTION_WAITING);
 
 		// 상태를 다 바꿨으면 실제로 카드를 나눠주기 시작한다.
 		m_dealer.Init(this);
 	}
 	
-	pkt._startHandNum = 0;
+	//패킷 조제
 	pkt._turnCountTime = 10;
+	pkt._dealerCard = m_dealer.GetCard(0);
 
-	
-	// TODO: 시작 정보 추가
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] == nullptr) continue;
 
+		pkt._handInfo[i] = m_userList[i]->GetHand(0);
+	}
+
+	//패킷 전쏭
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
 		if (m_userList[i] == nullptr) continue;

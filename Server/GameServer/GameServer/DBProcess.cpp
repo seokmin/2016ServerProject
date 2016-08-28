@@ -92,7 +92,7 @@ void DBProcess::Process(DBResult rslt)
 		sendPacket.PacketBodySize = sizeof(resPkt);
 		m_pSendPacketQue->PushBack(sendPacket);
 		
-		// Notify
+		// 나머지 유저들한테 Notify
 		m_pRoomMgr->GetRoomBySessionIndex(rslt._sessionIndex)->NotifyEnterUserInfo(rslt._sessionIndex);
 	}
 	break;

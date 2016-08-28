@@ -22,6 +22,7 @@ void User::Clear()
 	m_curBetMoney = 0;
 	m_curSeat = 0;
 	m_curCardNum = 0;
+	m_curHand = 0;
 
 	InitHand();
 
@@ -65,7 +66,8 @@ COMMON::UserInfo User::GetUserInfo()
 	wcscpy_s(userInfo._name, _countof(userInfo._name), m_userName.c_str());
 	userInfo._totalMony = m_totalMoney;
 	userInfo._betMoney = m_curBetMoney;
-	for (int i = 0; i < MAX_HAND; ++i)
+	userInfo._curHand = m_curHand;
+	for (int i = 0; i < COMMON::MAX_HAND; ++i)
 	{
 		userInfo._hands[i] = m_hand[i];
 	}

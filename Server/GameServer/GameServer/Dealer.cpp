@@ -9,18 +9,21 @@ void Dealer::Init(Room* room)
 	m_pRoom = room;
 
 	bool flag = true;
-	for (int i = 0; i < 5; ++i)
+	for (int handCnt = 0; handCnt < 2; ++handCnt)
 	{
-		User* user = m_pRoom->GetUserInfo(i);
-		if (user == nullptr) continue;
-
-		user->SetHand(0, m_deck.Draw());
-
-		if (flag)
+		for (int i = 0; i < 5; ++i)
 		{
-			// 카지노 보니까 딜러는 한 장만 들고있음..
-			flag = false;
-			SetHand(m_deck.Draw());
+			User* user = m_pRoom->GetUserInfo(i);
+			if (user == nullptr) continue;
+
+			user->SetHand(0, m_deck.Draw());
+
+			if (flag)
+			{
+				// 카지노 보니까 딜러는 한 장만 들고있음..
+				flag = false;
+				SetHand(m_deck.Draw());
+			}
 		}
 	}
 }
@@ -28,6 +31,8 @@ void Dealer::Init(Room* room)
 void Dealer::Clear()
 {
 	m_deck.Clear();
+	m_pRoom = nullptr;
+	m_curCardNum = 0;
 }
 
 void Dealer::SetHand(COMMON::CardInfo card)

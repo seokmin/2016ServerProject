@@ -52,9 +52,10 @@ public:
 	void Clear();
 
 	COMMON::HandInfo GetHand() { return m_dealerHand; };
+	COMMON::CardInfo GetCard(int num) { return m_dealerHand._cardList[num]; };
 
 private:
-	void SetHand(CardInfo card);
+	void SetHand(COMMON::CardInfo card);
 
 private:
 	Room* m_pRoom;

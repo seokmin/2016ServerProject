@@ -42,6 +42,7 @@ public:
 	void NotifyChangeTurn();
 
 	void SetRoomStateToWaiting();
+	COMMON::DealerInfo GetDealerInfo();
 	ERROR_CODE ApplyBet(int sessionIndex, int betMoney);
 	
 	int GetCurrentUserCount() { return m_currentUserCount; };

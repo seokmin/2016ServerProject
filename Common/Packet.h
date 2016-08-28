@@ -90,8 +90,7 @@ namespace COMMON
 
 	struct DealerInfo
 	{
-		CardInfo _openedCardList[11];
-		int _hiddenCard;  // How many hidden cards is there? maybe 0 or 1;
+		CardInfo _openedCardList[8];
 	};
 
 	struct UserInfo
@@ -100,6 +99,7 @@ namespace COMMON
 		wchar_t _name[MAX_USER_ID_LEN + 1] = L"";
 		int _totalMony = 0;
 		int _betMoney = 0;
+		int _curHand = 0;
 		HandInfo _hands[MAX_HAND];
 	};
 

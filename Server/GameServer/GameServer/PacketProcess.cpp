@@ -80,10 +80,9 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 			return ERROR_CODE::ROOM_USER_LIST_USER_IS_IO_STATE;
 		}
 
-		UserInfo uInfo = pUser->GetUserInfo();
-		resPkt._users[i] = uInfo;
+		resPkt._users[i] = pUser->GetUserInfo();
 	}
-	resPkt._dealerinfo = DealerInfo();
+	resPkt._dealerinfo = room->GetDealerInfo();
 	resPkt._slot = user->GetCurSeat();
 	resPkt._errorCode = ERROR_CODE::NONE;
 
