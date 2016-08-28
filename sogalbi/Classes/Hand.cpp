@@ -24,7 +24,7 @@ bool Hand::init()
 
 void Hand::pushCard(CardInfo& card)
 {
-	if (card._number == 0 || card._shape == empty())
+	if (card._number == 0 || card._shape == CardInfo::CardShape::EMPTY)
 		return;
 
 	_cardInfos[_handNum] = card;
