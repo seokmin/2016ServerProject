@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Hand.h"
+
 class Player :
 	public Node
 {
@@ -22,6 +24,15 @@ public:
 	unsigned getMoneyBet() { return _betMoney; }
 
 	void setCounter(float countTime);
+	void initCounter();
+
+	bool isAlreadyBet() { return _isAlreadyBet; }
+	void setAlreadyBet(bool val) { _isAlreadyBet = val; }
+
+private:
+
+public:
+	Hand* _hand[2];
 
 private:
 	Sprite* _nameTag;
@@ -33,8 +44,10 @@ private:
 	Label* _moneyLabelFront;
 	Label* _moneyLabelBack;
 	
+
 	unsigned _money;
 	unsigned _betMoney;
 	bool _isActivated = false;
+	bool _isAlreadyBet = false;
 	
 };

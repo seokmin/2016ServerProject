@@ -33,7 +33,7 @@ namespace COMMON
 		GAME_BET_COUNTER_NTF = 91,
 		
 		GAME_BET_REQ = 92,
-		GAME_BET_RES = 93,
+		//GAME_BET_RES = 93,
 		GAME_BET_NTF = 94,
 
 		GAME_START_NTF			= 95,
@@ -63,16 +63,17 @@ namespace COMMON
 
 	struct CardInfo
 	{
-		enum class CardShape {
+		enum CardShape : short
+		{
 			EMPTY = 0, // 카드 없음
 
 			SPADE = 1,
 			DIAMOND = 2,
 			HEART = 3,
 			CLOVER = 4,
-		} _shape;
+		} _shape = EMPTY;
 
-		short _number; // J = 11, Q = 12, K = 13
+		short _number = 0; // J = 11, Q = 12, K = 13
 	};
 
 	struct HandInfo
@@ -170,10 +171,10 @@ namespace COMMON
 	{
 		int _betMoneyReq;
 	};
-	struct PacketGameBetRes
-	{
-		int _betMoneyRes;
-	};
+// 	struct PacketGameBetRes // TODO : 안쓸 가능성이 높음 지워야함
+// 	{
+// 		int _betMoneyRes;
+// 	};
 	struct PacketGameBetNtf
 	{
 		int _betSlot;

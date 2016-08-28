@@ -8,9 +8,11 @@ public:
 	virtual bool init();
 	CREATE_FUNC(BetSlider);
 	static BetSlider* create(int minBet, int maxBet, int startPercent = 10);
-	
+
 	void setMinBet(int value);
 	void setMaxBet(int value);
+
+	int getCurrentBet() { return _currentBet; }
 
 	//void setPercent(int value) override;
 

@@ -112,11 +112,18 @@ void GameScene::initLayout(int roomNum)
 	_players[3]->setPosition(screenSize.width - _players[1]->getPosition().x, 190);
 	_players[4]->setPosition(screenSize.width - 130, 260);
 
-	// 베팅 컨트롤
+	// 베팅 슬라이더
 	_betSlider = BetSlider::create();
 	_betSlider->setVisible(false);
-	_betSlider->setPosition(Vec2(600, 40));
+	_betSlider->setPosition(Vec2(550, 30));
 	addChild(_betSlider, Z_ORDER::UI_TOP);
+	// 베팅 버튼
+	auto betLabel = Label::createWithTTF("BET", FILENAME::FONT::SOYANON, 64);
+	auto betButton = MenuItemLabel::create(betLabel, CC_CALLBACK_1(GameScene::betButtonClicked, this));
+	_betButton = Menu::create(betButton, nullptr);
+	_betButton->setPosition(1170, 35);
+	_betButton->setVisible(false);
+	addChild(_betButton);
 }
 
 GameScene* GameScene::create(int roomNum)
@@ -154,6 +161,9 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 		break;
 	case COMMON::PACKET_ID::GAME_BET_COUNTER_NTF:
 		packetProcess_GameBetCounter(packetInfo);
+		break;
+	case COMMON::PACKET_ID::GAME_BET_NTF:
+		packetProcess_GameBetNtf(packetInfo);
 		break;
 	default:
 		ClientLogger::msgBox(L"모르는 패킷");
@@ -200,7 +210,7 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 	auto& time = packet->_countTime;
 	for (auto& user : _players)
 	{
-		if (user->isActivated())
+		if (user->isActivated() && !user->isAlreadyBet())
 		{
 			user->setCounter(time);
 		}
@@ -210,5 +220,27 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 		_betSlider->setMinBet(packet->minBet);
 		_betSlider->setMaxBet(_players[_userSlotNum]->getMoneyWhole());
 		_betSlider->setVisible(true);
+		_betButton->setVisible(true);
 	}
+}
+
+bool GameScene::betButtonClicked(Ref* sender)
+{
+	using namespace COMMON;
+	auto packet = PacketGameBetReq{_betSlider->getCurrentBet()};
+	
+	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_BET_REQ, sizeof(packet), (char*)&packet);
+	_betButton->setVisible(false);
+	_betSlider->setVisible(false);
+	return true;
+}
+
+void GameScene::packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	auto packet = (PacketGameBetNtf*)packetInfo.pRefData;
+	auto& betUser = _players[packet->_betSlot];
+	betUser->setMoneyBet(packet->_betMoney, betUser->getMoneyWhole() - packet->_betMoney);
+	betUser->setAlreadyBet(true);
+	betUser->initCounter();
 }

@@ -24,9 +24,10 @@ bool BetSlider::init()
 	this->addEventListenerSlider(this, sliderpercentchangedselector(BetSlider::SliderChanged));
 
 	// 라벨 구성
-	_minLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 40);
-	_maxLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 40);
-	_currentLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 40);
+	_minLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 36);
+	_maxLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 36);
+	_currentLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 36);
+	_currentLabel->setColor(Color3B::GREEN);
 
 	this->addChild(_minLabel);
 	this->addChild(_maxLabel);
@@ -34,7 +35,7 @@ bool BetSlider::init()
 
 	_minLabel->setPosition(0, 30);
 	_maxLabel->setPosition(980, 30);
-	_currentLabel->setPositionY(45);
+	_currentLabel->setPositionY(41);
 
 }
 

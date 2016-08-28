@@ -26,12 +26,19 @@ public:
 
 private:
 	void initLayout(int roomNum);
+
+
 	void recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, char* bodyPos);
 	void packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packetInfo);
 	void packetProcess_RoomEnterUserNtf(COMMON::RecvPacketInfo packetInfo);
 	void packetProcess_RoomLeaveUserNtf(COMMON::RecvPacketInfo packetInfo);
 
 	void packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo);
+	void packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo);
+
+
+	bool betButtonClicked(Ref* sender);
+
 public:
 private:
 	enum Z_ORDER : short
