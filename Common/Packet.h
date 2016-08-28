@@ -211,6 +211,7 @@ namespace COMMON
 		int			_handNum; // front hand 또는 back hand
 		int			_betMoney; // 초이스 후 걸게되는 돈 (더블다운/스플릿)
 		int			_currentMoney; // 초이스 후 남는 돈
+		int			_waitingTime;
 	};
 
 	struct PacketGameDealerResultNtf

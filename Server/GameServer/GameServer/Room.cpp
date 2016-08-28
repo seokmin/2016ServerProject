@@ -303,6 +303,9 @@ void Room::NotifyStartGame()
 
 void Room::NotifyChangeTurn()
 {
+	if (m_currentRoomState == ROOM_STATE::HANDOUT)
+		m_currentRoomState = ROOM_STATE::INGAME;
+
 	PacketGameChangeTurnNtf pkt;
 	
 	std::tuple<int, int> SeatNhand = GetNextPlayerSeatAndHand();
