@@ -346,7 +346,7 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 	using namespace COMMON;
 	auto packet = (PacketGameChangeTurnNtf*)packetInfo.pRefData;
 	_players[packet->_slotNum]->setCounter(packet->_waitingTime);
-	_waitingTimeInOnceTurn = packet->_waitingTime;
+
 	if (packet->_slotNum == _userSlotNum)
 	{
 		auto& player = _players[_userSlotNum];
@@ -379,8 +379,16 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	using namespace COMMON;
 	auto packet = (PacketGameChoiceNtf*)packetInfo.pRefData;
 	auto& player = _players[packet->_slotNum];
+
+	player->_hand[packet->_handNum]->pushCard(packet->_recvCard);
 	player->setMoneyBet(packet->_betMoney, packet->_currentMoney);
-	
+	player->setCounter(packet->_waitingTime);
+	// 자기 자신이면
+	if (packet->_slotNum == _userSlotNum)
+	{
+		_itemHit->setEnabled(true);
+		_itemStand->setEnabled(true);
+	}
 }
 
 void GameScene::disableAllChoiceButton()
