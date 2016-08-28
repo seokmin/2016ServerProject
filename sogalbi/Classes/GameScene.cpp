@@ -127,11 +127,18 @@ void GameScene::initLayout(int roomNum)
 
 	// 선택 버튼
 	auto labelSplit = Label::createWithTTF("SPLIT", FILENAME::FONT::PIXEL, 32);
-	auto labelDoubleDown = Label::createWithTTF("SPLIT", FILENAME::FONT::PIXEL, 32);
-	auto labelHit = Label::createWithTTF("SPLIT", FILENAME::FONT::PIXEL, 32);
-	auto labelStand = Label::createWithTTF("SPLIT", FILENAME::FONT::PIXEL, 32);
+	auto labelDoubleDown = Label::createWithTTF("DOUBLE DOWN", FILENAME::FONT::PIXEL, 32);
+	auto labelHit = Label::createWithTTF("HIT", FILENAME::FONT::PIXEL, 32);
+	auto labelStand = Label::createWithTTF("STAND", FILENAME::FONT::PIXEL, 32);
 
-	//auto itemSplit = 
+	auto itemSplit = MenuItemLabel::create(labelSplit, CC_CALLBACK_1(GameScene::splitButtonClicked, this));
+	auto itemDoubleDown = MenuItemLabel::create(labelDoubleDown, CC_CALLBACK_1(GameScene::doubleDownButtonClicked, this));
+	auto itemHit = MenuItemLabel::create(labelHit, CC_CALLBACK_1(GameScene::hitButtonClicked, this));
+	auto itemStand = MenuItemLabel::create(labelStand, CC_CALLBACK_1(GameScene::standButtonClicked, this));
+	_choiceButton = Menu::create(itemSplit, itemDoubleDown, itemHit, itemStand,nullptr);
+	_choiceButton->setPositionY(30);
+	_choiceButton->alignItemsHorizontallyWithPadding(30);
+	addChild(_choiceButton, Z_ORDER::UI_TOP);
 }
 
 GameScene* GameScene::create(int roomNum)
@@ -274,4 +281,24 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 		player->_hand[0]->pushCard(cards[1]);
 		player->setValueLabel(player->_hand[0]->getHandValue());
 	}
+}
+
+bool GameScene::splitButtonClicked(Ref* sender)
+{
+	return true;
+}
+
+bool GameScene::doubleDownButtonClicked(Ref* sender)
+{
+	return true;
+}
+
+bool GameScene::hitButtonClicked(Ref* sender)
+{
+	return true;
+}
+
+bool GameScene::standButtonClicked(Ref* sender)
+{
+	return true;
 }

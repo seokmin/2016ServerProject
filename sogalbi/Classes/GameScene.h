@@ -41,6 +41,11 @@ private:
 
 	bool betButtonClicked(Ref* sender);
 
+	bool splitButtonClicked(Ref* sender);
+	bool doubleDownButtonClicked(Ref* sender);
+	bool hitButtonClicked(Ref* sender);
+	bool standButtonClicked(Ref* sender);
+
 public:
 private:
 	enum Z_ORDER : short
