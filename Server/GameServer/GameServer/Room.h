@@ -36,11 +36,12 @@ public:
 	void NotifyEnterUserInfo(int sessionIndex);
 	void NotifyLeaveUserInfo(int sessionIndex);
 	void NotifyStartBettingTimer();
+	void NotifyBetDone(int sessionIdx, int betMoney);
 	void NotifyStartGame();
 	void NotifyChangeTurn();
 
 	void SetRoomStateToWaiting();
-	void ApplyBet(int sessionIndex, int betMoney);
+	ERROR_CODE ApplyBet(int sessionIndex, int betMoney);
 	
 	int GetCurrentUserCount() { return m_currentUserCount; };
 	User* GetUserInfo(int seatNum) { return m_userList[seatNum]; };

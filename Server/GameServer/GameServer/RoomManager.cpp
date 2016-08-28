@@ -60,13 +60,13 @@ void RoomManager::RunPostTimeAction()
 		if (room->GetCurrentUserCount() == 0)
 			continue;
 
-		switch (room->GetCurrentRoomState)
+		switch (room->GetCurrentRoomState())
 		{
 		case ROOM_STATE::NONE :
 		{
 			// 여기까지 왔는데 상태가 NONE일 수는 없음.
 			WCHAR errStr[100];
-			wsprintf(errStr, L"룸(%d)의 상태가 NONE인 거에 접근했음!", room->GetRoomId);
+			wsprintf(errStr, L"룸(%d)의 상태가 NONE인 거에 접근했음!", room->GetRoomId());
 			Logger::GetInstance()->Log(Logger::INFO, errStr, 100);
 			break;
 		}

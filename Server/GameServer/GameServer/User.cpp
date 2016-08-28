@@ -14,14 +14,19 @@ void User::Init(std::string authToken, std::wstring userName, int pokeNum, int t
 void User::Clear()
 {
 	m_sessionIndex = -1;
-	m_authToken = "";
 	m_currentRoomIdx = -1;
-	m_curDomain = DOMAIN_STATE::NONE;
+	m_authToken = "";
 	m_userName = L"";
 	m_pokeNum = 0;
 	m_totalMoney = 0;
 	m_curBetMoney = 0;
+	m_curSeat = 0;
+
 	InitHand();
+
+	m_curDomain = DOMAIN_STATE::NONE;
+	m_gameState = GAME_STATE::NONE;
+	m_ioState = IO_STATE::NONE;
 }
 
 void User::InitHand()
@@ -41,6 +46,7 @@ void User::InitHand()
 void User::EnterRoom(int roomIdx)
 {
 	m_curDomain = DOMAIN_STATE::ROOM;
+	m_gameState = GAME_STATE::WAITING;
 	m_currentRoomIdx = roomIdx;
 }
 
@@ -64,4 +70,22 @@ COMMON::UserInfo User::GetUserInfo()
 	}
 
 	return userInfo;
+}
+
+ERROR_CODE User::ApplyBet(int betMoney)
+{
+	if (betMoney > m_totalMoney)
+	{
+		WCHAR errStr[100];
+		wsprintf(errStr, L"유저(%s)가 자기 돈 보다 많은 배팅을 했어..", m_userName);
+		Logger::GetInstance()->Log(Logger::ERROR_NORMAL, errStr, 100);
+
+		return ERROR_CODE::ROOM_GAME_NOT_ENOUGH_MONEY;
+	}
+
+	m_totalMoney -= betMoney;
+	m_curBetMoney = betMoney;
+	m_gameState = GAME_STATE::BET_DONE;
+
+	return ERROR_CODE::NONE;
 }

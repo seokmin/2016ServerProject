@@ -9,5 +9,11 @@ ERROR_CODE PacketProcess::GameBet(PacketInfo packetInfo)
 	
 	auto& room = m_pRefRoomMgr->GetRoomBySessionIndex(packetInfo.SessionIndex);
 
-	room->ApplyBet(packetInfo.SessionIndex, reqPkt->_betMoneyReq);
+	auto ret = room->ApplyBet(packetInfo.SessionIndex, reqPkt->_betMoneyReq);
+	if (ret != ERROR_CODE::NONE)
+		return ret;
+
+
+
+
 }
