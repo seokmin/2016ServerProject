@@ -262,6 +262,7 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 		auto cards = packet->_handInfo[i]._cardList;
 		player->_hand[0]->pushCard(cards[0]);
 		player->_hand[0]->pushCard(cards[1]);
+		player->setValueLabel(player->_hand[0]->getHandValue());
 	}
 
 }

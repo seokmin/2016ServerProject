@@ -24,6 +24,9 @@ bool Hand::init()
 
 void Hand::pushCard(CardInfo& card)
 {
+	if (card._number == 0 || card._shape == empty())
+		return;
+
 	_cardInfos[_handNum] = card;
 
 	auto& cardSpr = _cardSprites[_handNum];
