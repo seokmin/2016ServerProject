@@ -2,6 +2,13 @@
 #include "..\Common\Packet.h"
 
 class Player;
+namespace cocos2d
+{
+	namespace ui
+	{
+		class Slider;
+	}
+}
 
 class GameScene : public cocos2d::Layer
 {
@@ -9,6 +16,8 @@ public:
     static cocos2d::Scene* createScene(int roomNum);
 
     virtual bool init(int roomNum);
+
+	void update(float dt);
     
     void menuCloseCallback(cocos2d::Ref* pSender);
 	static GameScene* create(int roomNum);
@@ -19,6 +28,8 @@ private:
 	void packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packetInfo);
 	void packetProcess_RoomEnterUserNtf(COMMON::RecvPacketInfo packetInfo);
 	void packetProcess_RoomLeaveUserNtf(COMMON::RecvPacketInfo packetInfo);
+
+	void packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo);
 public:
 private:
 	enum Z_ORDER : short
@@ -35,4 +46,7 @@ private:
 	COMMON::DealerInfo _dealerInfo;
 	COMMON::UserInfo _userInfo[4];
 	int				_userSlotNum;
+
+	ui::Slider*			_betSlider;
+	Menu*			_betButton;
 };

@@ -5,6 +5,7 @@
 #include "NetworkManager.h"
 #include "Player.h"
 #include "ClientLogger.h"
+#include "ui\UISlider.h"
 
 
 Scene* GameScene::createScene(int roomNum)
@@ -39,6 +40,10 @@ bool GameScene::init(int roomNum)
 	// 네트워크 작업 스레딩
 	auto scheduler = Director::getInstance()->getScheduler();
 	scheduler->performFunctionInCocosThread(tempLambda);
+
+	// 타이머 고고씽
+	this->scheduleUpdate();
+
 	return true;
 }
 
@@ -104,7 +109,8 @@ void GameScene::initLayout(int roomNum)
 	_players[3]->setPosition(screenSize.width - _players[1]->getPosition().x, 190);
 	_players[4]->setPosition(screenSize.width - 130, 260);
 
-
+	// 베팅 컨트롤들
+	_betSlider = ui::Slider::create();
 }
 
 GameScene* GameScene::create(int roomNum)
@@ -172,4 +178,22 @@ void GameScene::packetProcess_RoomLeaveUserNtf(COMMON::RecvPacketInfo packetInfo
 	if (packet->_slotNum < 0 || packet->_slotNum >= MAX_USERCOUNT_PER_ROOM)
 		return;
 	_players[packet->_slotNum]->clear();
+}
+
+void GameScene::update(float dt)
+{
+}
+
+void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	auto packet = (PacketGameBetCounterNtf*)packetInfo.pRefData;
+	auto& time = packet->_countTime;
+	for (auto& user : _players)
+	{
+		if (user->isActivated())
+		{
+			user->setCounter(time);
+		}
+	}
 }

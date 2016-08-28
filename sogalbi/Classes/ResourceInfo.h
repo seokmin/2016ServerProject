@@ -29,7 +29,11 @@ namespace FILENAME
 		DEF_FILENAME(SPRITE, LOGIN_BG, "loginBg.png");
 
 		DEF_FILENAME(SPRITE, CHANNEL_LIST_BG, "channelListBg.png");
-				
+
+		DEF_FILENAME(SPRITE, SLIDER_TRACK, "barTrack.png");
+		DEF_FILENAME(SPRITE, SLIDER_PROGRESS, "barProgress.png");
+		DEF_FILENAME(SPRITE, SLIDER_THUMB, "thumb.png");
+
 		// 1번부터 시작
 		static std::string POKE_ARRAY[MAX_NUMBER_OF_POKEMON_AVAILABLE + 1] =
 		{

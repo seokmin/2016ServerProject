@@ -8,12 +8,22 @@ bool Player::init()
 {
 	_nameTag = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::NAMETAG);
 	_nameTagBack = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::NAMETAG_BACK);
+
+	auto counterSprite = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::NAMETAG_BACK);
+	counterSprite->setColor(Color3B::RED);
+	_timer = ProgressTimer::create(counterSprite);
+	_timer->setType(ProgressTimer::Type::RADIAL);
+	_timer->setBarChangeRate(Vec2(1, 1));
+	_timer->setMidpoint(Vec2(0.5, 0.5));
+
+
 	_nameLabel = Label::createWithTTF("NULL", FILENAME::FONT::SOYANON, 24);
 	_pokemon = Sprite::create();
 
 	_moneyLabelFront = Label::createWithTTF(u8"0", FILENAME::FONT::SOYANON, 24);
 	_moneyLabelBack = Label::createWithTTF(u8"/0", FILENAME::FONT::SOYANON, 24);
 	
+	addChild(_timer, 1);
 
 	addChild(_nameTag,1);
 	addChild(_nameTagBack,0);
@@ -39,6 +49,7 @@ void Player::setPlayerDataWithUserInfo(COMMON::UserInfo userInfo)
 {
 	if (userInfo._name[0] == '\0')
 		return;
+	_isActivated = true;
 	_nameLabel->setVisible(true);
 	_moneyLabelBack->setVisible(true);
 	_moneyLabelFront->setVisible(true);
@@ -57,6 +68,7 @@ void Player::setPlayerDataWithUserInfo(COMMON::UserInfo userInfo)
 
 void Player::clear()
 {
+	_isActivated = false;
 	_nameLabel->setVisible(false);
 	_moneyLabelBack->setVisible(false);
 	_moneyLabelFront->setVisible(false);
@@ -94,4 +106,9 @@ void Player::setMoneyBet(int bet,int whole)
 	_money = whole;
 	_moneyLabelFront->setString(std::to_string(bet));
 	_moneyLabelBack->setString(u8"/"+std::to_string(whole));
+}
+
+void Player::setCounter(float countTime)
+{
+	_timer->runAction(ProgressFromTo::create(countTime, 0, 100));
 }

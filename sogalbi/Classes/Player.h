@@ -10,6 +10,7 @@ public:
 	void setPlayerDataWithUserInfo(COMMON::UserInfo userInfo);
 
 	void clear();
+	bool isActivated(){ return _isActivated; }
 
 	void setAsPlayer();
 	void setNameLabel(std::string name);
@@ -18,9 +19,12 @@ public:
 	void setMoneyWhole();
 	void setMoneyBet(int bet,int whole);
 
+	void setCounter(float countTime);
+
 private:
 	Sprite* _nameTag;
 	Sprite* _nameTagBack;
+	ProgressTimer* _timer;
 	Sprite* _pokemon;
 	Sprite* _stateBanner;
 	Label* _nameLabel;
