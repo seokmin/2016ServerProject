@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ServerConfig.h"
+#include "Dealer.h"
 #include <chrono>
 
 using namespace std::chrono;
@@ -58,6 +59,7 @@ private:
 	unsigned int	m_lastActionTime;
 
 	ROOM_STATE		m_currentRoomState = ROOM_STATE::NONE;
+	Dealer			m_dealer;
 
 private:
 	User* GetUserBySessionIndex(int sessionIndex);

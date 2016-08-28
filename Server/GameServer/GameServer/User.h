@@ -43,6 +43,7 @@ public:
 
 	COMMON::UserInfo GetUserInfo();
 	ERROR_CODE ApplyBet(int betMoney);
+	void SetHand(int hand, CardInfo card);
 
 	bool				IsAvailableFromPool() { return m_sessionIndex < 0; };
 	bool				CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };
@@ -75,6 +76,7 @@ private:
 	int m_totalMoney = 0;
 	int m_curBetMoney = 0;
 	int m_curSeat = -1;
+	int m_curCardNum = 0;
 
 	COMMON::HandInfo m_hand[MAX_HAND];
 

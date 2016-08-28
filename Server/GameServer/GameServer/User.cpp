@@ -21,6 +21,7 @@ void User::Clear()
 	m_totalMoney = 0;
 	m_curBetMoney = 0;
 	m_curSeat = 0;
+	m_curCardNum = 0;
 
 	InitHand();
 
@@ -88,4 +89,11 @@ ERROR_CODE User::ApplyBet(int betMoney)
 	m_gameState = GAME_STATE::BET_DONE;
 
 	return ERROR_CODE::NONE;
+}
+
+void User::SetHand(int hand, CardInfo card)
+{
+	m_hand[hand]._cardList[m_curCardNum]._shape = card._shape;
+	m_hand[hand]._cardList[m_curCardNum]._number = card._number;
+	++m_curCardNum;
 }

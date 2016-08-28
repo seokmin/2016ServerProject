@@ -90,6 +90,9 @@
     <ClInclude Include="DBProcess.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Dealer.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -135,6 +138,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GamePacketProcess.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Dealer.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>

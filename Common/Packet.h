@@ -77,7 +77,7 @@ namespace COMMON
 
 	struct HandInfo
 	{
-		CardInfo _cardList[10];
+		CardInfo _cardList[8];
 		enum HandState {
 			CURRENT = 0,
 			BURST = 1,
@@ -183,7 +183,6 @@ namespace COMMON
 	struct PacketGameStartNtf
 	{
 		int _startSlotNum; // 시작하는 사람의 자리를 알려줌
-		int _startHandNum = 0;
 		int _turnCountTime = 10; // 힛, 스탠드 고를 시간 10초
 
 		HandInfo _handInfo[5]; // 각자의 핸드 0 정보. (1은 안줌~)

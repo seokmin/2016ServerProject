@@ -24,13 +24,10 @@ bool Room::EnterUser(User* user)
 	m_userList[seat] = user;
 	++m_currentUserCount;
 
-	// 현재 방의 시작 요청 시간을 기록하고, 노티를 보낸다.
+	// 현재 방의 시작 요청 시간을 기록한다. 노티는 user list req 까지 오면 보낸다.
 	if (m_currentRoomState == ROOM_STATE::NONE || m_currentRoomState == ROOM_STATE::WAITING)
 	{
 		SetRoomStateToWaiting();
-
-		// Send start game notification
-		NotifyStartBettingTimer();
 	}
 	else
 	{
@@ -90,7 +87,6 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	
 	// 유저의 상태/방정보도 나가도록 해줘야 함
 	//pUser->LeaveRoom();
-	pUser->Clear();
 
 	--m_currentUserCount;
 
@@ -98,11 +94,17 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	wsprintf(infoStr, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName().c_str());
 	Logger::GetInstance()->Log(Logger::INFO, infoStr, 100);
 
+	pUser->Clear();
+
 	return	COMMON::ERROR_CODE::NONE;
 }
 
 void Room::NotifyStartBettingTimer()
 {
+	// 방의 상태가  waiting이 아니면 노티를 보내면 안됨
+	if (m_currentRoomState != ROOM_STATE::WAITING)
+		return;
+
 	PacketGameBetCounterNtf pkt;
 	pkt._countTime = 10;
 	pkt.minBet = ServerConfig::minBet;
@@ -153,6 +155,9 @@ void Room::SetRoomStateToWaiting()
 	// 유저는 이제 베팅을 해야하므로 betting으로 바꿔준다.
 	for (auto& user : m_userList)
 	{
+		if (user == nullptr)
+			continue;
+
 		user->SetGameState(GAME_STATE::BETTING);
 	}
 }
@@ -204,13 +209,13 @@ void Room::NotifyStartGame()
 
 	bool flag = true;
 	HandInfo handInfo[5];
-	int seat = 0;
 	for (auto& user : m_userList)
 	{
 		if (user == nullptr)
 			continue;
 		else if (flag)
 		{
+			// 가장 앞 슬롯의 유저에게 턴을 주고 시작위치라고 표시한다
 			flag = false;
 			user->SetGameState(GAME_STATE::ACTIONING);
 			pkt._startSlotNum = user->GetCurSeat();
@@ -218,12 +223,10 @@ void Room::NotifyStartGame()
 		else
 			user->SetGameState(GAME_STATE::ACTION_WAITING);
 
-		// TODO : 유저 핸드 생성 / 나눠주기
-
-		++seat;
+		// 상태를 다 바꿨으면 실제로 카드를 나눠주기 시작한다.
+		m_dealer.Init(this);
 	}
-
-
+	
 	pkt._startHandNum = 0;
 	pkt._turnCountTime = 10;
 
@@ -237,7 +240,7 @@ void Room::NotifyStartGame()
 		// Res 보냄
 		PacketInfo sendPacket;
 		sendPacket.SessionIndex = m_userList[i]->GetSessionIndex();
-		sendPacket.PacketId = PACKET_ID::GAME_BET_COUNTER_NTF;
+		sendPacket.PacketId = PACKET_ID::GAME_START_NTF;
 		sendPacket.pRefData = (char *)&pkt;
 		sendPacket.PacketBodySize = sizeof(pkt);
 		m_pSendPacketQue->PushBack(sendPacket);

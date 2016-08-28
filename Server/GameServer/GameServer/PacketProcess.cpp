@@ -27,6 +27,8 @@ void PacketProcess::Init(UserManager * pUserMgr, RoomManager * pRoomMgr, PacketQ
 	PacketFuncArray[(int)PACKET_ID::ROOM_ENTER_REQ] = &PacketProcess::RoomEnter;
 	PacketFuncArray[(int)PACKET_ID::ROOM_ENTER_USER_LIST_REQ] = &PacketProcess::RoomUserList;
 	PacketFuncArray[(int)PACKET_ID::ROOM_LEAVE_REQ] = &PacketProcess::RoomLeave;
+	
+	PacketFuncArray[(int)PACKET_ID::GAME_BET_REQ] = &PacketProcess::GameBet;
 }
 
 void PacketProcess::Process(PacketInfo packetInfo)
@@ -91,6 +93,9 @@ ERROR_CODE PacketProcess::RoomUserList(PacketInfo packetInfo)
 	sendPacket.PacketBodySize = sizeof(PacketRoomUserlistRes);
 	sendPacket.pRefData = (char*)&resPkt;
 	m_pSendPacketQue->PushBack(sendPacket);
+
+	// 만약 방의 상태가 Waiting이면 노티를 보내준다.
+	room->NotifyStartBettingTimer();
 
 	return ERROR_CODE::NONE;
 }
