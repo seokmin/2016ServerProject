@@ -60,6 +60,7 @@ void LoginScene::leaveButtonClicked(cocos2d::Ref* pSender)
 
 void LoginScene::loginButtonClicked(cocos2d::Ref* pSender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::LOGIN_BUTTON.c_str());
 	_loginMenu->setEnabled(false);
 
 	// 테스트 json 입력
@@ -97,6 +98,7 @@ void LoginScene::logoutButtonClicked(Ref* pSender)
 {
 	// 로그아웃버튼 광클 못하게
 	_logoutMenu->setEnabled(false);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::LOGOUT_BUTTON.c_str());
 
 	popDownChannelsLayer();
 	auto request = new network::HttpRequest();
@@ -128,7 +130,7 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 		_loginMenu->setEnabled(true); // 로그인 실패했으므로 다시 누를 수 있게
 		return;
 	}
-
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::CHANNEL_SELECT_BGM.c_str());
 	// 받아온 정보 파싱
 	auto channels = std::vector<DEF::ChannelInfo>();
 	auto result = parseChannelInfo(resString, channels);
@@ -156,6 +158,8 @@ void LoginScene::logoutResponseArrived(network::HttpClient* sender, network::Htt
 	// 로그아웃 버튼 다시 누를 수 있게
 	_logoutMenu->setEnabled(true);
 	_loginMenu->setEnabled(true);
+
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::LOGIN_BGM.c_str());
 }
 
 void LoginScene::channelButtonClicked(DEF::ChannelInfo& targetChannel)
@@ -244,6 +248,8 @@ void LoginScene::popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos)
 
 void LoginScene::popDownChannelsLayer()
 {
+	_channelsMenu->setEnabled(true);
+
 	_channelsBg->setVisible(false);
 	_logoutMenu->setVisible(false);
 	_channelsMenu->removeAllChildren();

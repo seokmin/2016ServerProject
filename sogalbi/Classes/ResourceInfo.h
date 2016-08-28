@@ -126,6 +126,9 @@ namespace FILENAME
 	}
 	namespace AUDIO
 	{
-		DEF_FILENAME(AUDIO, LOGIN_BGM, "login.mp3");
+		DEF_FILENAME(AUDIO, LOGIN_BGM, "loginBgm.mp3");
+		DEF_FILENAME(AUDIO, LOGIN_BUTTON, "login.mp3");
+		DEF_FILENAME(AUDIO, LOGOUT_BUTTON, "logout.wav");
+		DEF_FILENAME(AUDIO, CHANNEL_SELECT_BGM, "channel.mp3");
 	}
 }

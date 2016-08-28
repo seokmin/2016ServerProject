@@ -56,6 +56,7 @@ bool Player::init()
 	// Ä«µå ¹ë·ù
 	_valueLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 48);
 	addChild(_valueLabel, 3);
+	_valueLabel->setColor(Color3B::YELLOW);
 	_valueLabel->setPositionY(200);
 
 	return true;

@@ -347,10 +347,11 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 	auto packet = (PacketGameChangeTurnNtf*)packetInfo.pRefData;
 	_players[packet->_slotNum]->setCounter(packet->_waitingTime);
 
+	auto& player = _players[_userSlotNum];
+	auto& hand = player->_hand[packet->_handNum];
+
 	if (packet->_slotNum == _userSlotNum)
 	{
-		auto& player = _players[_userSlotNum];
-		auto& hand = player->_hand[packet->_handNum];
 		auto& firstCard = hand->_cardInfos[0];
 		auto& secondCard = hand->_cardInfos[1];
 
@@ -374,6 +375,11 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 		// stand 버튼 활성화 여부
 		_itemStand->setEnabled(true);
 	}
+	else
+		disableAllChoiceButton();
+	auto flashEffect = Blink::create(0.5f, 2);
+	player->runAction(flashEffect);
+	
 }
 
 void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
