@@ -38,6 +38,8 @@ private:
 
 	void packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo);
 	void packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInfo);
+	void packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo);
+
 
 	bool betButtonClicked(Ref* sender);
 
@@ -45,6 +47,8 @@ private:
 	bool doubleDownButtonClicked(Ref* sender);
 	bool hitButtonClicked(Ref* sender);
 	bool standButtonClicked(Ref* sender);
+
+	void disableAllChoiceButton();
 
 public:
 private:

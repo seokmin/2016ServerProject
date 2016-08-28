@@ -17,8 +17,8 @@ public:
 
 private:
 public:
+	CardInfo _cardInfos[7];
 private:
 	Sprite* _cardSprites[7];
-	CardInfo _cardInfos[7];
 	int		_handNum = 0;
 };

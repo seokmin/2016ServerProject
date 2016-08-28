@@ -135,6 +135,7 @@ void GameScene::initLayout(int roomNum)
 	_itemDoubleDown = MenuItemLabel::create(labelDoubleDown, CC_CALLBACK_1(GameScene::doubleDownButtonClicked, this));
 	_itemHit = MenuItemLabel::create(labelHit, CC_CALLBACK_1(GameScene::hitButtonClicked, this));
 	_itemStand = MenuItemLabel::create(labelStand, CC_CALLBACK_1(GameScene::standButtonClicked, this));
+	disableAllChoiceButton();
 	_choiceButton = Menu::create(_itemSplit, _itemDoubleDown, _itemHit, _itemStand,nullptr);
 	_choiceButton->setPositionY(30);
 	_choiceButton->alignItemsHorizontallyWithPadding(30);
@@ -186,6 +187,9 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 		break;
 	case COMMON::PACKET_ID::GAME_CHANGE_TURN_NTF:
 		packetProcess_GameChangeTurnNtf(packetInfo);
+		break;
+	case COMMON::PACKET_ID::GAME_CHOICE_NTF:
+		packetProcess_GameChoiceNtf(packetInfo);
 		break;
 	default:
 		ClientLogger::msgBox(L"모르는 패킷");
@@ -255,6 +259,7 @@ bool GameScene::betButtonClicked(Ref* sender)
 	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_BET_REQ, sizeof(packet), (char*)&packet);
 	_betButton->setVisible(false);
 	_betSlider->setVisible(false);
+	_choiceButton->setVisible(true);
 	return true;
 }
 
@@ -294,6 +299,9 @@ bool GameScene::splitButtonClicked(Ref* sender)
 	auto packet = PacketGameChoiceReq{};
 	packet._choice = ChoiceKind::SPLIT;
 	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_CHOICE_REQ, sizeof(packet), (char*)&packet);
+
+	disableAllChoiceButton();
+
 	return true;
 }
 
@@ -303,6 +311,9 @@ bool GameScene::doubleDownButtonClicked(Ref* sender)
 	auto packet = PacketGameChoiceReq{};
 	packet._choice = ChoiceKind::DOUBLE_DOWN;
 	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_CHOICE_REQ, sizeof(packet), (char*)&packet);
+
+	disableAllChoiceButton();
+
 	return true;
 }
 
@@ -312,6 +323,9 @@ bool GameScene::hitButtonClicked(Ref* sender)
 	auto packet = PacketGameChoiceReq{};
 	packet._choice = ChoiceKind::HIT;
 	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_CHOICE_REQ, sizeof(packet), (char*)&packet);
+
+	disableAllChoiceButton();
+
 	return true;
 }
 
@@ -321,6 +335,9 @@ bool GameScene::standButtonClicked(Ref* sender)
 	auto packet = PacketGameChoiceReq{};
 	packet._choice = ChoiceKind::STAND;
 	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_CHOICE_REQ, sizeof(packet), (char*)&packet);
+
+	disableAllChoiceButton();
+
 	return true;
 }
 
@@ -328,4 +345,45 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 {
 	using namespace COMMON;
 	auto packet = (PacketGameChangeTurnNtf*)packetInfo.pRefData;
+	_players[packet->_slotNum]->setCounter(packet->_waitingTime);
+	if (packet->_slotNum == _userSlotNum)
+	{
+		auto& player = _players[_userSlotNum];
+		auto& hand = player->_hand[packet->_handNum];
+		auto& firstCard = hand->_cardInfos[0];
+		auto& secondCard = hand->_cardInfos[1];
+
+		// split 버튼 활성화 여부
+		// 숫자가 같으면
+		if (firstCard._number == secondCard._number)
+		{
+			// 돈도 있으면
+			if (player->getMoneyBet() >= player->getMoneyWhole())
+			{
+				_itemSplit->setEnabled(true);
+			}
+		}
+		// double down 버튼 활성화 여부
+		if (player->getMoneyBet() >= player->getMoneyWhole())
+			_itemDoubleDown->setEnabled(true);
+		// hit 버튼 활성화 여부
+		_itemHit->setEnabled(true);
+		// stand 버튼 활성화 여부
+		_itemStand->setEnabled(true);
+	}
+}
+
+void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	auto packet = (PacketGameChoiceNtf*)packetInfo.pRefData;
+	
+}
+
+void GameScene::disableAllChoiceButton()
+{
+	_itemSplit->setEnabled(false);
+	_itemDoubleDown->setEnabled(false);
+	_itemHit->setEnabled(false);
+	_itemStand->setEnabled(false);
 }
