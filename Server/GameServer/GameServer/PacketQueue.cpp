@@ -13,15 +13,21 @@ RecvPacketInfo PacketQueue::ReadFront()
 		nullPacket.PacketId = PACKET_ID::NULL_PACKET;
 		return nullPacket;
 	}
-	return _packetDeque.front();
+	_mutex.lock();
+	auto result = _packetDeque.front();
+	_mutex.unlock();
+	return result;
 }
 
 // 이 함수는 sync-safe 하지 않다. 여러군데에서 동시에 부르면 결과를 보장하지 못한다.
 void PacketQueue::PopFront()
 {
-	if (_packetDeque.empty())
-		return;
 	_mutex.lock();
+	if (_packetDeque.empty())
+	{
+		_mutex.unlock();
+		return;
+	}
 	auto packet2Delete = _packetDeque.front();
 	_packetDeque.pop_front();
 	if (packet2Delete.pRefData != nullptr)
@@ -51,5 +57,8 @@ void PacketQueue::PushBack(RecvPacketInfo& recvPacket)
 
 bool PacketQueue::IsEmpty()
 {
-	return _packetDeque.empty();
+	_mutex.lock();
+	auto result = _packetDeque.empty();
+	_mutex.unlock();
+	return result;
 }

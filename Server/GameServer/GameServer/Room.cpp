@@ -209,8 +209,7 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 			continue;
 		}
 
-		if (user->GetGameState() != GAME_STATE::BET_DONE &&
-			user->GetGameState() != GAME_STATE::WAITING)
+		if (user->GetGameState() != GAME_STATE::BET_DONE)
 		{
 			flag = false;
 		}
@@ -243,10 +242,10 @@ void Room::NotifyStartGame()
 		}
 		else
 			m_userList[i]->SetGameState(GAME_STATE::ACTION_WAITING);
-
-		// 상태를 다 바꿨으면 실제로 카드를 나눠주기 시작한다.
-		m_dealer.Init(this);
 	}
+
+	// 상태를 다 바꿨으면 실제로 카드를 나눠주기 시작한다.
+	m_dealer.Init(this);
 	
 	//패킷 조제
 	pkt._turnCountTime = 10;
