@@ -74,6 +74,7 @@ void Player::clear()
 	_moneyLabelFront->setVisible(false);
 	_pokemon->setVisible(false);
 	_timer->setPercentage(0);
+	_timer->stopAllActions();
 }
 
 void Player::setAsPlayer()

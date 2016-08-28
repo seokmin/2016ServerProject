@@ -33,7 +33,7 @@ namespace COMMON
 		GAME_BET_COUNTER_NTF = 91,
 		
 		GAME_BET_REQ = 92,
-		GAME_BET_RES = 93,
+		//GAME_BET_RES = 93,
 		GAME_BET_NTF = 94,
 
 		GAME_START_NTF			= 95,
@@ -170,7 +170,7 @@ namespace COMMON
 	{
 		int _betMoneyReq;
 	};
-	struct PacketGameBetRes
+	struct PacketGameBetRes // TODO : 안쓸 가능성이 높음 지워야함
 	{
 		int _betMoneyRes;
 	};
