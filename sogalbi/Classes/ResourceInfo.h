@@ -28,7 +28,11 @@ namespace FILENAME
 		DEF_FILENAME(SPRITE, BANNER_BLACKJACK, "bannerBlackJack.png");
 		DEF_FILENAME(SPRITE, BANNER_STAND, "bannerStand.png");
 		DEF_FILENAME(SPRITE, BANNER_WAITING, "bannerWaiting.png");
+
 		DEF_FILENAME(SPRITE, HIT, "hit.png");
+		DEF_FILENAME(SPRITE, STAND, "stand.png");
+		DEF_FILENAME(SPRITE, SPLIT, "split.png");
+		DEF_FILENAME(SPRITE, DOUBLE_DOWN, "doubleDown.png");
 
 		DEF_FILENAME(SPRITE, LOGIN_BG, "loginBg.png");
 
@@ -130,5 +134,7 @@ namespace FILENAME
 		DEF_FILENAME(AUDIO, LOGIN_BUTTON, "login.mp3");
 		DEF_FILENAME(AUDIO, LOGOUT_BUTTON, "logout.wav");
 		DEF_FILENAME(AUDIO, CHANNEL_SELECT_BGM, "channel.mp3");
+		DEF_FILENAME(AUDIO, GAME_READY_BGM, "gameReadyBgm.mp3");
+		DEF_FILENAME(AUDIO, GAME_BATTLE_BGM, "battle.mp3");
 	}
 }

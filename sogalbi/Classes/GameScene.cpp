@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "ClientLogger.h"
 #include "BetSlider.h"
+#include "SimpleAudioEngine.h"
 
 #include "GameScene.h"
 
@@ -201,12 +202,20 @@ void GameScene::packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packet
 {
 	using namespace COMMON;
 	auto userList = (PacketRoomUserlistRes*)packetInfo.pRefData;
+	
+	auto isAlreadyPlaying = false;
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
 		_players[i]->setPlayerDataWithUserInfo(userList->_users[i]);
+		if (userList->_users->_hands[0]._cardList[0]._shape != CardInfo::CardShape::EMPTY)
+			isAlreadyPlaying = true;
 	}
 	_userSlotNum = userList->_slot;
 	_players[_userSlotNum]->setAsPlayer();
+	if (isAlreadyPlaying)
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str());
+	else
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_READY_BGM.c_str());
 }
 
 void GameScene::packetProcess_RoomEnterUserNtf(COMMON::RecvPacketInfo packetInfo)
@@ -291,6 +300,7 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 		player->_hand[0]->pushCard(cards[1],0.5f);
 		player->setValueLabel(player->_hand[0]->getHandValue());
 	}
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str());
 }
 
 bool GameScene::splitButtonClicked(Ref* sender)
