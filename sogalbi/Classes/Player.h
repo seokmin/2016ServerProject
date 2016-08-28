@@ -16,8 +16,10 @@ public:
 	void setNameLabel(std::string name);
 	void setPoke(std::string pokeFileName);
 	void setPoke(int pokeNum);
-	void setMoneyWhole();
 	void setMoneyBet(int bet,int whole);
+
+	unsigned getMoneyWhole() { return _money; }
+	unsigned getMoneyBet() { return _betMoney; }
 
 	void setCounter(float countTime);
 

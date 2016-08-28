@@ -30,10 +30,6 @@ bool LoginScene::init()
 	if (!Layer::init())
 		return false;
 
-	auto slider = BetSlider::create(20,100,10);
-	slider->setPosition(Vec2(700, 200));
-	addChild(slider,Z_ORDER::UI_ALWAYS_TOP);
-
 	// ·¹ÀÌ¾Æ¿ô
 	initLayout();
 

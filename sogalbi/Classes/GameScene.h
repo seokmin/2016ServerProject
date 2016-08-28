@@ -2,6 +2,8 @@
 #include "..\Common\Packet.h"
 
 class Player;
+class BetSlider;
+
 namespace cocos2d
 {
 	namespace ui
@@ -47,6 +49,6 @@ private:
 	COMMON::UserInfo _userInfo[4];
 	int				_userSlotNum;
 
-	ui::Slider*			_betSlider;
+	BetSlider*			_betSlider;
 	Menu*			_betButton;
 };

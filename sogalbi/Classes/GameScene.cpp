@@ -1,11 +1,14 @@
 #include "pch.h"
-#include "GameScene.h"
+
+#include "..\Common\common.h"
 #include "SimpleAudioEngine.h"
 #include "ResourceInfo.h"
 #include "NetworkManager.h"
 #include "Player.h"
 #include "ClientLogger.h"
-#include "ui\UISlider.h"
+#include "BetSlider.h"
+
+#include "GameScene.h"
 
 
 Scene* GameScene::createScene(int roomNum)
@@ -109,8 +112,11 @@ void GameScene::initLayout(int roomNum)
 	_players[3]->setPosition(screenSize.width - _players[1]->getPosition().x, 190);
 	_players[4]->setPosition(screenSize.width - 130, 260);
 
-	// 베팅 컨트롤들
-	_betSlider = ui::Slider::create();
+	// 베팅 컨트롤
+	_betSlider = BetSlider::create();
+	_betSlider->setVisible(false);
+	_betSlider->setPosition(Vec2(600, 40));
+	addChild(_betSlider, Z_ORDER::UI_TOP);
 }
 
 GameScene* GameScene::create(int roomNum)
@@ -145,6 +151,9 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 		break;
 	case COMMON::PACKET_ID::ROOM_LEAVE_USER_NTF:
 		packetProcess_RoomLeaveUserNtf(packetInfo);
+		break;
+	case COMMON::PACKET_ID::GAME_BET_COUNTER_NTF:
+		packetProcess_GameBetCounter(packetInfo);
 		break;
 	default:
 		ClientLogger::msgBox(L"모르는 패킷");
@@ -195,5 +204,11 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 		{
 			user->setCounter(time);
 		}
+	}
+	if (_betSlider->isVisible() == false)
+	{
+		_betSlider->setMinBet(packet->minBet);
+		_betSlider->setMaxBet(_players[_userSlotNum]->getMoneyWhole());
+		_betSlider->setVisible(true);
 	}
 }
