@@ -272,5 +272,4 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 		player->_hand[0]->pushCard(cards[1]);
 		player->setValueLabel(player->_hand[0]->getHandValue());
 	}
-
 }

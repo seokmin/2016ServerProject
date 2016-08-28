@@ -81,15 +81,29 @@ void Player::setPlayerDataWithUserInfo(COMMON::UserInfo userInfo)
 
 	setMoneyBet(userInfo._betMoney, userInfo._totalMony);
 
+
+
+	// 핸드부분
 	int curHandNum = 0;
-	if (userInfo._hands[0]._handState == HandInfo::HandState::CURRENT)
+	if (userInfo._curHand)
 	{
 		curHandNum = 0;
+		_hand[0]->setVisible(true);
+		_hand[1]->setVisible(false);
 	}
-	// 핸드부분
-	for (auto& cardInfo : userInfo._hands[0]._cardList)
+	else
 	{
-
+		_hand[1]->setVisible(true);
+		_hand[0]->setVisible(false);
+	}
+	for (int i = 0; i<2; ++i)
+	{
+		for (auto& card : userInfo._hands[i]._cardList)
+		{
+			if (card._shape == CardInfo::CardShape::EMPTY)
+				break;
+			_hand[i]->pushCard(card);
+		}
 	}
 }
 
@@ -102,6 +116,11 @@ void Player::clear()
 	_pokemon->setVisible(false);
 	_timer->setPercentage(0);
 	_timer->stopAllActions();
+
+	_hand[0]->setVisible(true);
+	_hand[1]->setVisible(false);
+	_hand[0]->clear();
+	_hand[1]->clear();
 }
 
 void Player::setAsPlayer()

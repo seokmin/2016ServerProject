@@ -70,7 +70,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 void AppDelegate::applicationDidEnterBackground()
 {
 
-    Director::getInstance()->stopAnimation();
+    //Director::getInstance()->stopAnimation();
 
 	CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 }
