@@ -47,8 +47,8 @@ bool Player::init()
 	_hand[1] = Hand::create();
 	_hand[1]->setVisible(false);
 
-	_hand[0]->setPositionY(100);
-	_hand[1]->setPositionY(100);
+	_hand[0]->setPosition(-50,70);
+	_hand[1]->setPosition(-50,70);
 
 	addChild(_hand[0], 3);
 	addChild(_hand[1], 3);
@@ -80,7 +80,6 @@ void Player::setPlayerDataWithUserInfo(COMMON::UserInfo userInfo)
 	setNameLabel(utfChar);
 
 	setMoneyBet(userInfo._betMoney, userInfo._totalMony);
-
 
 
 	// 핸드부분

@@ -37,7 +37,7 @@ private:
 	void packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo);
 
 	void packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo);
-
+	void packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInfo);
 
 	bool betButtonClicked(Ref* sender);
 
@@ -66,5 +66,9 @@ private:
 	BetSlider*			_betSlider;
 	Menu*			_betButton;
 
-	Menu*			_choiceButton;
+	Menu*			_choiceButton = nullptr;
+	MenuItemLabel*	_itemSplit = nullptr;
+	MenuItemLabel*	_itemDoubleDown = nullptr;
+	MenuItemLabel*	_itemHit = nullptr;
+	MenuItemLabel*	_itemStand = nullptr;
 };

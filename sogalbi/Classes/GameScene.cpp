@@ -131,13 +131,14 @@ void GameScene::initLayout(int roomNum)
 	auto labelHit = Label::createWithTTF("HIT", FILENAME::FONT::PIXEL, 32);
 	auto labelStand = Label::createWithTTF("STAND", FILENAME::FONT::PIXEL, 32);
 
-	auto itemSplit = MenuItemLabel::create(labelSplit, CC_CALLBACK_1(GameScene::splitButtonClicked, this));
-	auto itemDoubleDown = MenuItemLabel::create(labelDoubleDown, CC_CALLBACK_1(GameScene::doubleDownButtonClicked, this));
-	auto itemHit = MenuItemLabel::create(labelHit, CC_CALLBACK_1(GameScene::hitButtonClicked, this));
-	auto itemStand = MenuItemLabel::create(labelStand, CC_CALLBACK_1(GameScene::standButtonClicked, this));
-	_choiceButton = Menu::create(itemSplit, itemDoubleDown, itemHit, itemStand,nullptr);
+	_itemSplit = MenuItemLabel::create(labelSplit, CC_CALLBACK_1(GameScene::splitButtonClicked, this));
+	_itemDoubleDown = MenuItemLabel::create(labelDoubleDown, CC_CALLBACK_1(GameScene::doubleDownButtonClicked, this));
+	_itemHit = MenuItemLabel::create(labelHit, CC_CALLBACK_1(GameScene::hitButtonClicked, this));
+	_itemStand = MenuItemLabel::create(labelStand, CC_CALLBACK_1(GameScene::standButtonClicked, this));
+	_choiceButton = Menu::create(_itemSplit, _itemDoubleDown, _itemHit, _itemStand,nullptr);
 	_choiceButton->setPositionY(30);
 	_choiceButton->alignItemsHorizontallyWithPadding(30);
+	_choiceButton->setEnabled(false);
 	addChild(_choiceButton, Z_ORDER::UI_TOP);
 }
 
@@ -182,6 +183,9 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 		break;
 	case COMMON::PACKET_ID::GAME_START_NTF:
 		packetProcess_GameStartNtf(packetInfo);
+		break;
+	case COMMON::PACKET_ID::GAME_CHANGE_TURN_NTF:
+		packetProcess_GameChangeTurnNtf(packetInfo);
 		break;
 	default:
 		ClientLogger::msgBox(L"모르는 패킷");
@@ -240,6 +244,7 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 		_betSlider->setVisible(true);
 		_betButton->setVisible(true);
 	}
+	_choiceButton->setVisible(false);
 }
 
 bool GameScene::betButtonClicked(Ref* sender)
@@ -285,20 +290,42 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 
 bool GameScene::splitButtonClicked(Ref* sender)
 {
+	using namespace COMMON;
+	auto packet = PacketGameChoiceReq{};
+	packet._choice = ChoiceKind::SPLIT;
+	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_CHOICE_REQ, sizeof(packet), (char*)&packet);
 	return true;
 }
 
 bool GameScene::doubleDownButtonClicked(Ref* sender)
 {
+	using namespace COMMON;
+	auto packet = PacketGameChoiceReq{};
+	packet._choice = ChoiceKind::DOUBLE_DOWN;
+	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_CHOICE_REQ, sizeof(packet), (char*)&packet);
 	return true;
 }
 
 bool GameScene::hitButtonClicked(Ref* sender)
 {
+	using namespace COMMON;
+	auto packet = PacketGameChoiceReq{};
+	packet._choice = ChoiceKind::HIT;
+	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_CHOICE_REQ, sizeof(packet), (char*)&packet);
 	return true;
 }
 
 bool GameScene::standButtonClicked(Ref* sender)
 {
+	using namespace COMMON;
+	auto packet = PacketGameChoiceReq{};
+	packet._choice = ChoiceKind::STAND;
+	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_CHOICE_REQ, sizeof(packet), (char*)&packet);
 	return true;
+}
+
+void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	auto packet = (PacketGameChangeTurnNtf*)packetInfo.pRefData;
 }
