@@ -100,7 +100,7 @@ namespace COMMON
 		int _totalMony = 0;
 		int _betMoney = 0;
 		int _curHand = 0;
-		int _isSpit = false;
+		bool _isSpit = false;
 		HandInfo _hands[MAX_HAND];
 	};
 
