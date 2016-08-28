@@ -22,7 +22,7 @@ bool Hand::init()
 	return true;
 }
 
-void Hand::pushCard(CardInfo& card)
+void Hand::pushCard(CardInfo& card, float delay /*= 0.f*/)
 {
 	if (card._number == 0 || card._shape == CardInfo::CardShape::EMPTY)
 		return;
@@ -30,7 +30,9 @@ void Hand::pushCard(CardInfo& card)
 	_cardInfos[_handNum] = card;
 
 	auto& cardSpr = _cardSprites[_handNum];
-	auto spawn = Spawn::create(MoveTo::create(0.3, cardSpr->getPosition()), RotateTo::create(0.3, 0), nullptr);
+	auto spawn = Spawn::create( MoveTo::create(0.3, cardSpr->getPosition()), RotateTo::create(0.3, 0), nullptr);
+	auto callFunc = CallFunc::create(CC_CALLBACK_0(Sprite::setVisible, cardSpr, true));
+	auto seq = Sequence::create(DelayTime::create(delay),callFunc, spawn, nullptr);
 	cardSpr->setPosition(cardSpr->getPosition() + Vec2(0,100));
 	cardSpr->setRotation(180);
 	
@@ -38,8 +40,8 @@ void Hand::pushCard(CardInfo& card)
 	auto sprFrame = SpriteFrameCache::getInstance()->
 		getSpriteFrameByName(FILENAME::SPRITE::CARD_ARRAY[card._shape][card._number]);
 	cardSpr->setSpriteFrame(sprFrame);
-	cardSpr->setVisible(true);
-	cardSpr->runAction(spawn);
+	cardSpr->setVisible(false);
+	cardSpr->runAction(seq);
 	++_handNum;
 }
 

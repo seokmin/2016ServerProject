@@ -121,6 +121,8 @@ void Player::clear()
 	_hand[1]->setVisible(false);
 	_hand[0]->clear();
 	_hand[1]->clear();
+
+	_valueLabel->setString("");
 }
 
 void Player::setAsPlayer()

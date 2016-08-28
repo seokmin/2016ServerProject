@@ -288,7 +288,7 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 		player->_hand[1]->setVisible(false);
 		auto cards = packet->_handInfo[i]._cardList;
 		player->_hand[0]->pushCard(cards[0]);
-		player->_hand[0]->pushCard(cards[1]);
+		player->_hand[0]->pushCard(cards[1],0.5f);
 		player->setValueLabel(player->_hand[0]->getHandValue());
 	}
 }
@@ -353,6 +353,8 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 		auto& hand = player->_hand[packet->_handNum];
 		auto& firstCard = hand->_cardInfos[0];
 		auto& secondCard = hand->_cardInfos[1];
+
+		_choiceButton->setEnabled(true);
 
 		// split 버튼 활성화 여부
 		// 숫자가 같으면

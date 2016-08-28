@@ -11,7 +11,7 @@ public:
 	CREATE_FUNC(Hand);
 	virtual bool init() override;
 
-	void pushCard(CardInfo& card);
+	void pushCard(CardInfo& card, float delay = 0.f);
 	std::pair<int, int> getHandValue();
 	void clear();
 
