@@ -60,4 +60,6 @@ private:
 
 	BetSlider*			_betSlider;
 	Menu*			_betButton;
+
+	Menu*			_choiceButton;
 };

@@ -106,11 +106,11 @@ void GameScene::initLayout(int roomNum)
 		addChild(player,NAMETAG_BG);
 	}
 	auto screenSize = getContentSize();
-	_players[0]->setPosition(130, 260);
-	_players[1]->setPosition((screenSize.width / 2 + 130) / 2, 190);
+	_players[4]->setPosition(130, 260);
+	_players[3]->setPosition((screenSize.width / 2 + 130) / 2, 190);
 	_players[2]->setPosition(screenSize.width / 2, 120);
-	_players[3]->setPosition(screenSize.width - _players[1]->getPosition().x, 190);
-	_players[4]->setPosition(screenSize.width - 130, 260);
+	_players[1]->setPosition(screenSize.width - _players[3]->getPosition().x, 190);
+	_players[0]->setPosition(screenSize.width - 130, 260);
 
 	// 베팅 슬라이더
 	_betSlider = BetSlider::create();
@@ -124,6 +124,14 @@ void GameScene::initLayout(int roomNum)
 	_betButton->setPosition(1170, 35);
 	_betButton->setVisible(false);
 	addChild(_betButton);
+
+	// 선택 버튼
+	auto labelSplit = Label::createWithTTF("SPLIT", FILENAME::FONT::PIXEL, 32);
+	auto labelDoubleDown = Label::createWithTTF("SPLIT", FILENAME::FONT::PIXEL, 32);
+	auto labelHit = Label::createWithTTF("SPLIT", FILENAME::FONT::PIXEL, 32);
+	auto labelStand = Label::createWithTTF("SPLIT", FILENAME::FONT::PIXEL, 32);
+
+	//auto itemSplit = 
 }
 
 GameScene* GameScene::create(int roomNum)
