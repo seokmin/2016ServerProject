@@ -16,6 +16,15 @@
     <Filter Include="src\jsoncpp">
       <UniqueIdentifier>{15742fec-48ec-44b1-802f-3bdbf4bd4624}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Network">
+      <UniqueIdentifier>{f3e0fb1d-ea4e-4336-9349-3a8dced3c1f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Login">
+      <UniqueIdentifier>{638af136-8848-4432-be1b-8e273e517bb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Game">
+      <UniqueIdentifier>{79731dee-1bc6-4d0c-9d29-69042abcc7dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -25,26 +34,29 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\pch.cpp" />
-    <ClCompile Include="..\Classes\GameScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\NetworkManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Player.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\LoginScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\jsoncpp.cpp">
       <Filter>src\jsoncpp</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\ClientLogger.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\NetworkManager.cpp">
+      <Filter>src\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LoginScene.cpp">
+      <Filter>src\Login</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\BetSlider.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameScene.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Hand.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Player.cpp">
+      <Filter>src\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -56,20 +68,8 @@
     </ClInclude>
     <ClInclude Include="..\Classes\pch.h" />
     <ClInclude Include="..\Classes\definition.h" />
-    <ClInclude Include="..\Classes\GameScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\ResourceInfo.h">
       <Filter>resource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\NetworkManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Player.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\LoginScene.h">
-      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Common\Packet.h">
       <Filter>Common</Filter>
@@ -89,8 +89,23 @@
     <ClInclude Include="..\Classes\ClientLogger.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\NetworkManager.h">
+      <Filter>src\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LoginScene.h">
+      <Filter>src\Login</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\BetSlider.h">
-      <Filter>src</Filter>
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameScene.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Hand.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Player.h">
+      <Filter>src\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

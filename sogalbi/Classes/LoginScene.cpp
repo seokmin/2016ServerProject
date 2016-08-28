@@ -15,6 +15,7 @@
 #include "GameScene.h"
 
 #include "BetSlider.h"
+#include "Hand.h"
 
 cocos2d::Scene* LoginScene::createScene()
 {

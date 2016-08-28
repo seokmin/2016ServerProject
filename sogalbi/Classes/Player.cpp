@@ -42,6 +42,11 @@ bool Player::init()
 
 	_pokemon->setPosition(-80.f, 0.f);
 
+	// ÇÚµå
+	_hand[0] = Hand::create();
+	_hand[1] = Hand::create();
+	_hand[1]->setVisible(false);
+
 	return true;
 }
 
@@ -113,4 +118,10 @@ void Player::setMoneyBet(int bet,int whole)
 void Player::setCounter(float countTime)
 {
 	_timer->runAction(ProgressFromTo::create(countTime, 0, 100));
+}
+
+void Player::initCounter()
+{
+	_timer->stopAllActions();
+	_timer->setPercentage(0.f);
 }

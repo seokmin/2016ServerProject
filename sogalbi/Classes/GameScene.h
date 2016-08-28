@@ -34,6 +34,7 @@ private:
 	void packetProcess_RoomLeaveUserNtf(COMMON::RecvPacketInfo packetInfo);
 
 	void packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo);
+	void packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo);
 
 
 	bool betButtonClicked(Ref* sender);

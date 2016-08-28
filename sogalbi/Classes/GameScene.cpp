@@ -163,6 +163,7 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 		packetProcess_GameBetCounter(packetInfo);
 		break;
 	case COMMON::PACKET_ID::GAME_BET_NTF:
+		packetProcess_GameBetNtf(packetInfo);
 		break;
 	default:
 		ClientLogger::msgBox(L"모르는 패킷");
@@ -209,7 +210,7 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 	auto& time = packet->_countTime;
 	for (auto& user : _players)
 	{
-		if (user->isActivated())
+		if (user->isActivated() && !user->isAlreadyBet())
 		{
 			user->setCounter(time);
 		}
@@ -232,4 +233,14 @@ bool GameScene::betButtonClicked(Ref* sender)
 	_betButton->setVisible(false);
 	_betSlider->setVisible(false);
 	return true;
+}
+
+void GameScene::packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	auto packet = (PacketGameBetNtf*)packetInfo.pRefData;
+	auto& betUser = _players[packet->_betSlot];
+	betUser->setMoneyBet(packet->_betMoney, betUser->getMoneyWhole() - packet->_betMoney);
+	betUser->setAlreadyBet(true);
+	betUser->initCounter();
 }
