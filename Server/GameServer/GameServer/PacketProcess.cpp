@@ -29,6 +29,7 @@ void PacketProcess::Init(UserManager * pUserMgr, RoomManager * pRoomMgr, PacketQ
 	PacketFuncArray[(int)PACKET_ID::ROOM_LEAVE_REQ] = &PacketProcess::RoomLeave;
 	
 	PacketFuncArray[(int)PACKET_ID::GAME_BET_REQ] = &PacketProcess::GameBet;
+	PacketFuncArray[(int)PACKET_ID::GAME_CHOICE_REQ] = &PacketProcess::GameChoice;	
 }
 
 void PacketProcess::Process(PacketInfo packetInfo)

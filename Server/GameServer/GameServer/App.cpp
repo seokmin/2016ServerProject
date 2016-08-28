@@ -42,10 +42,9 @@ void App::Run()
 
 	while (m_IsReady)
 	{
-
 		while (true)
 		{
-			//m_pRoomMgr->RunPostTimeAction();
+			m_pRoomMgr->RunPostTimeAction();
 
 			auto& packet = m_pRecvPacketQue.get()->ReadFront();
 			if (packet.PacketId != 0)

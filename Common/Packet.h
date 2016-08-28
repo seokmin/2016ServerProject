@@ -163,7 +163,7 @@ namespace COMMON
 	// 게임 로직 부분
 	struct PacketGameBetCounterNtf
 	{
-		int _countTime = 10;
+		int _countTime = 15;
 		unsigned int minBet = 100;
 		unsigned int maxBet = 1000;
 	};
@@ -195,6 +195,7 @@ namespace COMMON
 	{
 		int _slotNum;
 		int _handNum = 0;
+		int _waitingTime = 10;
 	};
 	
 	struct PacketGameChoiceReq

@@ -89,6 +89,20 @@ void RoomManager::RunPostTimeAction()
 		}
 		break;
 
+		case ROOM_STATE::HANDOUT :
+		{
+			// 카드 나눠주고 2초 지난 뒤 자동으로 항상 시작
+			auto nowTime = duration_cast< milliseconds >(
+				steady_clock::now().time_since_epoch()
+				).count();
+
+			if (room->GetLastActionTime() - nowTime > 2 * 1000)
+			{
+				room->NotifyChangeTurn();
+			}
+		}
+		break;
+
 		case ROOM_STATE::INGAME :
 		{
 			// 이 경우는 행동을 결정한 시간이 지나도 상태가 그대로일 때..

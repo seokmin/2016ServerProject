@@ -47,6 +47,7 @@ private:
 	ERROR_CODE RoomChange(PacketInfo packetInfo);
 
 	ERROR_CODE GameBet(PacketInfo packetInfo);
+	ERROR_CODE GameChoice(PacketInfo packetInfo);
 	
 private:
 };

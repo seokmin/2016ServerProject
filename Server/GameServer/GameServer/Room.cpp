@@ -224,7 +224,11 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 
 void Room::NotifyStartGame()
 {
-	m_currentRoomState = ROOM_STATE::INGAME;
+	// 2초 뒤에 (카드 나눠주는게 끝나면) 첫 번째 유저부터 게임 시작
+	m_currentRoomState = ROOM_STATE::HANDOUT;
+	m_lastActionTime = duration_cast< milliseconds >(
+		steady_clock::now().time_since_epoch()
+		).count();
 
 	PacketGameStartNtf pkt;
 

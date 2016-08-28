@@ -13,7 +13,9 @@ enum class ROOM_STATE
 {
 	NONE = 0,
 	WAITING = 1,
-	INGAME = 2,
+	HANDOUT = 2,
+	INGAME = 3,
+	CALCULATE = 4,
 };
 
 class Room

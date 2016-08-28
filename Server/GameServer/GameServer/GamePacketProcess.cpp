@@ -9,12 +9,17 @@ ERROR_CODE PacketProcess::GameBet(PacketInfo packetInfo)
 	
 	auto& room = m_pRefRoomMgr->GetRoomBySessionIndex(packetInfo.SessionIndex);
 
-
 	auto ret = room->ApplyBet(packetInfo.SessionIndex, reqPkt->_betMoneyReq);
 	if (ret != ERROR_CODE::NONE)
 		return ret;
 
-
-
-
+	return ERROR_CODE::NONE;
 }
+
+ERROR_CODE PacketProcess::GameChoice(PacketInfo packetInfo)
+{
+
+
+	return ERROR_CODE::NONE;
+}
+
