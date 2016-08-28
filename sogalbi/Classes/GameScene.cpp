@@ -115,7 +115,7 @@ void GameScene::initLayout(int roomNum)
 	// 베팅 컨트롤
 	_betSlider = BetSlider::create();
 	_betSlider->setVisible(false);
-	_betSlider->setPosition(Vec2(600, 40));
+	_betSlider->setPosition(Vec2(600, 30));
 	addChild(_betSlider, Z_ORDER::UI_TOP);
 }
 
