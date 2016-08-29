@@ -30,12 +30,22 @@ public:
 	void setAlreadyBet(bool val) { _isAlreadyBet = val; }
 	void setValueLabel(std::pair<int, int> values);
 
+	enum class EffectKind
+	{
+		HIT = 0,
+		STAND = 1,
+		SPLIT = 2,
+		DOUBLE_DOWN = 3
+	};
+	void showEffect(EffectKind effect);
+
 private:
 
 public:
 	Hand* _hand[2];
 
 private:
+
 	Sprite* _nameTag;
 	Sprite* _nameTagBack;
 	ProgressTimer* _timer;
@@ -46,6 +56,8 @@ private:
 	Label* _moneyLabelBack;
 	
 	Label* _valueLabel;
+
+	Sprite* _effectSprite = nullptr;
 	
 
 	unsigned _money;

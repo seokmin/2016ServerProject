@@ -130,7 +130,6 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 		_loginMenu->setEnabled(true); // 로그인 실패했으므로 다시 누를 수 있게
 		return;
 	}
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::CHANNEL_SELECT_BGM.c_str());
 	// 받아온 정보 파싱
 	auto channels = std::vector<DEF::ChannelInfo>();
 	auto result = parseChannelInfo(resString, channels);
@@ -143,6 +142,7 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 	else if (result == COMMON::RESULT_LOGIN::SUCCESS_CREATE_ACCOUNT || result == COMMON::RESULT_LOGIN::SUCCESS_LOGIN)
 	{
 		// 로그인 성공시
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::CHANNEL_SELECT_BGM.c_str(), true);
 		popUpChannelsLayer(channels);
 	}
 	else
@@ -159,7 +159,7 @@ void LoginScene::logoutResponseArrived(network::HttpClient* sender, network::Htt
 	_logoutMenu->setEnabled(true);
 	_loginMenu->setEnabled(true);
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::LOGIN_BGM.c_str());
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::LOGIN_BGM.c_str(),true);
 }
 
 void LoginScene::channelButtonClicked(DEF::ChannelInfo& targetChannel)
@@ -272,8 +272,10 @@ void LoginScene::packetProcess_RoomEnterRes(COMMON::RecvPacketInfo packetInfo)
 		// TODO : 에러시 처리
 		return;
 	}
+	Director::getInstance()->getScheduler()->performFunctionInCocosThread([] {CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true); });
+	
 	auto gameScene = GameScene::createScene(recvBody->_roomNum);
-	Director::getInstance()->replaceScene(gameScene);
+	Director::getInstance()->pushScene(gameScene);
 	return;
 }
 

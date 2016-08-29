@@ -139,7 +139,7 @@ void GameScene::initLayout(int roomNum)
 	disableAllChoiceButton();
 	_choiceButton = Menu::create(_itemSplit, _itemDoubleDown, _itemHit, _itemStand,nullptr);
 	_choiceButton->setPositionY(30);
-	_choiceButton->alignItemsHorizontallyWithPadding(30);
+	_choiceButton->alignItemsHorizontallyWithPadding(60);
 	_choiceButton->setEnabled(false);
 	addChild(_choiceButton, Z_ORDER::UI_TOP);
 }
@@ -213,9 +213,9 @@ void GameScene::packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packet
 	_userSlotNum = userList->_slot;
 	_players[_userSlotNum]->setAsPlayer();
 	if (isAlreadyPlaying)
-		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str());
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str(),true);
 	else
-		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_READY_BGM.c_str());
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_READY_BGM.c_str(),true);
 }
 
 void GameScene::packetProcess_RoomEnterUserNtf(COMMON::RecvPacketInfo packetInfo)
@@ -300,7 +300,7 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 		player->_hand[0]->pushCard(cards[1],0.5f);
 		player->setValueLabel(player->_hand[0]->getHandValue());
 	}
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str());
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str(),true);
 }
 
 bool GameScene::splitButtonClicked(Ref* sender)
@@ -387,8 +387,9 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 	}
 	else
 		disableAllChoiceButton();
+	// ±ôºý±ôºý
 	auto flashEffect = Blink::create(0.5f, 2);
-	player->runAction(flashEffect);
+	_players[packet->_slotNum]->runAction(flashEffect);
 	
 }
 
@@ -397,10 +398,11 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	using namespace COMMON;
 	auto packet = (PacketGameChoiceNtf*)packetInfo.pRefData;
 	auto& player = _players[packet->_slotNum];
-
-	player->_hand[packet->_handNum]->pushCard(packet->_recvCard);
+	if(packet->_recvCard._shape != CardInfo::CardShape::EMPTY)
+		player->_hand[packet->_handNum]->pushCard(packet->_recvCard);
 	player->setMoneyBet(packet->_betMoney, packet->_currentMoney);
 	player->setCounter(packet->_waitingTime);
+	player->setValueLabel(player->_hand[packet->_handNum]->getHandValue());
 	// ÀÚ±â ÀÚ½ÅÀÌ¸é
 	if (packet->_slotNum == _userSlotNum)
 	{

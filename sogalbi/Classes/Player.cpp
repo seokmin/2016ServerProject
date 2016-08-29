@@ -50,14 +50,19 @@ bool Player::init()
 	_hand[0]->setPosition(-50,70);
 	_hand[1]->setPosition(-50,70);
 
-	addChild(_hand[0], 3);
-	addChild(_hand[1], 3);
+	addChild(_hand[0], 1);
+	addChild(_hand[1], 1);
 
 	// Ä«µå ¹ë·ù
 	_valueLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 48);
 	addChild(_valueLabel, 3);
 	_valueLabel->setColor(Color3B::YELLOW);
 	_valueLabel->setPositionY(200);
+
+	// ÀÌÆåÆ®
+	_effectSprite = Sprite::create();
+	addChild(_effectSprite, 4);
+	_effectSprite->setPosition(70, 200);
 
 	return true;
 }
@@ -178,4 +183,28 @@ void Player::setValueLabel(std::pair<int, int> values)
 	else
 		valueString = std::to_string(values.first) + "/" + std::to_string(values.second);
 	_valueLabel->setString(valueString);
+}
+
+void Player::showEffect(EffectKind effect)
+{
+	auto frameName = std::string{};
+	switch (effect)
+	{
+	case Player::EffectKind::HIT:
+		frameName = FILENAME::SPRITE::HIT;
+		break;
+	case Player::EffectKind::STAND:
+		frameName = FILENAME::SPRITE::STAND;
+		break;
+	case Player::EffectKind::SPLIT:
+		frameName = FILENAME::SPRITE::SPLIT;
+		break;
+	case Player::EffectKind::DOUBLE_DOWN:
+		frameName = FILENAME::SPRITE::DOUBLE_DOWN;
+		break;
+	default:
+		break;
+	}
+	auto spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frameName);
+	_effectSprite->setSpriteFrame(spriteFrame);
 }
