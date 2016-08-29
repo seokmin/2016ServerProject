@@ -64,6 +64,11 @@ bool Player::init()
 	addChild(_effectSprite, 4);
 	_effectSprite->setPosition(70, 200);
 
+	// ¹è³Ê
+	_bannerSprite = Sprite::create();
+	addChild(_bannerSprite,2);
+	_bannerSprite->setPositionY(60);
+
 	return true;
 }
 
@@ -214,4 +219,31 @@ void Player::showEffect(EffectKind effect)
 	auto callFunc = CallFunc::create(CC_CALLBACK_0(Sprite::setVisible,_effectSprite,false));
 	auto seq = Sequence::create(blink,DelayTime::create(0.5f), callFunc, nullptr);
 	_effectSprite->runAction(seq);
+}
+
+void Player::showBanner(BannerKind banner)
+{
+	_bannerSprite->setVisible(true);
+
+	auto frameName = std::string{};
+
+	switch (banner)
+	{
+	case BannerKind::BLACK_JACK:
+		frameName = FILENAME::SPRITE::BANNER_BLACKJACK;
+		break;
+	case BannerKind::STAND:
+		frameName = FILENAME::SPRITE::BANNER_STAND;
+		break;
+	case BannerKind::BURST:
+		frameName = FILENAME::SPRITE::BANNER_BURST;
+		break;
+	case BannerKind::WAITING:
+		frameName = FILENAME::SPRITE::BANNER_WAITING;
+		break;
+	default:
+		break;
+	}
+	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frameName);
+	_bannerSprite->setSpriteFrame(frame);
 }

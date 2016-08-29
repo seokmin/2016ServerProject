@@ -25,9 +25,11 @@ namespace FILENAME
 		DEF_FILENAME(SPRITE, DECK, "deckRed.png");
 		DEF_FILENAME(SPRITE, NAMETAG, "nameTag.png");
 		DEF_FILENAME(SPRITE, NAMETAG_BACK, "nameTagBack.png");
-		DEF_FILENAME(SPRITE, BANNER_BLACKJACK, "bannerBlackJack.png");
-		DEF_FILENAME(SPRITE, BANNER_STAND, "bannerStand.png");
-		DEF_FILENAME(SPRITE, BANNER_WAITING, "bannerWaiting.png");
+
+		DEF_FILENAME(SPRITE, BANNER_BLACKJACK,	"bannerBlackJack.png");
+		DEF_FILENAME(SPRITE, BANNER_STAND,		"bannerStand.png");
+		DEF_FILENAME(SPRITE, BANNER_WAITING,	"bannerWaiting.png");
+		DEF_FILENAME(SPRITE, BANNER_BURST,		"bannerBurst.png");
 
 		DEF_FILENAME(SPRITE, HIT, "hit.png");
 		DEF_FILENAME(SPRITE, STAND, "stand.png");

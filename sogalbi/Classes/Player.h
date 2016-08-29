@@ -39,6 +39,16 @@ public:
 	};
 	void showEffect(EffectKind effect);
 
+	enum class BannerKind
+	{
+		STAND = 0,
+		BLACK_JACK = 1,
+		BURST = 2,
+		WAITING = 3
+	};
+	void showBanner(BannerKind banner);
+	void hideBanner() { _bannerSprite->setVisible(false); }
+
 private:
 
 public:
@@ -58,6 +68,8 @@ private:
 	Label* _valueLabel;
 
 	Sprite* _effectSprite = nullptr;
+
+	Sprite* _bannerSprite = nullptr;
 	
 
 	unsigned _money;

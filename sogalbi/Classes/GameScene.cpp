@@ -417,6 +417,8 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	{
 		disableAllChoiceButton();
 	}
+
+	// ÀÌÆåÆ® »Ñ¸®±â
 	switch (packet->_choice)
 	{
 	case ChoiceKind::HIT:
@@ -424,6 +426,7 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 		break;
 	case ChoiceKind::STAND:
 		player->showEffect(Player::EffectKind::STAND);
+		player->showBanner(Player::BannerKind::STAND);
 		break;
 	case ChoiceKind::SPLIT:
 		player->showEffect(Player::EffectKind::SPLIT);
@@ -434,6 +437,8 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	default:
 		break;
 	}
+	if (player->_hand[packet->_handNum]->getHandValue().first > 21)
+		player->showBanner(Player::BannerKind::BURST);
 
 }
 
