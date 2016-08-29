@@ -73,9 +73,8 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	// Notify
 	NotifyLeaveUserInfo(pUser->GetSessionIndex());
 
-	int targetPos = -1;
-
 	//find user
+	int targetPos = -1;
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM ; ++i)
 	{
 		if (m_userList[i] == pUser)
@@ -91,9 +90,6 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	else
 		m_userList[targetPos] = nullptr; 
 	
-	// 유저의 상태/방정보도 나가도록 해줘야 함
-	//pUser->LeaveRoom();
-
 	--m_currentUserCount;
 	if (m_currentUserCount == 0)
 	{
@@ -101,6 +97,14 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 		m_waitForRestart = 100; // 초기화용..
 		m_dealer.Clear();
 	}
+	else if (pUser->GetGameState() == GAME_STATE::ACTIONING) //유저가 게임중이었으면 다음 사람으로 진행
+	{
+		//turn 진행을 알림.
+		NotifyChangeTurn();
+	}
+
+	// 유저의 상태/방정보도 나가도록 해줘야 함
+	//pUser->LeaveRoom();
 
 	WCHAR infoStr[100];
 	wsprintf(infoStr, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName().c_str());
@@ -193,6 +197,7 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 	// 상태가 베팅이 아닌데 감히 베팅을 하려 하다니..
 	if (user->GetGameState() != GAME_STATE::BETTING)
 	{
+		Logger::GetInstance()->Log(Logger::Level::ERROR_NORMAL, L"베팅상태가 아닌데.. 베팅함.");
 		return ERROR_CODE::ROOM_GAME_NOT_IN_PROPER_STATE;
 	}
 
@@ -205,7 +210,7 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 	NotifyBetDone(sessionIndex, betMoney);
 
 	// 베팅이 들어온 시점에서 방 안의 유저가 모두 베팅완료라면 게임 시작
-	bool flag = true;
+	bool isAllBetReadyFlag = true;
 	for (auto& user : m_userList)
 	{
 		if (user == nullptr)
@@ -215,10 +220,10 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 
 		if (user->GetGameState() != GAME_STATE::BET_DONE)
 		{
-			flag = false;
+			isAllBetReadyFlag = false;
 		}
 	}
-	if (flag)
+	if (isAllBetReadyFlag)
 	{
 		NotifyStartGame();
 	}
@@ -494,6 +499,7 @@ void Room::EndOfGame()
 	{
 		m_dealer.SetHand(m_dealer.Draw());
 	}
+
 	if (m_dealer.GetCardNum() == 7)
 	{
 		m_dealer.SetHandState(HandInfo::HandState::SEVENCARD);

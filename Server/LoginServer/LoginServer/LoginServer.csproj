@@ -118,6 +118,7 @@
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="DB\MysqlLib.cs" />
     <Compile Include="ErrorCode.cs" />
+    <Compile Include="Ini.cs" />
     <Compile Include="PacketData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
