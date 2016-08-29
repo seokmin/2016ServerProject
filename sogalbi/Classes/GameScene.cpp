@@ -483,8 +483,10 @@ void GameScene::packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetI
 
 	// 카운터 종료
 	for (auto& player : _players)
+	{
 		player->initCounter();
-
+		player->setAlreadyBet(false);
+	}
 	// 딜러가 새로 깐 카드들
 	auto& cardList = packet->_dealerResult._openedCardList;
 	float waitingTime = 0.f;
