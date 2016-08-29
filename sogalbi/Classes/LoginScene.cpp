@@ -334,6 +334,21 @@ void LoginScene::initLayout()
 	_passField->setCursorEnabled(true);
 	addChild(_passField,Z_ORDER::UI_LOGIN);
 
+	//탭키 누르면 비번으로 이동
+	auto eventListener = EventListenerKeyboard::create();
+	eventListener->onKeyPressed = [&](EventKeyboard::KeyCode keyCode, Event* e) {
+		if (_nameField->isFocused() && keyCode == EventKeyboard::KeyCode::KEY_TAB)
+		{
+			auto tmpNode = Widget::getCurrentFocusedWidget();
+			_passField->setFocused(true);
+			_passField->requestFocus();
+			auto tmpNode2 = Widget::getCurrentFocusedWidget();
+			//_passField->setCursorPosition(0);
+			auto tmpNode3 = _nameField->findNextFocusedWidget(ui::Widget::FocusDirection::DOWN, _nameField);
+		}
+	};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, _nameField);
+
 	// 채널 선택창 배경
 	_channelsBg = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::CHANNEL_LIST_BG);
 	_channelsBg->setAnchorPoint(Vec2::ZERO);
