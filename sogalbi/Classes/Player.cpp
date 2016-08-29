@@ -67,7 +67,7 @@ bool Player::init()
 	// ¹è³Ê
 	_bannerSprite = Sprite::create();
 	addChild(_bannerSprite,2);
-	_bannerSprite->setPositionY(60);
+	_bannerSprite->setPositionY(52);
 
 	return true;
 }

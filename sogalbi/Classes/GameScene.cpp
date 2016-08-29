@@ -299,6 +299,7 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 		_betButton->setVisible(true);
 	}
 	_choiceButton->setVisible(false);
+	_dealerHand->clear();
 }
 
 void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
@@ -460,11 +461,15 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	default:
 		break;
 	}
-	if (player->_hand[packet->_handNum]->getHandValue().first > 21)
+	auto value = player->_hand[packet->_handNum]->getHandValue();
+	if (value.first > 21)
 	{
 		soundName = FILENAME::AUDIO::BURST;
 		player->showBanner(Player::BannerKind::BURST);
 	}
+	if (value.first == 21 || value.second == 21)
+		player->showBanner(Player::BannerKind::STAND);
+
 	if (soundName != "")
 		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(soundName.c_str());
 }

@@ -68,8 +68,10 @@ std::pair<int, int> Hand::getHandValue()
 			value.second += card._number;
 		}
 	}
-	if (value.second >= 21)
+	if (value.second > 21)
 		value.second = value.first;
+	if (value.second == 21 || value.first == 21)
+		value = { 21,21 };
 	
 	return value;
 }
