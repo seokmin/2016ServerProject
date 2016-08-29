@@ -43,14 +43,13 @@ public:
 	void NotifyStartGame();
 	void NotifyChangeTurn();
 	void NotifyGameChoice(int sessionIndex, ChoiceKind choice);
+	void NotifyEndOfGame();
 
 	void SetRoomStateToWaiting();
 	COMMON::DealerInfo GetDealerInfo();
 	ERROR_CODE ApplyBet(int sessionIndex, int betMoney);
 	std::tuple<int, int> GetCurrentBettingUser();
 	void ForceNextTurn(int seat, int hand);
-
-	void EndOfGame();
 
 	ERROR_CODE ApplyChoice(int sessionIndex, ChoiceKind choice);
 

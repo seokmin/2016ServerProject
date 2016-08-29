@@ -18,7 +18,16 @@ ERROR_CODE PacketProcess::GameBet(PacketInfo packetInfo)
 
 ERROR_CODE PacketProcess::GameChoice(PacketInfo packetInfo)
 {
+	auto reqPkt = (PacketGameChoiceReq*)packetInfo.pRefData;
+	
+	auto& room = m_pRefRoomMgr->GetRoomBySessionIndex(packetInfo.SessionIndex);
+	
+	auto ret = room->ApplyChoice(packetInfo.SessionIndex, reqPkt->_choice);
+	if (ret != ERROR_CODE::NONE)
+		return ret;
 
+	room->NotifyGameChoice(packetInfo.SessionIndex, reqPkt->_choice);
+	room->NotifyChangeTurn();
 
 	return ERROR_CODE::NONE;
 }

@@ -43,6 +43,9 @@ public:
 	ERROR_CODE ApplyBet(int betMoney);
 	void SetHand(int hand, CardInfo card);
 	void SetHandState(int hand, COMMON::HandInfo::HandState state);
+	void Split();
+	void DoubleDown();
+	std::tuple<int, int> GetCardSum(int hand);
 
 	bool				IsAvailableFromPool() { return m_sessionIndex < 0; };
 	bool				CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };
@@ -63,6 +66,11 @@ public:
 	GAME_STATE			GetGameState() { return m_gameState; };
 	COMMON::HandInfo	GetHand(int num) { return m_hand[num]; };
 	bool				IsSplit(){ return m_isSplit; };
+	int					GetCurHand() { return m_curHand; };
+	void				SwitchHand() { ++m_curHand; };
+	CardInfo			GetLastCard(int hand) { return m_hand[hand]._cardList[m_curCardNum[hand] - 1]; };
+	int					GetBetMoney() { return m_curBetMoney; };
+	int					GetCurMoney() { return m_totalMoney; };
 
 private:
 	void InitHand();
@@ -77,7 +85,7 @@ private:
 	int m_totalMoney = 0;
 	int m_curBetMoney = 0;
 	int m_curSeat = -1;
-	int m_curCardNum = 0;
+	int m_curCardNum[MAX_HAND] = { 0, 0 };
 	int m_curHand = 0;
 	bool m_isSplit = false;
 

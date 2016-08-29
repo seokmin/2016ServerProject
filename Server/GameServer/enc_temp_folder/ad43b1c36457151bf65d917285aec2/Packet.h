@@ -214,13 +214,11 @@ namespace COMMON
 		int			_waitingTime;
 	};
 
-	// 이거 보낸 후 애니매이션 시간 딜러 카드 장수 + 2초
 	struct PacketGameDealerResultNtf
 	{
 		DealerInfo  _dealerResult;
-		int			_currentMoney[5]; // 각  슬롯마다 번 돈
+		int			_plusMoney[5]; // 각  슬롯마다 번 돈
 	};
-
 
 	struct PacketGameAnimCompleteReq
 	{

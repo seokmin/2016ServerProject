@@ -420,7 +420,7 @@ void Room::NotifyChangeTurn()
 	
 	if (std::get<0>(SeatNhand) == -1 || std::get<1>(SeatNhand) == -1)
 	{
-		EndOfGame();
+		NotifyEndOfGame();
 		return;
 	}
 
@@ -478,7 +478,7 @@ void Room::NotifyGameChoice(int sessionIndex, ChoiceKind choice)
 	}
 }
 
-void Room::EndOfGame()
+void Room::NotifyEndOfGame()
 {
 	PacketGameDealerResultNtf pkt;
 

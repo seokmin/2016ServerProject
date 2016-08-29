@@ -33,7 +33,7 @@ void Dealer::Init(Room* room)
 		User* user = m_pRoom->GetUserInfo(i);
 		if (user == nullptr) continue;
 
-		if (user->GetHand(0)._cardList[0]._number + user->GetHand(0)._cardList[1]._number == 21)
+		if (std::get<1>(user->GetCardSum(0)) == 21)
 		{
 			user->SetHandState(0, COMMON::HandInfo::HandState::BLACKJACK);
 		}

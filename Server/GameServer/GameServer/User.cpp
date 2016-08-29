@@ -21,7 +21,8 @@ void User::Clear()
 	m_totalMoney = 0;
 	m_curBetMoney = 0;
 	m_curSeat = 0;
-	m_curCardNum = 0;
+	m_curCardNum[0] = 0;
+	m_curCardNum[1] = 0;
 	m_curHand = 0;
 	m_isSplit = false;
 
@@ -82,7 +83,7 @@ ERROR_CODE User::ApplyBet(int betMoney)
 	if (betMoney > m_totalMoney)
 	{
 		WCHAR errStr[100];
-		wsprintf(errStr, L"유저(%s)가 자기 돈 보다 많은 배팅을 했어..", m_userName);
+		wsprintf(errStr, L"유저(%s)가 자기 돈 보다 많은 배팅을 했어..", m_userName.c_str());
 		Logger::GetInstance()->Log(Logger::ERROR_NORMAL, errStr, 100);
 
 		return ERROR_CODE::ROOM_GAME_NOT_ENOUGH_MONEY;
@@ -97,12 +98,76 @@ ERROR_CODE User::ApplyBet(int betMoney)
 
 void User::SetHand(int hand, CardInfo card)
 {
-	m_hand[hand]._cardList[m_curCardNum]._shape = card._shape;
-	m_hand[hand]._cardList[m_curCardNum]._number = card._number;
-	++m_curCardNum;
+	m_hand[hand]._cardList[m_curCardNum[hand]]._shape = card._shape;
+	m_hand[hand]._cardList[m_curCardNum[hand]]._number = card._number;
+	++m_curCardNum[hand];
 }
 
 void User::SetHandState(int hand, COMMON::HandInfo::HandState state)
 {
 	m_hand[hand]._handState = state;
+}
+
+void User::Split()
+{
+	if (m_curBetMoney > m_totalMoney)
+	{
+		WCHAR errStr[100];
+		wsprintf(errStr, L"유저(%s)가 돈도 없는데 스플릿을 함.", m_userName.c_str());
+		Logger::GetInstance()->Log(Logger::ERROR_NORMAL, errStr, 100);
+		return;
+	}
+
+	if (m_curCardNum[m_curHand] != 2)
+	{
+		WCHAR errStr[100];
+		wsprintf(errStr, L"유저(%s)가 두장이 아닌데 스플릿을 함.", m_userName.c_str());
+		Logger::GetInstance()->Log(Logger::ERROR_NORMAL, errStr, 100);
+		return;
+	}
+
+	m_isSplit = true;
+	m_totalMoney -= m_curBetMoney;
+	m_curBetMoney += m_curBetMoney;
+}
+
+void User::DoubleDown()
+{
+	if (m_curBetMoney > m_totalMoney)
+	{
+		WCHAR errStr[100];
+		wsprintf(errStr, L"유저(%s)가 돈도 없는데 DD를 함.", m_userName.c_str());
+		Logger::GetInstance()->Log(Logger::ERROR_NORMAL, errStr, 100);
+		return;
+	}
+
+	if (m_curCardNum[m_curHand] != 2)
+	{
+		WCHAR errStr[100];
+		wsprintf(errStr, L"유저(%s)가 두장이 아닌데 DD를 함.", m_userName.c_str());
+		Logger::GetInstance()->Log(Logger::ERROR_NORMAL, errStr, 100);
+		return;
+	}
+	
+	m_totalMoney -= m_curBetMoney;
+	m_curBetMoney += m_curBetMoney;
+}
+
+std::tuple<int, int> User::GetCardSum(int hand)
+{
+	int sum1 = 0;
+	int sum2 = 0;
+	bool flag = false;
+	for (int i = 0; i < m_curCardNum[hand]; ++i)
+	{
+		sum1 += m_hand[hand]._cardList[i]._number;
+		if (m_hand[hand]._cardList[i]._number == 1)
+		{
+			flag = true;
+		}
+	}
+	if (flag) sum2 = sum1 + 10;
+	else sum2 = sum1;
+
+	return std::make_tuple(sum1, sum2);
 }

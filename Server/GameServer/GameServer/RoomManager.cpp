@@ -75,14 +75,14 @@ void RoomManager::RunPostTimeAction()
 		case ROOM_STATE::WAITING :
 		{
 			// 게임을 시작하려고 기다리는 중이면..
-			// 그리고 10초가 넘게 이 상태였으면
+			// 그리고 15초가 넘게 이 상태였으면
 			// "자 이제 게임을 시작하지"
 
 			auto nowTime = duration_cast< milliseconds >(
 				steady_clock::now().time_since_epoch()
 				).count();
 
-			if (room->GetLastActionTime() - nowTime > 10 * 1000)
+			if (room->GetLastActionTime() - nowTime > ServerConfig::bettingTime * 1000)
 			{
 				room->NotifyStartGame();
 			}
@@ -96,8 +96,9 @@ void RoomManager::RunPostTimeAction()
 				steady_clock::now().time_since_epoch()
 				).count();
 
-			if (room->GetLastActionTime() - nowTime > 2 * 1000)
+			if (nowTime - room->GetLastActionTime() > 2 * 1000)
 			{
+				// 사실상 이때부터 게임 시작.
 				room->NotifyChangeTurn();
 			}
 		}
@@ -111,8 +112,21 @@ void RoomManager::RunPostTimeAction()
 				steady_clock::now().time_since_epoch()
 				).count();
 
-			if (room->GetLastActionTime() - nowTime > 10 * 1000)
+			if (room->GetLastActionTime() - nowTime > ServerConfig::waitingTime * 1000)
 			{
+				auto seatNhand = room->GetCurrentBettingUser();
+				if (std::get<0>(seatNhand) == -1 || std::get<1>(seatNhand) == -1)
+				{
+					// 게임중에 10초가 지났는데.. 베팅중인 유저가 없으면 버그!
+					WCHAR errStr[100];
+					wsprintf(errStr, L"룸(%d)의 상태가 INGAME, 시간이 지났는데 베팅유저가 없음!!", room->GetRoomId());
+					Logger::GetInstance()->Log(Logger::INFO, errStr, 100);
+					
+					room->NotifyEndOfGame();
+					break;
+				}
+				room->ForceNextTurn(std::get<0>(seatNhand), std::get<1>(seatNhand));
+				
 				room->NotifyChangeTurn();
 			}
 		}

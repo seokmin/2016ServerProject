@@ -51,6 +51,8 @@ public:
 	void Init(Room* room);
 	void Clear();
 
+	COMMON::CardInfo Draw() { return m_deck.Draw(); };
+
 	COMMON::HandInfo GetHand() { return m_dealerHand; };
 	COMMON::CardInfo GetCard(int num) { return m_dealerHand._cardList[num]; };
 
