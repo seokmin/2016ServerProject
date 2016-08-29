@@ -5,8 +5,8 @@
 
 void Dealer::Init(Room* room)
 {
-	m_deck.Init();
 	m_pRoom = room;
+	m_deck.Init();
 
 	bool flag = true;
 	for (int handCnt = 0; handCnt < 2; ++handCnt)
@@ -52,4 +52,16 @@ void Dealer::SetHand(COMMON::CardInfo card)
 	m_dealerHand._cardList[m_curCardNum]._shape = card._shape;
 	m_dealerHand._cardList[m_curCardNum]._number = card._number;
 	++m_curCardNum;
+}
+
+int Dealer::GetCardSum()
+{
+	int sum = 0;
+
+	for (int i = 0; i < m_curCardNum; ++i)
+	{
+		sum += m_dealerHand._cardList[i]._number;
+	}
+
+	return sum;
 }

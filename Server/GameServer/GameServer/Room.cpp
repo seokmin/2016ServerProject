@@ -174,7 +174,7 @@ COMMON::DealerInfo Room::GetDealerInfo()
 {
 	COMMON::DealerInfo dInfo;
 	
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < 7; ++i)
 	{
 		dInfo._openedCardList[i] = m_dealer.GetCard(i);
 	}
@@ -480,11 +480,112 @@ void Room::NotifyGameChoice(int sessionIndex, ChoiceKind choice)
 
 void Room::EndOfGame()
 {
+	using namespace COMMON;
+
+	while (m_dealer.GetCardSum() < 17)
+	{
+		m_dealer.SetHand(m_dealer.Draw());
+	}
+	if (m_dealer.GetCardNum() == 7)
+	{
+		m_dealer.SetHandState(HandInfo::HandState::SEVENCARD);
+	}
+	else if (m_dealer.GetCardSum() == 21)
+	{
+		m_dealer.SetHandState(HandInfo::HandState::BLACKJACK);
+	}
+	else if (m_dealer.GetCardSum() > 21)
+	{
+		m_dealer.SetHandState(HandInfo::HandState::BURST);
+	}
+	else
+	{
+		m_dealer.SetHandState(HandInfo::HandState::STAND);
+	}
+
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		auto user = m_userList[i];
+		if (user == nullptr) continue;
+
+		for (int hand = 0; hand < MAX_HAND; ++hand)
+		{
+			if (user->GetCurHand() < hand) continue;
+			if (user->GetHand(hand)._handState == HandInfo::HandState::CURRENT) continue;
+
+			auto sum = user->GetCardSum(hand);
+
+			// 만약 유저가 버스트 했으면 무조건 돈을 잃음!
+			if (user->GetHand(hand)._handState == HandInfo::HandState::BURST)
+			{
+				user->CalculateMoney(0);
+			}
+
+			// 딜러의 패가 더 높다면.. 돈을 잃음!
+			else if (m_dealer.GetHand()._handState > user->GetHand(hand)._handState)
+			{
+				user->CalculateMoney(0);
+			}
+
+			// 유저 패가 더 높다면.. 돈을 땀!
+			else if (m_dealer.GetHand()._handState < user->GetHand(hand)._handState)
+			{
+				int blackjack = 1;
+				if (user->GetHand(hand)._handState == HandInfo::HandState::BLACKJACK)
+				{
+					// 근데 블랙잭이면 1.5배를 줌!
+					int blackjack = user->GetBetMoney() * 0.5;
+				}
+				user->CalculateMoney(user->GetBetMoney() * 2 + blackjack);
+			}
+
+			// 패가 같으면
+			else
+			{
+				// 스탠드이면 딸 수도 있지만 아니면 푸시푸시
+				if (user->GetHand(hand)._handState == HandInfo::HandState::STAND)
+				{
+					int useSum = 0;
+					if (std::get<0>(sum) == std::get<1>(sum))
+						useSum = std::get<0>(sum);
+					else if(std::get<1>(sum) > 21)
+						useSum = std::get<0>(sum);
+					else 
+						useSum = std::get<1>(sum);
+
+					if (useSum > m_dealer.GetCardSum())
+					{
+						user->CalculateMoney(user->GetBetMoney() * 2);
+					}
+					else if (useSum < m_dealer.GetCardSum())
+					{
+						user->CalculateMoney(0);
+					}
+					else
+					{
+						user->CalculateMoney(user->GetBetMoney());
+					}
+				}
+				else
+				{
+					user->CalculateMoney(user->GetBetMoney());
+				}
+			}
+		}
+	}
+
 	PacketGameDealerResultNtf pkt;
+
+	for (int i = 0; i < 7; ++i)
+	{
+		pkt._dealerResult._openedCardList[i] = m_dealer.GetCard(i);
+	}
 
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
 		if (m_userList[i] == nullptr) continue;
+		
+		pkt._currentMoney[i] = m_userList[i]->GetCurMoney();
 
 		// Res 보냄
 		PacketInfo sendPacket;

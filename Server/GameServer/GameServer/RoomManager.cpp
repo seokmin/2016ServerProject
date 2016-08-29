@@ -122,7 +122,7 @@ void RoomManager::RunPostTimeAction()
 					wsprintf(errStr, L"룸(%d)의 상태가 INGAME, 시간이 지났는데 베팅유저가 없음!!", room->GetRoomId());
 					Logger::GetInstance()->Log(Logger::INFO, errStr, 100);
 					
-					room->NotifyEndOfGame();
+					room->EndOfGame();
 					break;
 				}
 				room->ForceNextTurn(std::get<0>(seatNhand), std::get<1>(seatNhand));

@@ -128,7 +128,7 @@ void User::Split()
 
 	m_isSplit = true;
 	m_totalMoney -= m_curBetMoney;
-	m_curBetMoney += m_curBetMoney;
+	//m_curBetMoney += m_curBetMoney;
 }
 
 void User::DoubleDown()
@@ -170,4 +170,9 @@ std::tuple<int, int> User::GetCardSum(int hand)
 	else sum2 = sum1;
 
 	return std::make_tuple(sum1, sum2);
+}
+
+void User::CalculateMoney(int toChange)
+{
+	m_totalMoney += toChange;
 }

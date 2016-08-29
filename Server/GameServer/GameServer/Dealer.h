@@ -55,10 +55,11 @@ public:
 
 	COMMON::HandInfo GetHand() { return m_dealerHand; };
 	COMMON::CardInfo GetCard(int num) { return m_dealerHand._cardList[num]; };
-
-private:
 	void SetHand(COMMON::CardInfo card);
-
+	int GetCardSum();
+	int GetCardNum() { return m_curCardNum; };
+	void SetHandState(COMMON::HandInfo::HandState state) { m_dealerHand._handState = state; };
+	
 private:
 	Room* m_pRoom;
 

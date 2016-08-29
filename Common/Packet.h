@@ -78,19 +78,20 @@ namespace COMMON
 
 	struct HandInfo
 	{
-		CardInfo _cardList[8];
+		CardInfo _cardList[7];
 		enum HandState {
 			CURRENT = 0,
 			BURST = 1,
 			STAND = 2,
-			BLACKJACK = 3,
+			SEVENCARD = 3,
+			BLACKJACK = 4,
 		} _handState;
 		bool _isDoubledown;
 	};
 
 	struct DealerInfo
 	{
-		CardInfo _openedCardList[8];
+		CardInfo _openedCardList[7];
 	};
 
 	struct UserInfo
@@ -138,7 +139,7 @@ namespace COMMON
 	struct PacketRoomUserlistRes : PacketBase
 	{
 		int _slot = -1;
-		DealerInfo _dealerinfo;
+		DealerInfo _dealerinfo; // 딜러가 새로 깐 카드만 넣어줌
 		UserInfo _users[MAX_USERCOUNT_PER_ROOM];
 	};
 
