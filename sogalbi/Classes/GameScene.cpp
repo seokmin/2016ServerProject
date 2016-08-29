@@ -355,6 +355,10 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 {
 	using namespace COMMON;
 	auto packet = (PacketGameChangeTurnNtf*)packetInfo.pRefData;
+	for (auto player : _players)
+	{
+		player->initCounter();
+	}
 	_players[packet->_slotNum]->setCounter(packet->_waitingTime);
 
 	auto& player = _players[_userSlotNum];
@@ -408,6 +412,10 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	{
 		_itemHit->setEnabled(true);
 		_itemStand->setEnabled(true);
+	}
+	else
+	{
+		disableAllChoiceButton();
 	}
 	switch (packet->_choice)
 	{
