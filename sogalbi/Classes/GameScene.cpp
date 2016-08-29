@@ -113,6 +113,11 @@ void GameScene::initLayout(int roomNum)
 	_players[1]->setPosition(screenSize.width - _players[3]->getPosition().x, 190);
 	_players[0]->setPosition(screenSize.width - 130, 260);
 
+	// 딜러 핸드
+	_dealerHand = Hand::create();
+	addChild(_dealerHand, Z_ORDER::CARD_TOP);
+	_dealerHand->setPosition(getContentSize().width / 2, 600);
+
 	// 베팅 슬라이더
 	_betSlider = BetSlider::create();
 	_betSlider->setVisible(false);
@@ -166,6 +171,7 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 	packetInfo.PacketId = packetId;
 	packetInfo.PacketBodySize = bodySize;
 	packetInfo.pRefData = bodyPos;
+
 	switch (packetId)
 	{
 	case COMMON::PACKET_ID::ROOM_ENTER_USER_LIST_RES:
@@ -191,6 +197,9 @@ void GameScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, ch
 		break;
 	case COMMON::PACKET_ID::GAME_CHOICE_NTF:
 		packetProcess_GameChoiceNtf(packetInfo);
+		break;
+	case COMMON::PACKET_ID::GAME_DEALER_RESULT_NTF:
+		packetProcess_GameDealerResultNtf(packetInfo);
 		break;
 	default:
 		ClientLogger::msgBox(L"모르는 패킷");
@@ -249,6 +258,8 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 		{
 			user->setCounter(time);
 		}
+		user->_hand[0]->clear();
+		user->_hand[1]->clear();
 	}
 	if (_betSlider->isVisible() == false)
 	{
@@ -300,7 +311,8 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 		player->_hand[0]->pushCard(cards[1],0.5f);
 		player->setValueLabel(player->_hand[0]->getHandValue());
 	}
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str(),true);
+	_dealerHand->pushCard(packet->_dealerCard);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str(), true);
 }
 
 bool GameScene::splitButtonClicked(Ref* sender)
@@ -418,15 +430,18 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 		disableAllChoiceButton();
 	}
 
-	// 이펙트 뿌리기
+	// 이펙트 뿌리기, 사운드 재생
+	auto soundName = std::string{};
 	switch (packet->_choice)
 	{
 	case ChoiceKind::HIT:
 		player->showEffect(Player::EffectKind::HIT);
+		soundName = FILENAME::AUDIO::HIT;
 		break;
 	case ChoiceKind::STAND:
 		player->showEffect(Player::EffectKind::STAND);
 		player->showBanner(Player::BannerKind::STAND);
+		soundName = FILENAME::AUDIO::STAND;
 		break;
 	case ChoiceKind::SPLIT:
 		player->showEffect(Player::EffectKind::SPLIT);
@@ -438,8 +453,44 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 		break;
 	}
 	if (player->_hand[packet->_handNum]->getHandValue().first > 21)
+	{
+		soundName = FILENAME::AUDIO::HIT;
 		player->showBanner(Player::BannerKind::BURST);
+	}
+	if (soundName != "")
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(soundName.c_str());
+}
 
+void GameScene::packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetInfo)
+{
+	auto packet = (PacketGameDealerResultNtf*)packetInfo.pRefData;
+
+	// 버튼 전부 비활성화
+	disableAllChoiceButton();
+
+	// 카운터 종료
+	for (auto& player : _players)
+		player->initCounter();
+
+	// 딜러가 새로 깐 카드들
+	auto& cardList = packet->_dealerResult._openedCardList;
+	float waitingTime = 0.f;
+	for (auto& card : cardList)
+	{
+		if (card._shape == CardInfo::CardShape::EMPTY)
+			break;
+		_dealerHand->pushCard(card, waitingTime);
+		waitingTime += 1.f;
+	}
+
+	// 돈 결과 알려줌
+	for (int i = 0; i < 5; ++i)
+	{
+		if(_players[i]->_hand[0]->_cardInfos[0]._shape == CardInfo::CardShape::EMPTY)
+			continue;
+		auto callFunc = CallFunc::create(CC_CALLBACK_0(Player::setMoneyBet,_players[i],0,packet->_currentMoney[i]));
+		_players[i]->runAction(Sequence::create(DelayTime::create(waitingTime), callFunc, nullptr));
+	}
 }
 
 void GameScene::disableAllChoiceButton()

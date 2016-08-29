@@ -3,6 +3,7 @@
 
 class Player;
 class BetSlider;
+class Hand;
 
 namespace cocos2d
 {
@@ -39,7 +40,7 @@ private:
 	void packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo);
 	void packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInfo);
 	void packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo);
-
+	void packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetInfo);
 
 	bool betButtonClicked(Ref* sender);
 
@@ -63,11 +64,12 @@ private:
 		UI_TOP = 10
 	};
 	Player* _players[5];
+	Hand*	_dealerHand;
 	COMMON::DealerInfo _dealerInfo;
 	COMMON::UserInfo _userInfo[4];
 	int				_userSlotNum;
 
-	BetSlider*			_betSlider;
+	BetSlider*		_betSlider;
 	Menu*			_betButton;
 
 	Menu*			_choiceButton = nullptr;
