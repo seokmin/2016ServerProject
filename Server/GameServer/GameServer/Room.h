@@ -51,6 +51,7 @@ public:
 	void ForceNextTurn(int seat, int hand);
 
 	void EndOfGame();
+	void ResetForNextGame();
 
 	ERROR_CODE ApplyChoice(int sessionIndex, ChoiceKind choice);
 
@@ -61,6 +62,7 @@ public:
 	unsigned int GetLastActionTime() { return m_lastActionTime; };
 
 	std::tuple<int, int> GetNextPlayerSeatAndHand();
+	int GetWaitingForRestart() { return m_waitForRestart; };
 
 
 private:
@@ -72,6 +74,8 @@ private:
 
 	ROOM_STATE		m_currentRoomState = ROOM_STATE::NONE;
 	Dealer			m_dealer;
+
+	int				m_waitForRestart = 100;
 
 private:
 	User* GetUserBySessionIndex(int sessionIndex);

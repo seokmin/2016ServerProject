@@ -155,10 +155,10 @@ ERROR_CODE PacketProcess::NtfSysCloseSesson(PacketInfo packetInfo)
 		m_pRefRoomMgr->LeavUserFromRoom(outRoomId, outUser.get());
 
 		// 사실 룸에서 나왔으면 여기로 와야 정상.
-		if (outUser->IsCurDomainLogin())
-		{
-			outUser->Clear();
-		}
+		//if (outUser->IsCurDomainLogin())
+		//{
+		//	outUser->Clear();
+		//}
 	}
 
 	PacketInfo sendPacketInfo;

@@ -28,7 +28,7 @@ void Dealer::Init(Room* room)
 	}
 
 	// 블랙젝인지 체크하고, 블랙젝이면 핸드 상태를 바꿔줌
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
 		User* user = m_pRoom->GetUserInfo(i);
 		if (user == nullptr) continue;
@@ -58,10 +58,27 @@ int Dealer::GetCardSum()
 {
 	int sum = 0;
 
+	bool flag = false;
 	for (int i = 0; i < m_curCardNum; ++i)
 	{
 		sum += m_dealerHand._cardList[i]._number;
+		if (m_dealerHand._cardList[i]._number > 10)
+		{
+			sum -= (m_dealerHand._cardList[i]._number - 10);
+		}
+
+		if (m_dealerHand._cardList[i]._number == 1)
+		{
+			flag = true;
+		}
+
 	}
 
+	if (flag)
+	{
+		if (sum + 10 <= 21)
+			sum += 10;
+	}
+	
 	return sum;
 }

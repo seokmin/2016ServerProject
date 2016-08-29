@@ -82,7 +82,7 @@ void RoomManager::RunPostTimeAction()
 				steady_clock::now().time_since_epoch()
 				).count();
 
-			if (room->GetLastActionTime() - nowTime > ServerConfig::bettingTime * 1000)
+			if (nowTime - room->GetLastActionTime() > ServerConfig::bettingTime * 1000)
 			{
 				room->NotifyStartGame();
 			}
@@ -112,7 +112,7 @@ void RoomManager::RunPostTimeAction()
 				steady_clock::now().time_since_epoch()
 				).count();
 
-			if (room->GetLastActionTime() - nowTime > ServerConfig::waitingTime * 1000)
+			if (nowTime - room->GetLastActionTime() > ServerConfig::waitingTime * 1000)
 			{
 				auto seatNhand = room->GetCurrentBettingUser();
 				if (std::get<0>(seatNhand) == -1 || std::get<1>(seatNhand) == -1)
@@ -128,6 +128,22 @@ void RoomManager::RunPostTimeAction()
 				room->ForceNextTurn(std::get<0>(seatNhand), std::get<1>(seatNhand));
 				
 				room->NotifyChangeTurn();
+			}
+		}
+		break;
+
+		case ROOM_STATE::CALCULATE :
+		{
+			// 애니메이션 끝난 뒤 게임 재시작
+
+			auto nowTime = duration_cast< milliseconds >(
+				steady_clock::now().time_since_epoch()
+				).count();
+
+			if (nowTime - room->GetLastActionTime() > room->GetWaitingForRestart() * 1000)
+			{
+				room->SetRoomStateToWaiting();
+				room->NotifyStartBettingTimer();
 			}
 		}
 		break;

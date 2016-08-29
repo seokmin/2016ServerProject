@@ -74,6 +74,12 @@ namespace COMMON
 		} _shape = EMPTY;
 
 		short _number = 0; // J = 11, Q = 12, K = 13
+
+		void Reset()
+		{
+			_number = 0;
+			_shape = EMPTY;
+		}
 	};
 
 	struct HandInfo
@@ -86,7 +92,17 @@ namespace COMMON
 			SEVENCARD = 3,
 			BLACKJACK = 4,
 		} _handState;
-		bool _isDoubledown;
+		bool _isDoubledown = false;
+
+		void Reset()
+		{
+			for (int i = 0; i < 7; ++i)
+			{
+				_cardList[i].Reset();
+			}
+			_isDoubledown = false;
+			_handState = CURRENT;
+		}
 	};
 
 	struct DealerInfo

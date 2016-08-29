@@ -37,12 +37,12 @@ void User::InitHand()
 {
 	for (int i = 0; i < MAX_HAND; ++i)
 	{
-		for (int j = 0; j < 10; ++j)
+		for (int j = 0; j < 7; ++j)
 		{
 			m_hand[i]._cardList[j]._shape = COMMON::CardInfo::CardShape::EMPTY;
 			m_hand[i]._cardList[j]._number = 0;
 		}
-		m_hand[i]._handState = COMMON::HandInfo::CURRENT;
+		m_hand[i]._handState = COMMON::HandInfo::HandState::CURRENT;
 		m_hand[i]._isDoubledown = false;
 	}
 }
@@ -161,6 +161,10 @@ std::tuple<int, int> User::GetCardSum(int hand)
 	for (int i = 0; i < m_curCardNum[hand]; ++i)
 	{
 		sum1 += m_hand[hand]._cardList[i]._number;
+		if (m_hand[hand]._cardList[i]._number > 10)
+		{
+			sum1 -= (m_hand[hand]._cardList[i]._number - 10);
+		}
 		if (m_hand[hand]._cardList[i]._number == 1)
 		{
 			flag = true;
@@ -175,4 +179,16 @@ std::tuple<int, int> User::GetCardSum(int hand)
 void User::CalculateMoney(int toChange)
 {
 	m_totalMoney += toChange;
+}
+
+void User::ResetForNextGame()
+{
+	for (int i = 0; i < MAX_HAND; ++i)
+	{
+		m_curCardNum[i] = 0;
+		m_hand[i].Reset();
+	}
+	m_curHand = 0;
+	m_isSplit = false;
+	m_gameState = GAME_STATE::WAITING;
 }

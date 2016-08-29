@@ -47,6 +47,7 @@ public:
 	void DoubleDown();
 	std::tuple<int, int> GetCardSum(int hand);
 	void CalculateMoney(int toChange);
+	void ResetForNextGame();
 
 	bool				IsAvailableFromPool() { return m_sessionIndex < 0; };
 	bool				CheckUserWithAuthToken(std::string authToken) { return (m_authToken == authToken); };

@@ -96,7 +96,11 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 
 	--m_currentUserCount;
 	if (m_currentUserCount == 0)
+	{
 		m_currentRoomState = ROOM_STATE::NONE;
+		m_waitForRestart = 100; // 초기화용..
+		m_dealer.Clear();
+	}
 
 	WCHAR infoStr[100];
 	wsprintf(infoStr, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName().c_str());
@@ -295,7 +299,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		}
 		else if (std::get<0>(sum) == 21 || std::get<1>(sum) == 21)
 		{
-			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::BLACKJACK);
+			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
 			if (!(user->IsSplit() && user->GetCurHand() == 0))
 			{
 				user->SetGameState(GAME_STATE::ACTION_DONE);
@@ -481,6 +485,8 @@ void Room::NotifyGameChoice(int sessionIndex, ChoiceKind choice)
 void Room::EndOfGame()
 {
 	using namespace COMMON;
+	
+	PacketGameDealerResultNtf pkt;
 
 	while (m_dealer.GetCardSum() < 17)
 	{
@@ -489,10 +495,6 @@ void Room::EndOfGame()
 	if (m_dealer.GetCardNum() == 7)
 	{
 		m_dealer.SetHandState(HandInfo::HandState::SEVENCARD);
-	}
-	else if (m_dealer.GetCardSum() == 21)
-	{
-		m_dealer.SetHandState(HandInfo::HandState::BLACKJACK);
 	}
 	else if (m_dealer.GetCardSum() > 21)
 	{
@@ -572,20 +574,17 @@ void Room::EndOfGame()
 				}
 			}
 		}
+		pkt._currentMoney[i] = m_userList[i]->GetCurMoney();
 	}
 
-	PacketGameDealerResultNtf pkt;
-
-	for (int i = 0; i < 7; ++i)
+	for (int i = 1; i < 7; ++i)
 	{
-		pkt._dealerResult._openedCardList[i] = m_dealer.GetCard(i);
+		pkt._dealerResult._openedCardList[i - 1] = m_dealer.GetCard(i);
 	}
 
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
-		if (m_userList[i] == nullptr) continue;
-		
-		pkt._currentMoney[i] = m_userList[i]->GetCurMoney();
+		if (m_userList[i] == nullptr) continue;		
 
 		// Res 보냄
 		PacketInfo sendPacket;
@@ -595,6 +594,29 @@ void Room::EndOfGame()
 		sendPacket.PacketBodySize = sizeof(pkt);
 		m_pSendPacketQue->PushBack(sendPacket);
 	}
+
+	ResetForNextGame();
+}
+
+void Room::ResetForNextGame()
+{
+	// x초 뒤에 시작할 준비
+	m_waitForRestart = m_dealer.GetCardNum() * 2 + 4;
+
+	m_dealer.Clear();
+
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] == nullptr ) continue;
+
+		m_userList[i]->ResetForNextGame();
+	}
+
+	m_currentRoomState = ROOM_STATE::CALCULATE;
+
+	m_lastActionTime = m_lastActionTime = duration_cast< milliseconds >(
+		steady_clock::now().time_since_epoch()
+		).count();
 }
 
 // sessionIndex = 들어온 본인 -> 빼고 나머지한테 보냄
