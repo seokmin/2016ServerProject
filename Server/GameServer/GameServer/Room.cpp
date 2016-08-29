@@ -342,6 +342,9 @@ std::tuple<int, int> Room::GetNextPlayerSeatAndHand()
 		if (user == nullptr)
 			continue;
 
+		if (user->GetGameState() != GAME_STATE::ACTION_WAITING)
+			continue;
+
 		for (int hand = 0; hand < MAX_HAND; ++hand)
 		{
 			if (hand != user->GetCurHand())
@@ -376,12 +379,11 @@ void Room::NotifyStartGame()
 		{
 			// 가장 앞 슬롯의 유저에게 턴을 주고 시작위치라고 표시한다
 			flag = false;
-			m_userList[i]->SetGameState(GAME_STATE::ACTIONING);
 			pkt._startSlotNum = m_userList[i]->GetCurSeat();
 
 		}
-		else
-			m_userList[i]->SetGameState(GAME_STATE::ACTION_WAITING);
+
+		m_userList[i]->SetGameState(GAME_STATE::ACTION_WAITING);
 	}
 
 	// 상태를 다 바꿨으면 실제로 카드를 나눠주기 시작한다.

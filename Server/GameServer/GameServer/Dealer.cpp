@@ -45,6 +45,7 @@ void Dealer::Clear()
 	m_deck.Clear();
 	m_pRoom = nullptr;
 	m_curCardNum = 0;
+	m_dealerHand.Reset();
 }
 
 void Dealer::SetHand(COMMON::CardInfo card)
