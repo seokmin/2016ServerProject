@@ -50,8 +50,8 @@ bool Player::init()
 	_hand[0]->setPosition(-50,70);
 	_hand[1]->setPosition(-50,70);
 
-	addChild(_hand[0], 1);
-	addChild(_hand[1], 1);
+	addChild(_hand[0], -1);
+	addChild(_hand[1], -1);
 
 	// Ä«µå ¹ë·ù
 	_valueLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 48);

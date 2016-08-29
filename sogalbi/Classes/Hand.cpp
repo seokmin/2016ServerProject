@@ -68,13 +68,15 @@ std::pair<int, int> Hand::getHandValue()
 			value.second += card._number;
 		}
 	}
-	if (value.second > 21)
+	if (value.second >= 21)
 		value.second = value.first;
+	
 	return value;
 }
 
 void Hand::clear()
 {
+	_handNum = 0;
 	for (auto& card : _cardInfos)
 	{
 		card._shape = CardInfo::CardShape::EMPTY;
