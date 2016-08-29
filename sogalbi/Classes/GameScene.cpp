@@ -290,6 +290,7 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 		user->_hand[0]->clear();
 		user->_hand[1]->clear();
 		user->clearValueLabel();
+		user->hideBanner();
 	}
 	if (_betSlider->isVisible() == false)
 	{
@@ -322,6 +323,16 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 	}
 	_dealerHand->pushCard(packet->_dealerCard);
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str(), true);
+
+	for (auto& player : _players)
+	{
+		if (player->_hand[0]->getHandValue().first == 21)
+		{
+			player->showBanner(Player::BannerKind::BLACK_JACK);
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::STAND.c_str());
+		}
+	}
+
 }
 
 bool GameScene::splitButtonClicked(Ref* sender)
