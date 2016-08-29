@@ -116,13 +116,16 @@ void GameScene::initLayout(int roomNum)
 	// 딜러 핸드
 	_dealerHand = Hand::create();
 	addChild(_dealerHand, Z_ORDER::CARD_TOP);
-	_dealerHand->setPosition(getContentSize().width / 2, 600);
+	_dealerHand->setPosition(getContentSize().width / 2 - 60, 600);
 
 	// 베팅 슬라이더
 	_betSlider = BetSlider::create();
+	if (_betSlider == nullptr)
+		_betSlider = BetSlider::create();
 	_betSlider->setVisible(false);
 	_betSlider->setPosition(Vec2(550, 30));
 	addChild(_betSlider, Z_ORDER::UI_TOP);
+
 	// 베팅 버튼
 	auto betLabel = Label::createWithTTF("BET", FILENAME::FONT::SOYANON, 64);
 	auto betButton = MenuItemLabel::create(betLabel, CC_CALLBACK_1(GameScene::betButtonClicked, this));
@@ -247,30 +250,6 @@ void GameScene::update(float dt)
 {
 }
 
-void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
-{
-	using namespace COMMON;
-	auto packet = (PacketGameBetCounterNtf*)packetInfo.pRefData;
-	auto& time = packet->_countTime;
-	for (auto& user : _players)
-	{
-		if (user->isActivated() && !user->isAlreadyBet())
-		{
-			user->setCounter(time);
-		}
-		user->_hand[0]->clear();
-		user->_hand[1]->clear();
-	}
-	if (_betSlider->isVisible() == false)
-	{
-		_betSlider->setMinBet(packet->minBet);
-		_betSlider->setMaxBet(_players[_userSlotNum]->getMoneyWhole());
-		_betSlider->setVisible(true);
-		_betButton->setVisible(true);
-	}
-	_choiceButton->setVisible(false);
-}
-
 bool GameScene::betButtonClicked(Ref* sender)
 {
 	using namespace COMMON;
@@ -291,6 +270,35 @@ void GameScene::packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo)
 	betUser->setMoneyBet(packet->_betMoney, betUser->getMoneyWhole() - packet->_betMoney);
 	betUser->setAlreadyBet(true);
 	betUser->initCounter();
+}
+
+void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
+{
+	using namespace COMMON;
+	auto packet = (PacketGameBetCounterNtf*)packetInfo.pRefData;
+	
+	if (CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying() == false)
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_READY_BGM.c_str(), true);
+	
+	auto& time = packet->_countTime;
+	for (auto& user : _players)
+	{
+		if (user->isActivated() && !user->isAlreadyBet())
+		{
+			user->setCounter(time);
+		}
+		user->_hand[0]->clear();
+		user->_hand[1]->clear();
+		user->clearValueLabel();
+	}
+	if (_betSlider->isVisible() == false)
+	{
+		_betSlider->setMinBet(packet->minBet);
+		_betSlider->setMaxBet(_players[_userSlotNum]->getMoneyWhole());
+		_betSlider->setVisible(true);
+		_betButton->setVisible(true);
+	}
+	_choiceButton->setVisible(false);
 }
 
 void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
@@ -454,7 +462,7 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	}
 	if (player->_hand[packet->_handNum]->getHandValue().first > 21)
 	{
-		soundName = FILENAME::AUDIO::HIT;
+		soundName = FILENAME::AUDIO::BURST;
 		player->showBanner(Player::BannerKind::BURST);
 	}
 	if (soundName != "")
@@ -491,6 +499,9 @@ void GameScene::packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetI
 		auto callFunc = CallFunc::create(CC_CALLBACK_0(Player::setMoneyBet,_players[i],0,packet->_currentMoney[i]));
 		_players[i]->runAction(Sequence::create(DelayTime::create(waitingTime), callFunc, nullptr));
 	}
+
+	// 음악 끄기?
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(false);
 }
 
 void GameScene::disableAllChoiceButton()

@@ -29,6 +29,7 @@ public:
 	bool isAlreadyBet() { return _isAlreadyBet; }
 	void setAlreadyBet(bool val) { _isAlreadyBet = val; }
 	void setValueLabel(std::pair<int, int> values);
+	void clearValueLabel() { _valueLabel->setString(""); }
 
 	enum class EffectKind
 	{
