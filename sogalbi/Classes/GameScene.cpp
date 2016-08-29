@@ -409,6 +409,24 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 		_itemHit->setEnabled(true);
 		_itemStand->setEnabled(true);
 	}
+	switch (packet->_choice)
+	{
+	case ChoiceKind::HIT:
+		player->showEffect(Player::EffectKind::HIT);
+		break;
+	case ChoiceKind::STAND:
+		player->showEffect(Player::EffectKind::STAND);
+		break;
+	case ChoiceKind::SPLIT:
+		player->showEffect(Player::EffectKind::SPLIT);
+		break;
+	case ChoiceKind::DOUBLE_DOWN:
+		player->showEffect(Player::EffectKind::DOUBLE_DOWN);
+		break;
+	default:
+		break;
+	}
+
 }
 
 void GameScene::disableAllChoiceButton()

@@ -187,6 +187,8 @@ void Player::setValueLabel(std::pair<int, int> values)
 
 void Player::showEffect(EffectKind effect)
 {
+	_effectSprite->setVisible(true);
+
 	auto frameName = std::string{};
 	switch (effect)
 	{
@@ -206,5 +208,10 @@ void Player::showEffect(EffectKind effect)
 		break;
 	}
 	auto spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frameName);
+
 	_effectSprite->setSpriteFrame(spriteFrame);
+	auto blink = Blink::create(0.5, 2);
+	auto callFunc = CallFunc::create(CC_CALLBACK_0(Sprite::setVisible,_effectSprite,false));
+	auto seq = Sequence::create(blink,DelayTime::create(0.5f), callFunc, nullptr);
+	_effectSprite->runAction(seq);
 }
