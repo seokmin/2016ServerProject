@@ -235,13 +235,7 @@ namespace COMMON
 	struct PacketGameDealerResultNtf
 	{
 		DealerInfo  _dealerResult;
-		int			_currentMoney[MAX_USERCOUNT_PER_ROOM]; // 각  슬롯마다 번 돈
-		enum class WIN_YEOBU
-		{
-			WIN = 0,
-			LOSE = 1,
-			PUSH = 2
-		} _winYeobu[MAX_USERCOUNT_PER_ROOM];
+		int			_currentMoney[5]; // 각  슬롯마다 번 돈
 	};
 
 
