@@ -534,6 +534,12 @@ void GameScene::packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetI
 		_players[i]->runAction(Sequence::create(DelayTime::create(waitingTime), callFunc, nullptr));
 	}
 
+	if (packet->_winYeobu[_userSlotNum] == PacketGameDealerResultNtf::WIN_YEOBU::WIN)
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::RESULT_WIN.c_str());
+	else if (packet->_winYeobu[_userSlotNum] == PacketGameDealerResultNtf::WIN_YEOBU::LOSE)
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::RESULT_LOSE.c_str());
+
+
 	// À½¾Ç ²ô±â?
 	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(false);
 }
