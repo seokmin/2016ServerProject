@@ -32,7 +32,10 @@ void Hand::pushCard(CardInfo& card, float delay /*= 0.f*/)
 	auto& cardSpr = _cardSprites[_handNum];
 	auto spawn = Spawn::create( MoveTo::create(0.3, cardSpr->getPosition()), RotateTo::create(0.3, 0), nullptr);
 	auto callFunc = CallFunc::create(CC_CALLBACK_0(Sprite::setVisible, cardSpr, true));
-	auto seq = Sequence::create(DelayTime::create(delay),callFunc, spawn, nullptr);
+	auto dieFunc = CallFunc::create(CC_CALLBACK_0(Hand::Die, this, .5f));
+	if (getHandValue().first <= 21)
+		dieFunc = nullptr;
+	auto seq = Sequence::create(DelayTime::create(delay),callFunc, spawn,dieFunc, nullptr);
 	cardSpr->setPosition(cardSpr->getPosition() + Vec2(0,100));
 	cardSpr->setRotation(180);
 	
@@ -43,10 +46,12 @@ void Hand::pushCard(CardInfo& card, float delay /*= 0.f*/)
 	cardSpr->setVisible(false);
 	cardSpr->runAction(seq);
 	++_handNum;
+}
 
-	// 다이까지 알아서
-	if (getHandValue().first > 21)
-		Die(.5f);
+void Hand::popCard()
+{
+	--_handNum;
+	_cardSprites[_handNum]->setVisible(false);
 }
 
 std::pair<int, int> Hand::getHandValue()
