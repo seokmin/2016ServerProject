@@ -477,6 +477,7 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	{
 		soundName = FILENAME::AUDIO::BURST;
 		player->showBanner(Player::BannerKind::BURST);
+		player->_hand[packet->_handNum]->Die(.2f);
 	}
 	if (value.first == 21 || value.second == 21)
 		player->showBanner(Player::BannerKind::STAND);
@@ -506,8 +507,13 @@ void GameScene::packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetI
 		if (card._shape == CardInfo::CardShape::EMPTY)
 			break;
 		_dealerHand->pushCard(card, waitingTime);
+		
 		waitingTime += 1.f;
 	}
+
+	//딜러 Burst이면 어둡게
+	if (_dealerHand->getHandValue().first > 21)
+		_dealerHand->Die(waitingTime - .6f);
 
 	// 돈 결과 알려줌
 	for (int i = 0; i < 5; ++i)

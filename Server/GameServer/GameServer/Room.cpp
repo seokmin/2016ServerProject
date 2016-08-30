@@ -197,7 +197,7 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 	// 상태가 베팅이 아닌데 감히 베팅을 하려 하다니..
 	if (user->GetGameState() != GAME_STATE::BETTING)
 	{
-		Logger::GetInstance()->Log(Logger::Level::ERROR_NORMAL, L"베팅상태가 아닌데.. 베팅함.");
+		Logger::GetInstance()->Log(Logger::Level::ERROR_NORMAL, L"베팅상태가 아닌데.. 베팅함.", 20);
 		return ERROR_CODE::ROOM_GAME_NOT_IN_PROPER_STATE;
 	}
 
