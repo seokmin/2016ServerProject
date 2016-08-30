@@ -8,6 +8,7 @@ using namespace std::chrono;
 
 class User;
 class PacketQueue;
+class DBmanager;
 
 enum class ROOM_STATE
 {
@@ -26,7 +27,7 @@ public:
 	Room(const int i) : m_id(i) {};
 	~Room() {};
 
-	void Init(PacketQueue* sendPacketQue);
+	void Init(PacketQueue* sendPacketQue, DBmanager* pDBman);
 
 	bool EnterUser(User* user);
 
@@ -76,6 +77,7 @@ private:
 	Dealer			m_dealer;
 
 	int				m_waitForRestart = 100;
+	DBmanager*		m_pDBmanager;
 
 private:
 	User* GetUserBySessionIndex(int sessionIndex);

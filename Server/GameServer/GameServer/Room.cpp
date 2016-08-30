@@ -3,13 +3,15 @@
 #include "User.h"
 #include "IOCPManager.h"
 #include "PacketQueue.h"
+#include "DBmanager.h"
 
 #include "Room.h"
 #include "Dealer.h"
 
-void Room::Init(PacketQueue* sendPacketQue)
+void Room::Init(PacketQueue* sendPacketQue, DBmanager* pDBman)
 {
 	m_pSendPacketQue = sendPacketQue;
+	m_pDBmanager = pDBman;
 
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
@@ -205,6 +207,8 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 	auto ret = user->ApplyBet(betMoney);
 	if (ret != ERROR_CODE::NONE)
 		return ret;
+	// DB에 돈 수정해서 보냄.
+	m_pDBmanager->SubmitUserDeltaMoney(user, -betMoney);
 
 	// 표현할 수 있게 베팅 정보를 노티한다.
 	NotifyBetDone(sessionIndex, betMoney);
@@ -546,7 +550,11 @@ void Room::EndOfGame()
 					// 근데 블랙잭이면 1.5배를 줌!
 					blackjack_bonus = user->GetBetMoney() * 0.5;
 				}
-				user->CalculateMoney(user->GetBetMoney() * 2 + blackjack_bonus);
+
+				int deltaMoney = user->GetBetMoney() * 2 + blackjack_bonus;
+				m_pDBmanager->SubmitUserDeltaMoney(user, deltaMoney);
+				user->CalculateMoney(deltaMoney);
+				
 			}
 
 			// 패가 같으면
@@ -565,7 +573,9 @@ void Room::EndOfGame()
 
 					if (useSum > m_dealer.GetCardSum())
 					{
-						user->CalculateMoney(user->GetBetMoney() * 2);
+						int deltaMoney = user->GetBetMoney() * 2;
+						m_pDBmanager->SubmitUserDeltaMoney(user, deltaMoney); 
+						user->CalculateMoney(deltaMoney);
 					}
 					else if (useSum < m_dealer.GetCardSum())
 					{
@@ -573,12 +583,16 @@ void Room::EndOfGame()
 					}
 					else
 					{
-						user->CalculateMoney(user->GetBetMoney());
+						int deltaMoney = user->GetBetMoney(); 
+						m_pDBmanager->SubmitUserDeltaMoney(user, deltaMoney);
+						user->CalculateMoney(deltaMoney);
 					}
 				}
 				else
 				{
-					user->CalculateMoney(user->GetBetMoney());
+					int deltaMoney = user->GetBetMoney();
+					m_pDBmanager->SubmitUserDeltaMoney(user, deltaMoney); 
+					user->CalculateMoney(deltaMoney);
 				}
 			}
 		}

@@ -20,7 +20,7 @@ COMMON::ERROR_CODE App::Init()
 	m_pDB->Init(m_numberOfDBThread);
 	m_pDBProc->Init(m_pUserMgr.get(), m_pRoomMgr.get(), m_pSendPacketQue.get(), m_pDB.get());
 	m_pUserMgr->Init(m_pRoomMgr.get(), m_pDB.get());
-	m_pRoomMgr->Init(m_pUserMgr.get(), m_pSendPacketQue.get());
+	m_pRoomMgr->Init(m_pUserMgr.get(), m_pDB.get(), m_pSendPacketQue.get());
 
 	m_pPacketProc = std::make_unique<PacketProcess>();
 	m_pPacketProc->Init(m_pUserMgr.get(), m_pRoomMgr.get(), m_pRecvPacketQue.get(), m_pSendPacketQue.get());
@@ -56,11 +56,20 @@ void App::Run()
 			if (!m_pDB->DBResultEmpty())
 			{
 				auto& dbRslt = m_pDB->FrontDBResult();
-				if (dbRslt._type == JOB_TYPE::NONE)
-					break;
+				if (dbRslt._type == JOB_TYPE::SUBMIT_STATE)
+				{
+					if (dbRslt._type == JOB_TYPE::NONE)
+						break;
 
-				m_pDBProc->Process(dbRslt);
-				m_pDB->PopDBResult();
+					m_pDBProc->Process(dbRslt);
+					m_pDB->PopDBResult();
+				}
+				else
+				{
+					m_pDBProc->Process(dbRslt);
+					m_pDB->PopDBResult();
+				}
+				
 			}
 
 		}

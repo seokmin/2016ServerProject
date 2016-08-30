@@ -178,6 +178,7 @@ std::tuple<int, int> User::GetCardSum(int hand)
 
 void User::CalculateMoney(int toChange)
 {
+	Logger::GetInstance()->Logf(Logger::Level::INFO, L"Memory user money : %d -> %d", m_totalMoney, toChange + m_totalMoney);
 	m_totalMoney += toChange;
 }
 

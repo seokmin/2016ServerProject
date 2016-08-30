@@ -27,7 +27,7 @@ void DBProcess::Process(DBResult rslt)
 
 	if (DBFuncArray[(int)resultType] == nullptr)
 	{
-		Logger::GetInstance()->Logf( Logger::Level::ERROR_FATAL ,L"존재하지 않는 ID의 DB결과입니다. 위치 : %s \n", __FUNCTION__);
+		Logger::GetInstance()->Logf( Logger::Level::ERROR_FATAL ,L"존재하지 않는 ID의 DB결과입니다. 위치 : DB::Process");
 		return;
 	}
 
@@ -92,7 +92,8 @@ ERROR_CODE DBProcess::GetUserByAuthProcess(DBResult rslt)
 	return ERROR_CODE();
 }
 
-ERROR_CODE DBProcess::CalculateMoneyResProcess(DBResult ret)
+ERROR_CODE DBProcess::CalculateMoneyResProcess(DBResult rslt)
 {
+	Logger::GetInstance()->Logf(Logger::INFO, L"calcMoney result name:%s , money : %s", rslt._result1, rslt._result2);
 	return ERROR_CODE();
 }

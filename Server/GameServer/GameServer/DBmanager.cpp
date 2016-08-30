@@ -77,6 +77,12 @@ void DBmanager::DBThreadWorker()
 
 		m_jobPool[index] = m_jobQ[index].front();
 		m_jobQ[index].pop_front();
+
+		////디버그용 코드
+		//if (m_jobPool[index]._type != JOB_TYPE::SUBMIT_STATE)
+		//{
+		//	Logger::GetInstance()->Logf(Logger::Level::INFO, L"INfo ... %d", (int)m_jobPool[index]._type);
+		//}
 		
 		auto ret = m_sqlMgrPool[index]->sqlconn();
 		ret = m_sqlMgrPool[index]->sqlexec(m_jobPool[index]._query, m_jobPool[index]._nResult, m_resultPool[index]._result1, m_resultPool[index]._result2, m_resultPool[index]._result3, m_resultPool[index]._result4);
@@ -101,6 +107,8 @@ void DBmanager::DBThreadWorker()
 		m_resultPool[index].Reset();
 
 		ResetEvent(hDBEvent[index]);
+
+		
 	}
 }
 
@@ -151,14 +159,17 @@ void DBmanager::SubmitState(int max, int count, ServerConfig* pServerConfig)
 }
 
 
-void DBmanager::CalcUserMoney(User * pUser, int deltaMoney)
+void DBmanager::SubmitUserDeltaMoney(User * pUser, int deltaMoney)
 {
 	DBJob calcMoneyJob;
 
 	SQLWCHAR query[200] = L"";
-	wsprintf(calcMoneyJob._query, L"CALL Calc_user_money(\"%s\", %d);", pUser->GetName(), deltaMoney);
+	wsprintf(calcMoneyJob._query, L"CALL Calc_user_money(\"%s\", %d);", pUser->GetName().c_str(), deltaMoney);
+	calcMoneyJob._sessionIndex = pUser->GetSessionIndex();
+	calcMoneyJob._type = JOB_TYPE::CALCULATE_MONEY;
 	calcMoneyJob._nResult = 2;
 	wprintf_s(query);
 
 	PushDBJob(calcMoneyJob, 0);
+	Logger::GetInstance()->Logf(Logger::Level::INFO, L"DB submit money : %d ->%d", pUser->GetTotalMoney(), pUser->GetTotalMoney() + deltaMoney);
 }

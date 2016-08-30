@@ -73,7 +73,7 @@ public:
 	bool		DBResultEmpty() { return m_jobResultQ.empty(); };
 	DBResult	FrontDBResult();
 	void		PopDBResult();
-	void		CalcUserMoney(User* pUser, int deltaMoney);
+	void		SubmitUserDeltaMoney(User* pUser, int deltaMoney);
 
 	void		PushDBJob(DBJob job, int pushIndex);
 
