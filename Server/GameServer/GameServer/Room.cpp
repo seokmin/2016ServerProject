@@ -555,6 +555,8 @@ void Room::EndOfGame()
 		auto user = m_userList[i];
 		if (user == nullptr) continue;
 
+		int earnMoney = 0; // 계산 결과 번 돈
+
 		for (int hand = 0; hand < MAX_HAND; ++hand)
 		{
 			if (user->GetCurHand() < hand) continue;
@@ -565,13 +567,13 @@ void Room::EndOfGame()
 			// 만약 유저가 버스트 했으면 무조건 돈을 잃음!
 			if (user->GetHand(hand)._handState == HandInfo::HandState::BURST)
 			{
-				user->CalculateMoney(0);
+				earnMoney += 0;
 			}
 
 			// 딜러의 패가 더 높다면.. 돈을 잃음!
 			else if (m_dealer.GetHand()._handState > user->GetHand(hand)._handState)
 			{
-				user->CalculateMoney(0);
+				earnMoney += 0;
 			}
 
 			// 유저 패가 더 높다면.. 돈을 땀!
@@ -584,10 +586,7 @@ void Room::EndOfGame()
 					blackjack_bonus = user->GetBetMoney() * 0.5;
 				}
 
-				int deltaMoney = user->GetBetMoney() * 2 + blackjack_bonus;
-				m_pDBmanager->SubmitUserDeltaMoney(user, deltaMoney);
-				user->CalculateMoney(deltaMoney);
-
+				earnMoney += user->GetBetMoney() * 2 + blackjack_bonus;
 			}
 
 			// 패가 같으면
@@ -606,30 +605,36 @@ void Room::EndOfGame()
 
 					if (useSum > m_dealer.GetCardSum())
 					{
-						int deltaMoney = user->GetBetMoney() * 2;
-						m_pDBmanager->SubmitUserDeltaMoney(user, deltaMoney); 
-						user->CalculateMoney(deltaMoney);
+						earnMoney += user->GetBetMoney() * 2;
 					}
 					else if (useSum < m_dealer.GetCardSum())
 					{
-						user->CalculateMoney(0);
+						earnMoney += 0;
 					}
 					else
 					{
-						int deltaMoney = user->GetBetMoney(); 
-						m_pDBmanager->SubmitUserDeltaMoney(user, deltaMoney);
-						user->CalculateMoney(deltaMoney);
+						earnMoney += user->GetBetMoney();
 					}
 				}
 				else
 				{
-					int deltaMoney = user->GetBetMoney();
-					m_pDBmanager->SubmitUserDeltaMoney(user, deltaMoney); 
-					user->CalculateMoney(deltaMoney);
+					earnMoney += user->GetBetMoney();
 				}
 			}
 		}
+
+		user->CalculateMoney(earnMoney);
+		m_pDBmanager->SubmitUserDeltaMoney(user, earnMoney);
+
 		pkt._currentMoney[i] = m_userList[i]->GetCurMoney();
+		pkt._earnMoney[i] = earnMoney;
+
+		if (earnMoney > 0)
+			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::WIN;
+		else if(earnMoney == 0)
+			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::PUSH;
+		else
+			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::LOSE;
 	}
 
 	for (int i = 1; i < 7; ++i)
