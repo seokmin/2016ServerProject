@@ -283,14 +283,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 	case ChoiceKind::STAND :
 	{
 		user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-		if (user->IsSplit() && user->GetCurHand() == 0)
-		{
-			user->SwitchHand();
-		}
-		else
-		{
-			user->SetGameState(GAME_STATE::ACTION_DONE);
-		}
+		user->SwitchHandIfSplitExist();
 	}
 	break;
 
@@ -303,18 +296,12 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		if (std::get<0>(sum) > 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::BURST);
-			if (!(user->IsSplit() && user->GetCurHand() == 0))
-			{
-				user->SetGameState(GAME_STATE::ACTION_DONE);
-			}
+			user->SwitchHandIfSplitExist();
 		}
 		else if (std::get<0>(sum) == 21 || std::get<1>(sum) == 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-			if (!(user->IsSplit() && user->GetCurHand() == 0))
-			{
-				user->SetGameState(GAME_STATE::ACTION_DONE);
-			}
+			user->SwitchHandIfSplitExist();
 		}
 		else
 		{
@@ -336,10 +323,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		if (std::get<0>(sum) > 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::BURST);
-			if (!(user->IsSplit() && user->GetCurHand() == 0))
-			{
-				user->SetGameState(GAME_STATE::ACTION_DONE);
-			}
+			user->SwitchHandIfSplitExist();
 		}
 		//else if (std::get<0>(sum) == 21 || std::get<1>(sum) == 21)
 		//{
@@ -352,19 +336,16 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		else
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-			if (!(user->IsSplit() && user->GetCurHand() == 0))
-			{
-				user->SetGameState(GAME_STATE::ACTION_DONE);
-			}
+			user->SwitchHandIfSplitExist();
 		}
 	}
 	break;
 
 	case ChoiceKind::SPLIT:
 	{
-		//if (user->IsSplit())
-		//	break;
-		//
+		if (user->IsSplit())
+			return ERROR_CODE::ROOM_GAME_INVALID_PLAY_ALREADY_SPLIT;
+		
 		user->Split();
 	}
 	break;
@@ -586,39 +567,55 @@ void Room::EndOfGame()
 					blackjack_bonus = user->GetBetMoney() * 0.5;
 				}
 
-				earnMoney += user->GetBetMoney() * 2 + blackjack_bonus;
+				earnMoney = user->GetBetMoney() * 2 + blackjack_bonus;
+
+				//더블다운이면 거기에 두배를 줌!
+				if (user->GetHand(hand)._isDoubledown == true)
+					earnMoney += user->GetBetMoney() * 2;
+
 			}
 
 			// 패가 같으면
 			else
 			{
-				// 스탠드이면 딸 수도 있지만 아니면 푸시푸시
+				// 스탠드이면 딸 수도 있지만 아니면 비긴걸로
 				if (user->GetHand(hand)._handState == HandInfo::HandState::STAND)
 				{
+
+					//Ace가 섞인 경우 더 좋은 숫자를 선택
 					int useSum = 0;
 					if (std::get<0>(sum) == std::get<1>(sum))
 						useSum = std::get<0>(sum);
-					else if(std::get<1>(sum) > 21)
+					else if(std::get<1>(sum) > 21) // Ace를 11로 계산하면 안되는 경우
 						useSum = std::get<0>(sum);
 					else 
 						useSum = std::get<1>(sum);
 
-					if (useSum > m_dealer.GetCardSum())
+					if (useSum > m_dealer.GetCardSum()) // 이겼을대
 					{
 						earnMoney += user->GetBetMoney() * 2;
+						if (user->GetHand(hand)._isDoubledown == true)
+							earnMoney += user->GetBetMoney() * 2;
+
 					}
-					else if (useSum < m_dealer.GetCardSum())
+					else if (useSum < m_dealer.GetCardSum()) // 졌을때
 					{
 						earnMoney += 0;
 					}
-					else
+					else // 비겼을때
 					{
-						earnMoney += user->GetBetMoney();
+						if (user->GetHand(hand)._isDoubledown == true)
+							earnMoney += user->GetBetMoney() * 2;
+						else
+							earnMoney += user->GetBetMoney();
 					}
 				}
 				else
 				{
-					earnMoney += user->GetBetMoney();
+					if(user->GetHand(hand)._isDoubledown == true)
+						earnMoney += user->GetBetMoney() * 2;
+					else
+						earnMoney += user->GetBetMoney();
 				}
 			}
 		}
