@@ -53,7 +53,7 @@ void Logger::Log(Level level, WCHAR * message, int messageLen)
 	auto now = std::chrono::system_clock::now();
 	std::time_t t = std::chrono::system_clock::to_time_t(now);
 	std::cout << std::put_time(std::localtime(&t), "%F %T");
-	std::wcout << L"\t[" << m_levelStr[level] << L"]" << message << std::endl;
+	std::wcout << L"\t[" << m_levelStr[level] << L"]" << message <<std::endl;
 
 	m_mutex.unlock();
 #else
@@ -69,4 +69,16 @@ void Logger::Log(Level level, WCHAR * message, int messageLen)
 		m_mutex.unlock();
 	}
 #endif
+}
+
+void Logger::Logf(Level level, WCHAR * message, ...)
+{
+	va_list args;
+	WCHAR levelStr[500];
+
+	va_start(args, message);
+	vswprintf(levelStr, message, args);
+	Logger::GetInstance()->Log(Logger::INFO, levelStr, 500);
+
+	va_end(args);
 }
