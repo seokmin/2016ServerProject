@@ -67,9 +67,10 @@ public:
 	void				SetGameState(GAME_STATE state) { m_gameState = state; };
 	GAME_STATE			GetGameState() { return m_gameState; };
 	COMMON::HandInfo	GetHand(int num) { return m_hand[num]; };
+	COMMON::HandInfo&	GetNextHand();
 	bool				IsSplit(){ return m_isSplit; };
 	int					GetCurHand() { return m_curHand; };
-	void				SwitchHand() { ++m_curHand; };
+	void				SwitchHandIfSplitExist();
 	CardInfo			GetLastCard(int hand) { return m_hand[hand]._cardList[m_curCardNum[hand] - 1]; };
 	int					GetBetMoney() { return m_curBetMoney; };
 	int					GetCurMoney() { return m_totalMoney; };

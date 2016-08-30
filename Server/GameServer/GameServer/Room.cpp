@@ -283,14 +283,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 	case ChoiceKind::STAND :
 	{
 		user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-		if (user->IsSplit() && user->GetCurHand() == 0)
-		{
-			user->SwitchHand();
-		}
-		else
-		{
-			user->SetGameState(GAME_STATE::ACTION_DONE);
-		}
+		user->SwitchHandIfSplitExist();
 	}
 	break;
 
@@ -303,18 +296,12 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		if (std::get<0>(sum) > 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::BURST);
-			if (!(user->IsSplit() && user->GetCurHand() == 0))
-			{
-				user->SetGameState(GAME_STATE::ACTION_DONE);
-			}
+			user->SwitchHandIfSplitExist();
 		}
 		else if (std::get<0>(sum) == 21 || std::get<1>(sum) == 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-			if (!(user->IsSplit() && user->GetCurHand() == 0))
-			{
-				user->SetGameState(GAME_STATE::ACTION_DONE);
-			}
+			user->SwitchHandIfSplitExist();
 		}
 		else
 		{
@@ -336,10 +323,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		if (std::get<0>(sum) > 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::BURST);
-			if (!(user->IsSplit() && user->GetCurHand() == 0))
-			{
-				user->SetGameState(GAME_STATE::ACTION_DONE);
-			}
+			user->SwitchHandIfSplitExist();
 		}
 		//else if (std::get<0>(sum) == 21 || std::get<1>(sum) == 21)
 		//{
@@ -352,19 +336,16 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		else
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-			if (!(user->IsSplit() && user->GetCurHand() == 0))
-			{
-				user->SetGameState(GAME_STATE::ACTION_DONE);
-			}
+			user->SwitchHandIfSplitExist();
 		}
 	}
 	break;
 
 	case ChoiceKind::SPLIT:
 	{
-		//if (user->IsSplit())
-		//	break;
-		//
+		if (user->IsSplit())
+			return ERROR_CODE::ROOM_GAME_INVALID_PLAY_ALREADY_SPLIT;
+		
 		user->Split();
 	}
 	break;
@@ -585,6 +566,13 @@ void Room::EndOfGame()
 				}
 
 				int deltaMoney = user->GetBetMoney() * 2 + blackjack_bonus;
+
+				//더블다운이면 거기에 두배를 줌!
+				if (user->GetHand(hand)._isDoubledown == true)
+					deltaMoney += deltaMoney;
+
+
+				//돈 갱신.
 				m_pDBmanager->SubmitUserDeltaMoney(user, deltaMoney);
 				user->CalculateMoney(deltaMoney);
 

@@ -112,23 +112,54 @@ void User::Split()
 {
 	if (m_curBetMoney > m_totalMoney)
 	{
-		WCHAR errStr[100];
-		wsprintf(errStr, L"유저(%s)가 돈도 없는데 스플릿을 함.", m_userName.c_str());
-		Logger::GetInstance()->Log(Logger::ERROR_NORMAL, errStr, 100);
+		Logger::GetInstance()->Logf(Logger::ERROR_NORMAL, L"유저(%s)가 돈도 없는데 스플릿을 함.", m_userName.c_str());
 		return;
 	}
 
 	if (m_curCardNum[m_curHand] != 2)
 	{
-		WCHAR errStr[100];
-		wsprintf(errStr, L"유저(%s)가 두장이 아닌데 스플릿을 함.", m_userName.c_str());
-		Logger::GetInstance()->Log(Logger::ERROR_NORMAL, errStr, 100);
+		Logger::GetInstance()->Logf(Logger::ERROR_NORMAL, L"유저(%s)가 두장이 아닌데 스플릿을 함.", m_userName.c_str());
 		return;
 	}
 
 	m_isSplit = true;
 	m_totalMoney -= m_curBetMoney;
-	//m_curBetMoney += m_curBetMoney;
+	//돈은 핸드별로 계산됨.
+
+	//수동으로 박은 코드
+	//m_hand[1]._cardList[0]._shape = m_hand[m_curHand]._cardList[1]._shape;
+	//m_hand[1]._cardList[0]._number = m_hand[m_curHand]._cardList[1]._number;
+	//m_hand[m_curHand]._cardList[1].Reset(); // 원래 2번째 카드 삭제 
+
+	// hand 받아와서 처리.
+	auto& nextHand = GetNextHand(); 
+	nextHand._cardList[0]._shape = m_hand[m_curHand]._cardList[1]._shape;
+	nextHand._cardList[0]._number = m_hand[m_curHand]._cardList[1]._number;
+	m_hand[m_curHand]._cardList[1].Reset(); // 원래 2번째 카드 삭제 
+
+}
+
+COMMON::HandInfo& User::GetNextHand()
+{
+	for (int i = 0; i < MAX_HAND; i++)
+	{
+		if (m_hand[i]._cardList[0]._shape == CardInfo::CardShape::EMPTY)
+			return m_hand[i];
+	}
+
+	Logger::GetInstance()->Logf(Logger::Level::EXCEPTION, L"더 찢을 카드슬롯이 없습니다. cur handId = %d", m_curHand);
+	return HandInfo();
+}
+
+void User::SwitchHandIfSplitExist()
+{
+	if (IsSplit() 
+		&& m_curHand < MAX_HAND - 1 
+		&& m_hand[m_curHand+1]._cardList[0]._shape != CardInfo::CardShape::EMPTY)
+		++m_curHand;
+	else
+		SetGameState(GAME_STATE::ACTION_DONE);
+	
 }
 
 bool User::DoubleDown()
@@ -150,7 +181,8 @@ bool User::DoubleDown()
 	}
 	
 	m_totalMoney -= m_curBetMoney;
-	m_curBetMoney += m_curBetMoney;
+	//m_curBetMoney += m_curBetMoney; // 돈을 고치는게 아니라 hand별로 flag를 세워서 계산할때 같이함. 
+	m_hand[m_curHand]._isDoubledown = true;
 
 	return true;
 }
