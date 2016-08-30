@@ -48,8 +48,9 @@ public:
 	void SetRoomStateToWaiting();
 	COMMON::DealerInfo GetDealerInfo();
 	ERROR_CODE ApplyBet(int sessionIndex, int betMoney);
-	std::tuple<int, int> GetCurrentBettingUser();
+	User* GetCurrentBettingUser();
 	void ForceNextTurn(int seat, int hand);
+	void ForceBetting();
 
 	void EndOfGame();
 	void ResetForNextGame();

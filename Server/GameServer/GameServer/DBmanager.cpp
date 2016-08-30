@@ -160,10 +160,14 @@ void DBmanager::SubmitState(int max, int count, ServerConfig* pServerConfig)
 	submitJob._nResult = 2;
 	//wprintf_s(query);
 
+	// 이게 하나씩 늘어나면서 어느 디비쓰레드가 작업할지 정해줌.
+	static int dbCount = 0;
+	if (dbCount == 4) dbCount = 0;
+
 	m_mutex.lock();
-	m_jobQ[3].push_back(submitJob);
+	m_jobQ[dbCount].push_back(submitJob);
 	m_mutex.unlock();
-	SetEvent(hDBEvent[3]);
+	SetEvent(hDBEvent[dbCount++]);
 }
 
 

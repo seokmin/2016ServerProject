@@ -85,7 +85,8 @@ void RoomManager::RunPostTimeAction()
 
 			if (nowTime - room->GetLastActionTime() > ServerConfig::bettingTime * 1000)
 			{
-				room->NotifyStartGame();
+				room->ForceBetting();
+				//room->NotifyStartGame(); // 이 부분이 노티파이가 있어서 뺌..
 			}
 		}
 		break;
@@ -115,8 +116,8 @@ void RoomManager::RunPostTimeAction()
 
 			if (nowTime - room->GetLastActionTime() > ServerConfig::waitingTime * 1000)
 			{
-				auto seatNhand = room->GetCurrentBettingUser();
-				if (std::get<0>(seatNhand) == -1 || std::get<1>(seatNhand) == -1)
+				auto user = room->GetCurrentBettingUser();
+				if (user == nullptr)
 				{
 					// 게임중에 10초가 지났는데.. 베팅중인 유저가 없으면 버그!
 					WCHAR errStr[100];
@@ -126,8 +127,8 @@ void RoomManager::RunPostTimeAction()
 					room->EndOfGame();
 					break;
 				}
-				room->ForceNextTurn(std::get<0>(seatNhand), std::get<1>(seatNhand));
-				
+				room->ForceNextTurn(user->GetCurSeat(), user->GetCurHand());
+				room->NotifyGameChoice(user->GetSessionIndex(), COMMON::ChoiceKind::STAND);
 				room->NotifyChangeTurn();
 			}
 		}
