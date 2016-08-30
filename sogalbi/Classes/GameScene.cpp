@@ -551,10 +551,14 @@ void GameScene::packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetI
 		_players[i]->runAction(Sequence::create(DelayTime::create(waitingTime), callFunc, nullptr));
 	}
 
+	auto winSound = std::string{};
+
 	if (packet->_winYeobu[_userSlotNum] == PacketGameDealerResultNtf::WIN_YEOBU::WIN)
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::RESULT_WIN.c_str());
+		winSound = FILENAME::AUDIO::RESULT_WIN;
 	else if (packet->_winYeobu[_userSlotNum] == PacketGameDealerResultNtf::WIN_YEOBU::LOSE)
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::RESULT_LOSE.c_str());
+		winSound = FILENAME::AUDIO::RESULT_LOSE;
+	auto winSoundFunc = CallFunc::create(CC_CALLBACK_0(CocosDenshion::SimpleAudioEngine::playEffect, CocosDenshion::SimpleAudioEngine::getInstance(), winSound.c_str()));
+	runAction(Sequence::createWithTwoActions(DelayTime::create(waitingTime), winSoundFunc));
 
 
 	// À½¾Ç ²ô±â?
