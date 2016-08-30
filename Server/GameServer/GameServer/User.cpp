@@ -131,14 +131,14 @@ void User::Split()
 	//m_curBetMoney += m_curBetMoney;
 }
 
-void User::DoubleDown()
+bool User::DoubleDown()
 {
 	if (m_curBetMoney > m_totalMoney)
 	{
 		WCHAR errStr[100];
 		wsprintf(errStr, L"유저(%s)가 돈도 없는데 DD를 함.", m_userName.c_str());
 		Logger::GetInstance()->Log(Logger::ERROR_NORMAL, errStr, 100);
-		return;
+		return false;
 	}
 
 	if (m_curCardNum[m_curHand] != 2)
@@ -146,11 +146,13 @@ void User::DoubleDown()
 		WCHAR errStr[100];
 		wsprintf(errStr, L"유저(%s)가 두장이 아닌데 DD를 함.", m_userName.c_str());
 		Logger::GetInstance()->Log(Logger::ERROR_NORMAL, errStr, 100);
-		return;
+		return false;
 	}
 	
 	m_totalMoney -= m_curBetMoney;
 	m_curBetMoney += m_curBetMoney;
+
+	return true;
 }
 
 std::tuple<int, int> User::GetCardSum(int hand)

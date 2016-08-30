@@ -86,6 +86,7 @@ private:
 	DBResult				m_resultPool[ServerConfig::numberOfDBThread];
 
 	std::mutex				m_mutex;
+	std::mutex				m_mutex_result;
 
 };
 

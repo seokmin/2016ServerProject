@@ -323,7 +323,38 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 
 	case ChoiceKind::DOUBLE_DOWN:
 	{
-		//user->DoubleDown();
+		if (!user->DoubleDown())
+			return ERROR_CODE::ROOM_GAME_NOT_ENOUGH_MONEY;
+
+		user->SetHand(user->GetCurHand(), m_dealer.Draw());
+
+		auto sum = user->GetCardSum(user->GetCurHand());
+
+		// 위에 코드 복붙 ㅎㅎ
+		if (std::get<0>(sum) > 21)
+		{
+			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::BURST);
+			if (!(user->IsSplit() && user->GetCurHand() == 0))
+			{
+				user->SetGameState(GAME_STATE::ACTION_DONE);
+			}
+		}
+		//else if (std::get<0>(sum) == 21 || std::get<1>(sum) == 21)
+		//{
+		//	user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
+		//	if (!(user->IsSplit() && user->GetCurHand() == 0))
+		//	{
+		//		user->SetGameState(GAME_STATE::ACTION_DONE);
+		//	}
+		//}
+		else
+		{
+			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
+			if (!(user->IsSplit() && user->GetCurHand() == 0))
+			{
+				user->SetGameState(GAME_STATE::ACTION_DONE);
+			}
+		}
 	}
 	break;
 
@@ -554,7 +585,7 @@ void Room::EndOfGame()
 				int deltaMoney = user->GetBetMoney() * 2 + blackjack_bonus;
 				m_pDBmanager->SubmitUserDeltaMoney(user, deltaMoney);
 				user->CalculateMoney(deltaMoney);
-				
+
 			}
 
 			// 패가 같으면

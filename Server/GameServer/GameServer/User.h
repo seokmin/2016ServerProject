@@ -44,7 +44,7 @@ public:
 	void SetHand(int hand, CardInfo card);
 	void SetHandState(int hand, COMMON::HandInfo::HandState state);
 	void Split();
-	void DoubleDown();
+	bool DoubleDown();
 	std::tuple<int, int> GetCardSum(int hand);
 	void CalculateMoney(int toChange);
 	void ResetForNextGame();
