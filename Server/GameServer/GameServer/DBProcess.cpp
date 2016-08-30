@@ -94,6 +94,6 @@ ERROR_CODE DBProcess::GetUserByAuthProcess(DBResult rslt)
 
 ERROR_CODE DBProcess::CalculateMoneyResProcess(DBResult rslt)
 {
-	Logger::GetInstance()->Logf(Logger::INFO, L"calcMoney result name:%s , money : %s", rslt._result1, rslt._result2);
+	Logger::GetInstance()->Logf(Logger::INFO, L"[Submit DB(User money): Success]name:%s , money : %s", rslt._result1, rslt._result2);
 	return ERROR_CODE();
 }
