@@ -422,7 +422,7 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 		if (firstCard._number == secondCard._number)
 		{
 			// µ·µµ ÀÖÀ¸¸é
-			if (player->getMoneyBet() >= player->getMoneyWhole())
+			if (player->getMoneyBet() <= player->getMoneyWhole())
 			{
 				_itemSplit->setEnabled(true);
 			}

@@ -549,12 +549,14 @@ void Room::EndOfGame()
 			if (user->GetHand(hand)._handState == HandInfo::HandState::BURST)
 			{
 				earnMoney += 0;
+				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s:BURST, total EarnMoney:%d", user->GetName().c_str(), earnMoney);
 			}
 
 			// 딜러의 패가 더 높다면.. 돈을 잃음!
 			else if (m_dealer.GetHand()._handState > user->GetHand(hand)._handState)
 			{
 				earnMoney += 0;
+				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s is lower than Dealer.  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
 			}
 
 			// 유저 패가 더 높다면.. 돈을 땀!
@@ -572,12 +574,13 @@ void Room::EndOfGame()
 				//더블다운이면 거기에 두배를 줌!
 				if (user->GetHand(hand)._isDoubledown == true)
 					earnMoney += user->GetBetMoney() * 2;
-
+				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s is Higher than Dealer.  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
 			}
 
 			// 패가 같으면
 			else
 			{
+				
 				// 스탠드이면 딸 수도 있지만 아니면 비긴걸로
 				if (user->GetHand(hand)._handState == HandInfo::HandState::STAND)
 				{
@@ -609,6 +612,7 @@ void Room::EndOfGame()
 						else
 							earnMoney += user->GetBetMoney();
 					}
+					Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s 's score : %d , dealer's score : %d , total EarnMoney:%d", user->GetName().c_str(), useSum, m_dealer.GetCardSum(), earnMoney);
 				}
 				else
 				{
@@ -616,10 +620,13 @@ void Room::EndOfGame()
 						earnMoney += user->GetBetMoney() * 2;
 					else
 						earnMoney += user->GetBetMoney();
+
+					Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s is Same than Dealer.  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
 				}
 			}
 		}
 
+		Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s : resut :  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
 		user->CalculateMoney(earnMoney);
 		m_pDBmanager->SubmitUserDeltaMoney(user, earnMoney);
 
