@@ -65,18 +65,23 @@ void DBmanager::DBThreadWorker()
 			break;
 		}
 
+		m_mutex.lock();
 		if (m_jobQ[index].empty())
 		{
+			m_mutex.unlock();
 			WCHAR levelStr[200];
 			wsprintf(levelStr, L"DB 쓰레드(%d)에서 이벤트를 받았는데 Q에 아무것도 없음.. ", index);
 			Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
 			ResetEvent(hDBEvent[index]);
 			return;
 		}
+		m_mutex.unlock();
 
+		m_mutex.lock();
 		m_jobPool[index] = m_jobQ[index].front();
 		m_jobQ[index].pop_front();
-		
+		m_mutex.unlock();
+
 		auto ret = m_sqlMgrPool[index]->sqlconn();
 		ret = m_sqlMgrPool[index]->sqlexec(m_jobPool[index]._query, m_jobPool[index]._nResult, m_resultPool[index]._result1, m_resultPool[index]._result2, m_resultPool[index]._result3, m_resultPool[index]._result4);
 		m_sqlMgrPool[index]->sqldisconn();
@@ -105,26 +110,33 @@ void DBmanager::DBThreadWorker()
 
 DBResult DBmanager::FrontDBResult()
 {
+	m_mutex_result.lock();
 	if (m_jobResultQ.empty())
 	{
+		m_mutex_result.unlock();
 		return DBResult();
 	}
-
+	m_mutex_result.unlock();
 	return m_jobResultQ.front();
 }
 
 void DBmanager::PopDBResult()
 {
+	m_mutex_result.lock();
 	if (m_jobResultQ.empty())
 	{
+		m_mutex_result.unlock();
 		return;
 	}
+	m_mutex_result.unlock();
 	m_jobResultQ.pop_front();
 }
 
 void DBmanager::PushDBJob(DBJob job, int pushIndex)
 {
+	m_mutex.lock();
 	m_jobQ[pushIndex].push_back(job);
+	m_mutex.unlock();
 	SetEvent(hDBEvent[pushIndex]);
 }
 
@@ -145,6 +157,8 @@ void DBmanager::SubmitState(int max, int count, ServerConfig* pServerConfig)
 	submitJob._nResult = 2;
 	//wprintf_s(query);
 
+	m_mutex.lock();
 	m_jobQ[3].push_back(submitJob);
+	m_mutex.unlock();
 	SetEvent(hDBEvent[3]);
 }

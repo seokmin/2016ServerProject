@@ -84,6 +84,7 @@ private:
 	DBResult				m_resultPool[4];
 
 	std::mutex				m_mutex;
+	std::mutex				m_mutex_result;
 
 };
 
