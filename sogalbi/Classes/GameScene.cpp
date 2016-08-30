@@ -414,8 +414,10 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 			}
 		}
 		// double down 버튼 활성화 여부
-		if (player->getMoneyBet() >= player->getMoneyWhole())
+		if (player->getMoneyBet() <= player->getMoneyWhole())
+		{
 			_itemDoubleDown->setEnabled(true);
+		}
 		// hit 버튼 활성화 여부
 		_itemHit->setEnabled(true);
 		// stand 버튼 활성화 여부
