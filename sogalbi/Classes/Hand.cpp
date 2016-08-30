@@ -87,14 +87,22 @@ void Hand::clear()
 	for (auto& spr : _cardSprites)
 	{
 		spr->setVisible(false);
+		spr->setColor(Color3B(255, 255, 255));
 	}
 }
 
-void Hand::Die()
+void Hand::Die(float delay)
 {
-	for (int i = 0; i < MAX_CARD; i++)
-	{
-		if(_cardSprites[i] != nullptr)
-			_cardSprites[i]->setColor(Color3B(50, 50, 50));
-	}
+	auto darkenFunc = [&]() {
+		for (auto& spr : _cardSprites)
+		{
+			if (spr != nullptr)
+			{
+				spr->setColor(Color3B(50, 50, 50));
+			}
+		}
+	};
+	auto callFunc = CallFunc::create(darkenFunc);
+	auto seq = Sequence::create(DelayTime::create(delay), callFunc, nullptr);
+	this->runAction(seq);
 }

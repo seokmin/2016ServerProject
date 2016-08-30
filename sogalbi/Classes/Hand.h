@@ -14,7 +14,7 @@ public:
 	void pushCard(CardInfo& card, float delay = 0.f);
 	std::pair<int, int> getHandValue();
 	void clear();
-	void Die();
+	void Die(float delay);
 	
 private:
 	static const int MAX_CARD = 7;
