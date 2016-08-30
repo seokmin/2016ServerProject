@@ -64,13 +64,15 @@ private:
 		UI_TOP = 10
 	};
 	Player* _players[5];
-	Hand*	_dealerHand;
+	Hand*	_dealerHand = nullptr;
+
+
 	COMMON::DealerInfo _dealerInfo;
 	COMMON::UserInfo _userInfo[4];
 	int				_userSlotNum;
 
-	BetSlider*		_betSlider;
-	Menu*			_betButton;
+	BetSlider*		_betSlider = nullptr;
+	Menu*			_betButton = nullptr;
 
 	Menu*			_choiceButton = nullptr;
 	MenuItemLabel*	_itemSplit = nullptr;

@@ -149,6 +149,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BetSlider.cpp" />
     <ClCompile Include="..\Classes\ClientLogger.cpp" />
+    <ClCompile Include="..\Classes\Dealer.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
     <ClCompile Include="..\Classes\Hand.cpp" />
     <ClCompile Include="..\Classes\jsoncpp.cpp" />
@@ -168,6 +169,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BetSlider.h" />
     <ClInclude Include="..\Classes\ClientLogger.h" />
+    <ClInclude Include="..\Classes\Dealer.h" />
     <ClInclude Include="..\Classes\definition.h" />
     <ClInclude Include="..\Classes\GameScene.h" />
     <ClInclude Include="..\Classes\Hand.h" />

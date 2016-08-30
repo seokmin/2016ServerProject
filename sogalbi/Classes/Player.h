@@ -7,7 +7,7 @@ class Player :
 {
 public:
 	CREATE_FUNC(Player);
-	bool init();
+	bool init() override;
 
 	void setPlayerDataWithUserInfo(COMMON::UserInfo userInfo);
 
