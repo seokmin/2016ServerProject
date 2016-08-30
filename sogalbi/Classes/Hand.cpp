@@ -89,3 +89,12 @@ void Hand::clear()
 		spr->setVisible(false);
 	}
 }
+
+void Hand::Die()
+{
+	for (int i = 0; i < MAX_CARD; i++)
+	{
+		if(_cardSprites[i] != nullptr)
+			_cardSprites[i]->setColor(Color3B(50, 50, 50));
+	}
+}

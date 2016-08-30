@@ -477,6 +477,7 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	{
 		soundName = FILENAME::AUDIO::BURST;
 		player->showBanner(Player::BannerKind::BURST);
+		player->_hand[packet->_handNum]->Die();
 	}
 	if (value.first == 21 || value.second == 21)
 		player->showBanner(Player::BannerKind::STAND);

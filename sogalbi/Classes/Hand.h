@@ -14,11 +14,14 @@ public:
 	void pushCard(CardInfo& card, float delay = 0.f);
 	std::pair<int, int> getHandValue();
 	void clear();
+	void Die();
+	
+private:
+	static const int MAX_CARD = 7;
 
-private:
 public:
-	CardInfo _cardInfos[7];
+	CardInfo _cardInfos[MAX_CARD];
 private:
-	Sprite* _cardSprites[7];
+	Sprite* _cardSprites[MAX_CARD];
 	int		_handNum = 0;
 };
