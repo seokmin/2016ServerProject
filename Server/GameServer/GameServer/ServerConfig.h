@@ -21,7 +21,7 @@ public:
 
 	WCHAR SERVERNAME[MAX_NAME_LEN + 1] = L"testServer";
 	WCHAR IP[MAX_IP_LEN + 1] = L"127.0.0.1";
-	unsigned short Port = 34343;
+	static const unsigned short Port = 34343;
 	static const unsigned int minBet = 0;
 	static const unsigned int maxBet = 10000;
 
