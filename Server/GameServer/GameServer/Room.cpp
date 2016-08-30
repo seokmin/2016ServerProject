@@ -540,13 +540,13 @@ void Room::EndOfGame()
 			// À¯Àú ÆÐ°¡ ´õ ³ô´Ù¸é.. µ·À» ¶¡!
 			else if (m_dealer.GetHand()._handState < user->GetHand(hand)._handState)
 			{
-				int blackjack = 1;
+				int blackjack_bonus = 0;
 				if (user->GetHand(hand)._handState == HandInfo::HandState::BLACKJACK)
 				{
 					// ±Ùµ¥ ºí·¢ÀèÀÌ¸é 1.5¹è¸¦ ÁÜ!
-					int blackjack = user->GetBetMoney() * 0.5;
+					blackjack_bonus = user->GetBetMoney() * 0.5;
 				}
-				user->CalculateMoney(user->GetBetMoney() * 2 + blackjack);
+				user->CalculateMoney(user->GetBetMoney() * 2 + blackjack_bonus);
 			}
 
 			// ÆÐ°¡ °°À¸¸é

@@ -27,6 +27,7 @@ public:
 
 	static const unsigned int bettingTime = 15;
 	static const unsigned int waitingTime = 10;
+	static const unsigned int numberOfDBThread = 4;
 
 	int BackLogCount = 5;
 

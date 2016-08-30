@@ -9,7 +9,7 @@ class PacketQueue;
 
 class DBProcess
 {
-	typedef void(DBProcess::*DBFunc)(DBResult);
+	typedef ERROR_CODE (DBProcess::*DBFunc)(DBResult);
 	DBFunc DBFuncArray[(int)JOB_TYPE::MAX];
 
 public:
@@ -20,6 +20,11 @@ public:
 	
 	void Process(DBResult rslt);
 
+
+private:
+	ERROR_CODE SubmitStateProcess(DBResult ret);
+	ERROR_CODE GetUserByAuthProcess(DBResult ret);
+	ERROR_CODE CalculateMoneyResProcess(DBResult ret);
 
 private:
 	UserManager*			m_pUserMgr;

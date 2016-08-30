@@ -29,7 +29,7 @@ private:
 	bool m_IsReady = false;
 	bool m_dbisRunning = false;
 	const int DBSubmitInterval = 3;
-	const short m_numberOfDBThread = 4;
+	const short m_numberOfDBThread = ServerConfig::numberOfDBThread;
 
 	std::unique_ptr<ServerConfig> m_pServerConfig;
 	std::unique_ptr<DBmanager> m_pDB;

@@ -2,6 +2,7 @@
 #include "DBmanager.h"
 #include "MysqlManager.h"
 #include "Logger.h"
+#include "User.h"
 
 __declspec(thread) long g_nThreadIndex = 0;
 volatile long g_nThreadSeq = -1;
@@ -147,4 +148,17 @@ void DBmanager::SubmitState(int max, int count, ServerConfig* pServerConfig)
 
 	m_jobQ[3].push_back(submitJob);
 	SetEvent(hDBEvent[3]);
+}
+
+
+void DBmanager::CalcUserMoney(User * pUser, int deltaMoney)
+{
+	DBJob calcMoneyJob;
+
+	SQLWCHAR query[200] = L"";
+	wsprintf(calcMoneyJob._query, L"CALL Calc_user_money(\"%s\", %d);", pUser->GetName(), deltaMoney);
+	calcMoneyJob._nResult = 2;
+	wprintf_s(query);
+
+	PushDBJob(calcMoneyJob, 0);
 }
