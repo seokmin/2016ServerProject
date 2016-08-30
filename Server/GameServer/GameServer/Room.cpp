@@ -235,7 +235,7 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 	return ERROR_CODE::NONE;
 }
 
-std::tuple<int, int> Room::GetCurrentBettingUser()
+User* Room::GetCurrentBettingUser()
 {
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
@@ -244,21 +244,12 @@ std::tuple<int, int> Room::GetCurrentBettingUser()
 			continue;
 
 		if (user->GetGameState() == GAME_STATE::ACTIONING)
-		{
-			int hand = 0;
-			if (user->IsSplit())
-			{
-				if (user->GetHand(0)._handState != COMMON::HandInfo::HandState::CURRENT)
-				{
-					hand = 1;
-				}
-			}
-				
-			return std::make_tuple(i, hand);
+		{				
+			return user;
 		}
 	}
 
-	return std::make_tuple(-1, -1);
+	return nullptr;
 }
 
 void Room::ForceNextTurn(int seat, int hand)
@@ -270,6 +261,17 @@ void Room::ForceNextTurn(int seat, int hand)
 
 	m_userList[seat]->SetGameState(GAME_STATE::ACTION_DONE);
 	m_userList[seat]->SetHandState(hand, COMMON::HandInfo::HandState::STAND);
+}
+
+void Room::ForceBetting()
+{
+	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
+	{
+		if (m_userList[i] == nullptr)
+			return;
+
+		ApplyBet(m_userList[i]->GetSessionIndex(), ServerConfig::minBet);
+	}
 }
 
 ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
@@ -363,7 +365,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		//if (user->IsSplit())
 		//	break;
 		//
-		//user->Split();
+		user->Split();
 	}
 	break;
 	

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ui/UISlider.h"
 
 using namespace ui;

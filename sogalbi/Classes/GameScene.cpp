@@ -150,6 +150,7 @@ void GameScene::initLayout(int roomNum)
 	_choiceButton->alignItemsHorizontallyWithPadding(60);
 	_choiceButton->setEnabled(false);
 	addChild(_choiceButton, Z_ORDER::UI_TOP);
+
 }
 
 GameScene* GameScene::create(int roomNum)
@@ -394,7 +395,13 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 	_players[packet->_slotNum]->setCounter(packet->_waitingTime);
 
 	auto& player = _players[_userSlotNum];
+	
 	auto& hand = player->_hand[packet->_handNum];
+
+	// 해당 hand는 enable 해줘야함
+	hand->setVisible(true);
+	player->_hand[(packet->_handNum + 1) % 2]->setVisible(false);
+
 
 	if (packet->_slotNum == _userSlotNum)
 	{
