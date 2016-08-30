@@ -470,6 +470,7 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 		break;
 	case ChoiceKind::DOUBLE_DOWN:
 		player->showEffect(Player::EffectKind::DOUBLE_DOWN);
+		soundName = FILENAME::AUDIO::DOUBLE_DOWN;
 		break;
 	default:
 		break;

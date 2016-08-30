@@ -142,5 +142,7 @@ namespace FILENAME
 		DEF_FILENAME(AUDIO, BURST, "burst.wav");
 		DEF_FILENAME(AUDIO, STAND, "stand.wav");
 		DEF_FILENAME(AUDIO, HIT, "hit.wav");
+		DEF_FILENAME(AUDIO, DOUBLE_DOWN, "doubleDown.wav");
+		DEF_FILENAME(AUDIO, RESULT_WIN, "earnMoney.wav");
 	}
 }
