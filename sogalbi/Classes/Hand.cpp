@@ -43,6 +43,10 @@ void Hand::pushCard(CardInfo& card, float delay /*= 0.f*/)
 	cardSpr->setVisible(false);
 	cardSpr->runAction(seq);
 	++_handNum;
+
+	// 다이까지 알아서
+	if (getHandValue().first > 21)
+		Die(.5f);
 }
 
 std::pair<int, int> Hand::getHandValue()

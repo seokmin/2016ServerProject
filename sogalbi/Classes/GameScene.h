@@ -4,6 +4,7 @@
 class Player;
 class BetSlider;
 class Hand;
+class Dealer;
 
 namespace cocos2d
 {
@@ -64,6 +65,7 @@ private:
 		UI_TOP = 10
 	};
 	Player* _players[5];
+	Dealer* _dealer;
 	Hand*	_dealerHand = nullptr;
 
 

@@ -8,6 +8,7 @@
 #include "ClientLogger.h"
 #include "BetSlider.h"
 #include "SimpleAudioEngine.h"
+#include "Dealer.h"
 
 #include "GameScene.h"
 
@@ -114,9 +115,13 @@ void GameScene::initLayout(int roomNum)
 	_players[0]->setPosition(screenSize.width - 130, 260);
 
 	// 딜러 핸드
-	_dealerHand = Hand::create();
-	addChild(_dealerHand, Z_ORDER::CARD_TOP);
-	_dealerHand->setPosition(getContentSize().width / 2 - 60, 600);
+// 	_dealerHand = Hand::create();
+// 	addChild(_dealerHand, Z_ORDER::CARD_TOP);
+// 	_dealerHand->setPosition(getContentSize().width / 2 - 60, 600);
+	_dealer = Dealer::create();
+	addChild(_dealer, Z_ORDER::CARD_TOP);
+	_dealer->setPosition(getContentSize().width / 2, 600);
+
 
 	// 베팅 슬라이더
 	_betSlider = BetSlider::create();
@@ -301,7 +306,8 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 		_betButton->setVisible(true);
 	}
 	_choiceButton->setVisible(false);
-	_dealerHand->clear();
+	//_dealerHand->clear();
+	_dealer->clear();
 }
 
 void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
@@ -322,7 +328,8 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 		player->_hand[0]->pushCard(cards[1],0.5f);
 		player->setValueLabel(player->_hand[0]->getHandValue());
 	}
-	_dealerHand->pushCard(packet->_dealerCard);
+	//_dealerHand->pushCard(packet->_dealerCard);
+	_dealer->pushCard(packet->_dealerCard);
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str(), true);
 
 	for (auto& player : _players)
@@ -487,7 +494,7 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	{
 		soundName = FILENAME::AUDIO::BURST;
 		player->showBanner(Player::BannerKind::BURST);
-		player->_hand[packet->_handNum]->Die(.2f);
+		//player->_hand[packet->_handNum]->Die(.2f);
 	}
 	if (value.first == 21 || value.second == 21)
 		player->showBanner(Player::BannerKind::STAND);
@@ -509,21 +516,29 @@ void GameScene::packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetI
 		player->initCounter();
 		player->setAlreadyBet(false);
 	}
-	// 딜러가 새로 깐 카드들
-	auto& cardList = packet->_dealerResult._openedCardList;
-	float waitingTime = 0.f;
+// 	// 딜러가 새로 깐 카드들
+ 	auto& cardList = packet->_dealerResult._openedCardList;
+ 	float waitingTime = 0.f;
+// 	for (auto& card : cardList)
+// 	{
+// 		if (card._shape == CardInfo::CardShape::EMPTY)
+// 			break;
+// 		_dealerHand->pushCard(card, waitingTime);
+// 		
+// 		waitingTime += 1.f;
+// 	}
+// 
+// 	//딜러 Burst이면 어둡게
+// 	if (_dealerHand->getHandValue().first > 21)
+// 		_dealerHand->Die(waitingTime - .6f);
+
 	for (auto& card : cardList)
 	{
 		if (card._shape == CardInfo::CardShape::EMPTY)
 			break;
-		_dealerHand->pushCard(card, waitingTime);
-		
 		waitingTime += 1.f;
 	}
-
-	//딜러 Burst이면 어둡게
-	if (_dealerHand->getHandValue().first > 21)
-		_dealerHand->Die(waitingTime - .6f);
+	_dealer->playDealerResultAnimation(packet->_dealerResult);
 
 	// 돈 결과 알려줌
 	for (int i = 0; i < 5; ++i)
