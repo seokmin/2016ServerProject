@@ -22,18 +22,7 @@ void DBProcess::Process(DBResult rslt)
 	{
 	case JOB_TYPE::SUBMIT_STATE:
 	{
-		WCHAR levelStr[200];
-		if (rslt._retCode != SQL_SUCCESS)
-		{
-			// 에러만 띄우고 암것도 안 함.
-			wsprintf(levelStr, L"[DB : FAIL TO WRITE] Server Id = %s %s", rslt._result1, rslt._result2);
-		}
-		else
-		{
-			wsprintf(levelStr, L"[DB : GOOD] Server Id = %s %s", rslt._result1, rslt._result2);
-		}
-
-		Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
+		Logger::GetInstance()->Logf(Logger::INFO, L"[DB : GOOD] Server Id = %s %s ", rslt._result1, rslt._result2);
 	}
 	break;
 
@@ -41,9 +30,7 @@ void DBProcess::Process(DBResult rslt)
 	{
 		if (rslt._retCode != SQL_SUCCESS)
 		{
-			WCHAR levelStr[200];
-			wsprintf(levelStr, L"[DB : FAIL TO EXECUTE] Error = %s", rslt._retCode);
-			Logger::GetInstance()->Log(Logger::WARNING, levelStr, 200);
+			Logger::GetInstance()->Logf(Logger::WARNING, L"[DB : FAIL TO EXECUTE] Error = %s", rslt._retCode);
 
 			DBJob job;
 			int inputIndex = rslt._sessionIndex % 4;
@@ -62,9 +49,7 @@ void DBProcess::Process(DBResult rslt)
 		user->Init(sAuth, rslt._result1, _wtoi(rslt._result2), _wtoi(rslt._result3));
 		user->SetIoState(IO_STATE::NONE);
 
-		WCHAR logStr[200];
-		wsprintf(logStr, L"[LOGIC, DB : SUCCESS] User(%s) Logged In", rslt._result1);
-		Logger::GetInstance()->Log(Logger::INFO, logStr, 200);
+		Logger::GetInstance()->Logf(Logger::INFO, L"[LOGIC, DB : SUCCESS] User(%s) Logged In", rslt._result1);
 		
 		// RES 로직 시작
 		PacketRoomEnterRes resPkt;
@@ -72,15 +57,11 @@ void DBProcess::Process(DBResult rslt)
 		ERROR_CODE result = m_pRoomMgr->EnterUser(rslt._sessionIndex);
 		if (result != ERROR_CODE::NONE)
 		{
-			WCHAR levelStr[200];
-			wsprintf(levelStr, L"[LOGIC, DB : FAIL] User(%s) Failed to Enter Room!!! =========", rslt._result1);
-			Logger::GetInstance()->Log(Logger::ERROR_FATAL, levelStr, 200);
+			Logger::GetInstance()->Logf(Logger::ERROR_FATAL, L"[LOGIC, DB : FAIL] User(%s) Failed to Enter Room!!! =========", rslt._result1);
 			return;
 		}
 
-		WCHAR levelStr[200];
-		wsprintf(levelStr, L"[LOGIC, DB : SUCCESS] User(%s) Entered Room(%d)", rslt._result1, user->GetCurRoomIdx());
-		Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
+		Logger::GetInstance()->Logf(Logger::INFO, L"[LOGIC, DB : SUCCESS] User(%s) Entered Room(%d)", rslt._result1, user->GetCurRoomIdx());
 		
 		resPkt._roomNum = user->GetCurRoomIdx();
 		

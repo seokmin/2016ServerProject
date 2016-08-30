@@ -15,6 +15,7 @@ public:
 	};
 
 	void Log(Level level, WCHAR* message, int lessageLen);
+	void Logf(Level level, WCHAR* message, ... );
 
 	static Logger* GetInstance();
 	static void DelInstance();
