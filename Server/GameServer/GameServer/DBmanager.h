@@ -7,13 +7,14 @@
 
 class Logger;
 class MySQLMangager;
-
+class User;
 
 enum class JOB_TYPE
 {
 	NONE = 0,
 	SUBMIT_STATE = 1,
 	GET_USER_INFO_BY_AUTH = 2,
+	CALCULATE_MONEY =3,
 
 	MAX = 255,
 };
@@ -22,7 +23,7 @@ struct DBJob
 {
 	JOB_TYPE	_type = JOB_TYPE::NONE;
 	SQLWCHAR	_query[200];
-	int			_nResult = 0;
+	int			_nResult = 0; // result °¹¼ö
 	int			_sessionIndex = -1;
 
 	void Reset()
@@ -72,16 +73,17 @@ public:
 	bool		DBResultEmpty() { return m_jobResultQ.empty(); };
 	DBResult	FrontDBResult();
 	void		PopDBResult();
+	void		SubmitUserDeltaMoney(User* pUser, int deltaMoney);
 
 	void		PushDBJob(DBJob job, int pushIndex);
 
 private:
-	HANDLE					hDBEvent[4];
-	std::deque<DBJob>		m_jobQ[4];
+	HANDLE					hDBEvent[ServerConfig::numberOfDBThread];
+	std::deque<DBJob>		m_jobQ[ServerConfig::numberOfDBThread];
 	std::deque<DBResult>	m_jobResultQ;
-	MySQLMangager*			m_sqlMgrPool[4];
-	DBJob					m_jobPool[4];
-	DBResult				m_resultPool[4];
+	MySQLMangager*			m_sqlMgrPool[ServerConfig::numberOfDBThread];
+	DBJob					m_jobPool[ServerConfig::numberOfDBThread];
+	DBResult				m_resultPool[ServerConfig::numberOfDBThread];
 
 	std::mutex				m_mutex;
 	std::mutex				m_mutex_result;
