@@ -365,7 +365,7 @@ std::tuple<int, int> Room::GetNextPlayerSeatAndHand()
 		if (user == nullptr)
 			continue;
 
-		if (user->GetGameState() != GAME_STATE::ACTION_WAITING)
+		if (user->GetGameState() != GAME_STATE::ACTION_WAITING && user->GetGameState() != GAME_STATE::ACTIONING)
 			continue;
 
 		for (int hand = 0; hand < MAX_HAND; ++hand)
@@ -376,6 +376,7 @@ std::tuple<int, int> Room::GetNextPlayerSeatAndHand()
 			if (user->GetHand(hand)._handState != COMMON::HandInfo::HandState::CURRENT)
 				continue;
 			
+			user->SetGameState(GAME_STATE::ACTIONING);
 			return std::make_tuple(i, hand);
 		}
 	}

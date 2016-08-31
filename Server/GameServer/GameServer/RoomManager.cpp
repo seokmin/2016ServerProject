@@ -108,7 +108,7 @@ void RoomManager::RunPostTimeAction()
 
 		case ROOM_STATE::INGAME :
 		{
-			// 이 경우는 행동을 결정한 시간이 지나도 상태가 그대로일 때..
+			// 이 경우는 행동을 결정할 시간이 지나도 상태가 그대로일 때..
 
 			auto nowTime = duration_cast< milliseconds >(
 				steady_clock::now().time_since_epoch()
