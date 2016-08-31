@@ -319,25 +319,17 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 
 		auto sum = user->GetCardSum(user->GetCurHand());
 
-		// 위에 코드 복붙 ㅎㅎ
 		if (std::get<0>(sum) > 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::BURST);
-			user->SwitchHandIfSplitExist();
 		}
-		//else if (std::get<0>(sum) == 21 || std::get<1>(sum) == 21)
-		//{
-		//	user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-		//	if (!(user->IsSplit() && user->GetCurHand() == 0))
-		//	{
-		//		user->SetGameState(GAME_STATE::ACTION_DONE);
-		//	}
-		//}
 		else
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-			user->SwitchHandIfSplitExist();
 		}
+		//바로 턴을 종료함.
+		user->SwitchHandIfSplitExist();
+
 	}
 	break;
 
@@ -346,6 +338,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		if (user->IsSplit())
 			return ERROR_CODE::ROOM_GAME_INVALID_PLAY_ALREADY_SPLIT;
 		
+		Logger::GetInstance()->Logf(Logger::Level::INFO, L"Splite! user:%s", user->GetName().c_str());
 		user->Split();
 	}
 	break;
@@ -627,9 +620,9 @@ void Room::EndOfGame()
 		}
 
 		Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s : resut :  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
-		user->CalculateMoney(earnMoney);
 		m_pDBmanager->SubmitUserDeltaMoney(user, earnMoney);
-
+		user->CalculateMoney(earnMoney);
+		
 		pkt._currentMoney[i] = m_userList[i]->GetCurMoney();
 		pkt._earnMoney[i] = earnMoney;
 
