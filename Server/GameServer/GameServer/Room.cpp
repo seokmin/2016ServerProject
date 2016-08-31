@@ -102,6 +102,10 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	else if (pUser->GetGameState() == GAME_STATE::ACTIONING) //유저가 게임중이었으면 다음 사람으로 진행
 	{
 		//turn 진행을 알림.
+		pUser->SetGameState(GAME_STATE::ACTION_DONE);
+		Logger::GetInstance()->Logf(Logger::Level::INFO, L"User(%s)'s Current Hand state : %d", pUser->GetName().c_str(), (int)pUser->GetHand(0)._handState);
+		//pUser->SetHandState(0, HandInfo::HandState::BURST);
+
 		NotifyChangeTurn();
 	}
 
