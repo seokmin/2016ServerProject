@@ -626,11 +626,11 @@ void Room::EndOfGame()
 		pkt._currentMoney[i] = m_userList[i]->GetCurMoney();
 		pkt._earnMoney[i] = earnMoney;
 
-		if (earnMoney > 0)
+		if (earnMoney > user->GetBetMoney())
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::WIN;
-		else if(earnMoney == 0)
+		else if(earnMoney == user->GetBetMoney())
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::PUSH;
-		else
+		else if(earnMoney == 0)
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::LOSE;
 	}
 
@@ -658,7 +658,7 @@ void Room::EndOfGame()
 void Room::ResetForNextGame()
 {
 	// x초 뒤에 시작할 준비
-	m_waitForRestart = m_dealer.GetCardNum() * 2 + 4;
+	m_waitForRestart = m_dealer.GetCardNum() * 1.0 + 2;
 
 	m_dealer.Clear();
 

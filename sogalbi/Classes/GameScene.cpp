@@ -481,6 +481,8 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 		break;
 	case ChoiceKind::SPLIT:
 		player->showEffect(Player::EffectKind::SPLIT);
+		player->_hand[0]->popCard();
+		player->_hand[1]->pushCard(player->_hand[0]->getCard(1));
 		break;
 	case ChoiceKind::DOUBLE_DOWN:
 		player->showEffect(Player::EffectKind::DOUBLE_DOWN);
@@ -549,10 +551,17 @@ void GameScene::packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetI
 		_players[i]->runAction(Sequence::create(DelayTime::create(waitingTime), callFunc, nullptr));
 	}
 
+	auto winSound = std::string{};
+
 	if (packet->_winYeobu[_userSlotNum] == PacketGameDealerResultNtf::WIN_YEOBU::WIN)
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::RESULT_WIN.c_str());
+		winSound = FILENAME::AUDIO::RESULT_WIN;
 	else if (packet->_winYeobu[_userSlotNum] == PacketGameDealerResultNtf::WIN_YEOBU::LOSE)
-		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::RESULT_LOSE.c_str());
+		winSound = FILENAME::AUDIO::RESULT_LOSE;
+	auto winSoundFunc = CallFunc::create([winSound]() {
+		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(winSound.c_str());
+	}
+	);
+	runAction(Sequence::createWithTwoActions(DelayTime::create(waitingTime), winSoundFunc));
 
 
 	// À½¾Ç ²ô±â?

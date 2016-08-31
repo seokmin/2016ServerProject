@@ -12,6 +12,8 @@ public:
 	virtual bool init() override;
 
 	void pushCard(CardInfo& card, float delay = 0.f);
+	void popCard();
+	CardInfo getCard(int index) { return _cardInfos[index]; }
 	std::pair<int, int> getHandValue();
 	void clear();
 	void Die(float delay);
