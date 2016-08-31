@@ -315,6 +315,9 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		if (!user->DoubleDown())
 			return ERROR_CODE::ROOM_GAME_NOT_ENOUGH_MONEY;
 
+		// DB에 돈 더 낼것 보냄.
+		m_pDBmanager->SubmitUserDeltaMoney(user, -(user->GetBetMoney()));
+
 		user->SetHand(user->GetCurHand(), m_dealer.Draw());
 
 		auto sum = user->GetCardSum(user->GetCurHand());
@@ -561,15 +564,15 @@ void Room::EndOfGame()
 					// 근데 블랙잭이면 1.5배를 줌!
 					blackjack_bonus = user->GetBetMoney() * 0.5;
 				}
-
-				earnMoney = user->GetBetMoney() * 2 + blackjack_bonus;
+				earnMoney += user->GetBetMoney() * 2 + blackjack_bonus;
 
 				//더블다운이면 거기에 두배를 줌!
 				if (user->GetHand(hand)._isDoubledown == true)
+				{
 					earnMoney += user->GetBetMoney() * 2;
+				}
 				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s is Higher than Dealer.  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
 			}
-
 			// 패가 같으면
 			else
 			{
@@ -619,7 +622,7 @@ void Room::EndOfGame()
 			}
 		}
 
-		Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s : resut :  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
+		Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s : resut : curBetMoney:%d, total EarnMoney:%d", user->GetName().c_str(),user->GetBetMoney() ,earnMoney);
 		m_pDBmanager->SubmitUserDeltaMoney(user, earnMoney);
 		user->CalculateMoney(earnMoney);
 		
@@ -628,7 +631,7 @@ void Room::EndOfGame()
 
 		if (earnMoney > user->GetBetMoney())
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::WIN;
-		else if(earnMoney == user->GetBetMoney())
+		else if(earnMoney == user->GetBetMoney()) 
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::PUSH;
 		else if(earnMoney == 0)
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::LOSE;
