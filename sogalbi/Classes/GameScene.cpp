@@ -484,8 +484,8 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 		break;
 	case ChoiceKind::SPLIT:
 		player->showEffect(Player::EffectKind::SPLIT);
+		player->_hand[1]->pushCard(player->_hand[0]->getCard(1)); 
 		player->_hand[0]->popCard();
-		player->_hand[1]->pushCard(player->_hand[0]->getCard(1));
 		break;
 	case ChoiceKind::DOUBLE_DOWN:
 		player->showEffect(Player::EffectKind::DOUBLE_DOWN);
