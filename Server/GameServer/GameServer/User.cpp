@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "User.h"
+#include <cassert>
 
 void User::Init(std::string authToken, std::wstring userName, int pokeNum, int totalMoney)
 {
@@ -126,16 +127,22 @@ void User::Split()
 	m_totalMoney -= m_curBetMoney;
 	//돈은 핸드별로 계산됨.
 
+	assert(m_curHand == 0);
 	//수동으로 박은 코드
-	//m_hand[1]._cardList[0]._shape = m_hand[m_curHand]._cardList[1]._shape;
-	//m_hand[1]._cardList[0]._number = m_hand[m_curHand]._cardList[1]._number;
-	//m_hand[m_curHand]._cardList[1].Reset(); // 원래 2번째 카드 삭제 
+	m_hand[1]._cardList[0]._shape = m_hand[m_curHand]._cardList[1]._shape;
+	m_hand[1]._cardList[0]._number = m_hand[m_curHand]._cardList[1]._number;
+	m_hand[m_curHand]._cardList[1].Reset(); // 원래 2번째 카드 삭제 
+	m_curCardNum[m_curHand] = 1;
+	m_curCardNum[1] = 1;
+	assert((int)m_hand[1]._cardList[0]._shape != (int)CardInfo::CardShape::EMPTY);
+
+	Logger::GetInstance()->Logf(Logger::Level::INFO, L"m_curHad:%d, shape[1][0]:%d", m_curHand, m_hand[1]._cardList[0]._shape);
 
 	// hand 받아와서 처리.
-	auto& nextHand = GetNextHand(); 
-	nextHand._cardList[0]._shape = m_hand[m_curHand]._cardList[1]._shape;
-	nextHand._cardList[0]._number = m_hand[m_curHand]._cardList[1]._number;
-	m_hand[m_curHand]._cardList[1].Reset(); // 원래 2번째 카드 삭제 
+	//auto& nextHand = GetNextHand(); 
+	//nextHand._cardList[0]._shape = m_hand[m_curHand]._cardList[1]._shape;
+	//nextHand._cardList[0]._number = m_hand[m_curHand]._cardList[1]._number;
+	//m_hand[m_curHand]._cardList[1].Reset(); // 원래 2번째 카드 삭제 
 
 }
 

@@ -273,6 +273,9 @@ void GameScene::packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo)
 	using namespace COMMON;
 	auto packet = (PacketGameBetNtf*)packetInfo.pRefData;
 	auto& betUser = _players[packet->_betSlot];
+	if (packet->_betSlot == _userSlotNum)
+		disableAllChoiceButton();
+
 	betUser->setMoneyBet(packet->_betMoney, betUser->getMoneyWhole() - packet->_betMoney);
 	betUser->setAlreadyBet(true);
 	betUser->initCounter();
@@ -481,8 +484,8 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 		break;
 	case ChoiceKind::SPLIT:
 		player->showEffect(Player::EffectKind::SPLIT);
+		player->_hand[1]->pushCard(player->_hand[0]->getCard(1)); 
 		player->_hand[0]->popCard();
-		player->_hand[1]->pushCard(player->_hand[0]->getCard(1));
 		break;
 	case ChoiceKind::DOUBLE_DOWN:
 		player->showEffect(Player::EffectKind::DOUBLE_DOWN);

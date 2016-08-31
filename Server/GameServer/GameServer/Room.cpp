@@ -102,6 +102,10 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	else if (pUser->GetGameState() == GAME_STATE::ACTIONING) //유저가 게임중이었으면 다음 사람으로 진행
 	{
 		//turn 진행을 알림.
+		pUser->SetGameState(GAME_STATE::ACTION_DONE);
+		Logger::GetInstance()->Logf(Logger::Level::INFO, L"User(%s)'s Current Hand state : %d", pUser->GetName().c_str(), (int)pUser->GetHand(0)._handState);
+		//pUser->SetHandState(0, HandInfo::HandState::BURST);
+
 		NotifyChangeTurn();
 	}
 
@@ -315,29 +319,24 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		if (!user->DoubleDown())
 			return ERROR_CODE::ROOM_GAME_NOT_ENOUGH_MONEY;
 
+		// DB에 돈 더 낼것 보냄.
+		m_pDBmanager->SubmitUserDeltaMoney(user, -(user->GetBetMoney()));
+
 		user->SetHand(user->GetCurHand(), m_dealer.Draw());
 
 		auto sum = user->GetCardSum(user->GetCurHand());
 
-		// 위에 코드 복붙 ㅎㅎ
 		if (std::get<0>(sum) > 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::BURST);
-			user->SwitchHandIfSplitExist();
 		}
-		//else if (std::get<0>(sum) == 21 || std::get<1>(sum) == 21)
-		//{
-		//	user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-		//	if (!(user->IsSplit() && user->GetCurHand() == 0))
-		//	{
-		//		user->SetGameState(GAME_STATE::ACTION_DONE);
-		//	}
-		//}
 		else
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-			user->SwitchHandIfSplitExist();
 		}
+		//바로 턴을 종료함.
+		user->SwitchHandIfSplitExist();
+
 	}
 	break;
 
@@ -346,6 +345,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		if (user->IsSplit())
 			return ERROR_CODE::ROOM_GAME_INVALID_PLAY_ALREADY_SPLIT;
 		
+		Logger::GetInstance()->Logf(Logger::Level::INFO, L"Splite! user:%s", user->GetName().c_str());
 		user->Split();
 	}
 	break;
@@ -549,12 +549,14 @@ void Room::EndOfGame()
 			if (user->GetHand(hand)._handState == HandInfo::HandState::BURST)
 			{
 				earnMoney += 0;
+				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s:BURST, total EarnMoney:%d", user->GetName().c_str(), earnMoney);
 			}
 
 			// 딜러의 패가 더 높다면.. 돈을 잃음!
 			else if (m_dealer.GetHand()._handState > user->GetHand(hand)._handState)
 			{
 				earnMoney += 0;
+				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s is lower than Dealer.  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
 			}
 
 			// 유저 패가 더 높다면.. 돈을 땀!
@@ -566,18 +568,19 @@ void Room::EndOfGame()
 					// 근데 블랙잭이면 1.5배를 줌!
 					blackjack_bonus = user->GetBetMoney() * 0.5;
 				}
-
-				earnMoney = user->GetBetMoney() * 2 + blackjack_bonus;
+				earnMoney += user->GetBetMoney() * 2 + blackjack_bonus;
 
 				//더블다운이면 거기에 두배를 줌!
 				if (user->GetHand(hand)._isDoubledown == true)
+				{
 					earnMoney += user->GetBetMoney() * 2;
-
+				}
+				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s is Higher than Dealer.  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
 			}
-
 			// 패가 같으면
 			else
 			{
+				
 				// 스탠드이면 딸 수도 있지만 아니면 비긴걸로
 				if (user->GetHand(hand)._handState == HandInfo::HandState::STAND)
 				{
@@ -609,6 +612,7 @@ void Room::EndOfGame()
 						else
 							earnMoney += user->GetBetMoney();
 					}
+					Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s 's score : %d , dealer's score : %d , total EarnMoney:%d", user->GetName().c_str(), useSum, m_dealer.GetCardSum(), earnMoney);
 				}
 				else
 				{
@@ -616,19 +620,22 @@ void Room::EndOfGame()
 						earnMoney += user->GetBetMoney() * 2;
 					else
 						earnMoney += user->GetBetMoney();
+
+					Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s is Same than Dealer.  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
 				}
 			}
 		}
 
-		user->CalculateMoney(earnMoney);
+		Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s : resut : curBetMoney:%d, total EarnMoney:%d", user->GetName().c_str(),user->GetBetMoney() ,earnMoney);
 		m_pDBmanager->SubmitUserDeltaMoney(user, earnMoney);
-
+		user->CalculateMoney(earnMoney);
+		
 		pkt._currentMoney[i] = m_userList[i]->GetCurMoney();
 		pkt._earnMoney[i] = earnMoney;
 
 		if (earnMoney > user->GetBetMoney())
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::WIN;
-		else if(earnMoney == user->GetBetMoney())
+		else if(earnMoney == user->GetBetMoney()) 
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::PUSH;
 		else if(earnMoney == 0)
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::LOSE;
