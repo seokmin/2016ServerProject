@@ -57,7 +57,7 @@ void Dealer::SetHand(COMMON::CardInfo card)
 
 int Dealer::GetCardSum()
 {
-	int sum = 0;
+	/*int sum = 0;
 
 	bool flag = false;
 	for (int i = 0; i < m_curCardNum; ++i)
@@ -79,7 +79,13 @@ int Dealer::GetCardSum()
 	{
 		if (sum + 10 <= 21)
 			sum += 10;
-	}
-	
-	return sum;
+	}*/
+	auto resultPair = m_dealerHand.GetScore();
+	int sum1 = std::get<0>(resultPair);
+	int sum2 = std::get<1>(resultPair);
+
+	if (sum2 > 21)
+		return sum1;
+	else
+		return sum2;
 }

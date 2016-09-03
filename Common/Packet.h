@@ -1,5 +1,6 @@
 #pragma once
 #include "ErrorCode.h"
+#include <tuple>
 
 namespace COMMON
 {
@@ -102,6 +103,33 @@ namespace COMMON
 			}
 			_isDoubledown = false;
 			_handState = CURRENT;
+		}
+
+		std::tuple<int, int> GetScore()
+		{
+			int sum1 = 0;
+			int sum2 = 0;
+			bool isAce = false;
+			for (int i = 0; i < 7 ; ++i)
+			{
+				if (_cardList[i]._shape == CardInfo::CardShape::EMPTY)
+					break;
+
+				if (_cardList[i]._number > 10) // J, Q, K
+					sum1 += 10;
+				else 
+					sum1 += _cardList[i]._number;
+
+				if (_cardList[i]._number == 1)
+					isAce = true;
+			}
+
+			if (isAce) 
+				sum2 = sum1 + 10;
+			else 
+				sum2 = sum1;
+
+			return std::make_tuple(sum1, sum2);
 		}
 	};
 

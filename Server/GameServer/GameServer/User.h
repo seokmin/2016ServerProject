@@ -46,7 +46,7 @@ public:
 	void Split();
 	bool DoubleDown();
 	std::tuple<int, int> GetCardSum(int hand);
-	void CalculateMoney(int toChange);
+	void ApplyEarnMoney(int toChange);
 	void ResetForNextGame();
 
 	bool				IsAvailableFromPool() { return m_sessionIndex < 0; };

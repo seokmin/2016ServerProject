@@ -83,4 +83,6 @@ private:
 private:
 	User* GetUserBySessionIndex(int sessionIndex);
 	int GetUserSeatBySessionIndex(int sessionIndex);
+	int CalculateEarnMoney(Dealer* pDealer, User* pUser);
+	int CalculateResultByHand(HandInfo dHand, HandInfo uHand, int betMoney);
 };
