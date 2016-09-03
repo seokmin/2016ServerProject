@@ -171,7 +171,7 @@ void DBmanager::SubmitState(int max, int count, ServerConfig* pServerConfig)
 }
 
 
-void DBmanager::SubmitUserDeltaMoney(User * pUser, int deltaMoney)
+void DBmanager::SubmitUserEarnMoney(User * pUser, int deltaMoney)
 {
 	DBJob calcMoneyJob;
 

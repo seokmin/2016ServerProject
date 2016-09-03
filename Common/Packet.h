@@ -131,6 +131,15 @@ namespace COMMON
 
 			return std::make_tuple(sum1, sum2);
 		}
+
+		int GetBetterScore()
+		{
+			std::tuple<int, int> scorePair = GetScore();
+			if (std::get<1>(scorePair) <= 21)
+				return std::get<1>(scorePair);
+			else
+				return std::get<0>(scorePair);
+		}
 	};
 
 	struct DealerInfo
