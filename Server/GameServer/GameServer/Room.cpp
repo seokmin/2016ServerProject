@@ -7,6 +7,7 @@
 
 #include "Room.h"
 #include "Dealer.h"
+#include <cassert>
 
 void Room::Init(PacketQueue* sendPacketQue, DBmanager* pDBman)
 {
@@ -212,7 +213,7 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 	if (ret != ERROR_CODE::NONE)
 		return ret;
 	// DB에 돈 수정해서 보냄.
-	m_pDBmanager->SubmitUserDeltaMoney(user, -betMoney);
+	m_pDBmanager->SubmitUserEarnMoney(user, -betMoney);
 
 	// 표현할 수 있게 베팅 정보를 노티한다.
 	NotifyBetDone(sessionIndex, betMoney);
@@ -320,7 +321,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 			return ERROR_CODE::ROOM_GAME_NOT_ENOUGH_MONEY;
 
 		// DB에 돈 더 낼것 보냄.
-		m_pDBmanager->SubmitUserDeltaMoney(user, -(user->GetBetMoney()));
+		m_pDBmanager->SubmitUserEarnMoney(user, -(user->GetBetMoney()));
 
 		user->SetHand(user->GetCurHand(), m_dealer.Draw());
 
@@ -537,99 +538,12 @@ void Room::EndOfGame()
 		auto user = m_userList[i];
 		if (user == nullptr) continue;
 
-		int earnMoney = 0; // 계산 결과 번 돈
-
-		for (int hand = 0; hand < MAX_HAND; ++hand)
-		{
-			if (user->GetCurHand() < hand) continue;
-			if (user->GetHand(hand)._handState == HandInfo::HandState::CURRENT) continue;
-
-			auto sum = user->GetCardSum(hand);
-
-			// 만약 유저가 버스트 했으면 무조건 돈을 잃음!
-			if (user->GetHand(hand)._handState == HandInfo::HandState::BURST)
-			{
-				earnMoney += 0;
-				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s:BURST, total EarnMoney:%d", user->GetName().c_str(), earnMoney);
-			}
-
-			// 딜러의 패가 더 높다면.. 돈을 잃음!
-			else if (m_dealer.GetHand()._handState > user->GetHand(hand)._handState)
-			{
-				earnMoney += 0;
-				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s is lower than Dealer.  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
-			}
-
-			// 유저 패가 더 높다면.. 돈을 땀!
-			else if (m_dealer.GetHand()._handState < user->GetHand(hand)._handState)
-			{
-				int blackjack_bonus = 0;
-				if (user->GetHand(hand)._handState == HandInfo::HandState::BLACKJACK)
-				{
-					// 근데 블랙잭이면 1.5배를 줌!
-					blackjack_bonus = user->GetBetMoney() * 0.5;
-				}
-				earnMoney += user->GetBetMoney() * 2 + blackjack_bonus;
-
-				//더블다운이면 거기에 두배를 줌!
-				if (user->GetHand(hand)._isDoubledown == true)
-				{
-					earnMoney += user->GetBetMoney() * 2;
-				}
-				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s is Higher than Dealer.  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
-			}
-			// 패가 같으면
-			else
-			{
-				
-				// 스탠드이면 딸 수도 있지만 아니면 비긴걸로
-				if (user->GetHand(hand)._handState == HandInfo::HandState::STAND)
-				{
-
-					//Ace가 섞인 경우 더 좋은 숫자를 선택
-					int useSum = 0;
-					if (std::get<0>(sum) == std::get<1>(sum))
-						useSum = std::get<0>(sum);
-					else if(std::get<1>(sum) > 21) // Ace를 11로 계산하면 안되는 경우
-						useSum = std::get<0>(sum);
-					else 
-						useSum = std::get<1>(sum);
-
-					if (useSum > m_dealer.GetCardSum()) // 이겼을대
-					{
-						earnMoney += user->GetBetMoney() * 2;
-						if (user->GetHand(hand)._isDoubledown == true)
-							earnMoney += user->GetBetMoney() * 2;
-
-					}
-					else if (useSum < m_dealer.GetCardSum()) // 졌을때
-					{
-						earnMoney += 0;
-					}
-					else // 비겼을때
-					{
-						if (user->GetHand(hand)._isDoubledown == true)
-							earnMoney += user->GetBetMoney() * 2;
-						else
-							earnMoney += user->GetBetMoney();
-					}
-					Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s 's score : %d , dealer's score : %d , total EarnMoney:%d", user->GetName().c_str(), useSum, m_dealer.GetCardSum(), earnMoney);
-				}
-				else
-				{
-					if(user->GetHand(hand)._isDoubledown == true)
-						earnMoney += user->GetBetMoney() * 2;
-					else
-						earnMoney += user->GetBetMoney();
-
-					Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s is Same than Dealer.  total EarnMoney:%d", user->GetName().c_str(), earnMoney);
-				}
-			}
-		}
+		int earnMoney = CalculateEarnMoney(&m_dealer, m_userList[i]);
 
 		Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s : resut : curBetMoney:%d, total EarnMoney:%d", user->GetName().c_str(),user->GetBetMoney() ,earnMoney);
-		m_pDBmanager->SubmitUserDeltaMoney(user, earnMoney);
-		user->CalculateMoney(earnMoney);
+
+		m_pDBmanager->SubmitUserEarnMoney(user, earnMoney);
+		user->ApplyEarnMoney(earnMoney);
 		
 		pkt._currentMoney[i] = m_userList[i]->GetCurMoney();
 		pkt._earnMoney[i] = earnMoney;
@@ -760,4 +674,97 @@ int Room::GetUserSeatBySessionIndex(int sessionIndex)
 	}
 
 	return -1;
+}
+
+int Room::CalculateEarnMoney(Dealer * pDealer, User * pUser)
+{
+	int earnMoney = 0; // 계산 결과 번 돈
+
+	for (int hand = 0; hand < MAX_HAND; ++hand)
+	{
+		if (pUser->GetCurHand() < hand) 
+			continue; //이 방어 코드 왜있는지 모르겠음 ㅠ
+		int handEarn = CalculateResultByHand(pDealer->GetHand(), pUser->GetHand(hand), pUser->GetBetMoney()); 
+		Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s: hand money result :%d", pUser->GetName().c_str(), handEarn);
+
+		earnMoney += handEarn;
+	}
+	
+	return earnMoney;
+}
+
+int Room::CalculateResultByHand(HandInfo dHand, HandInfo uHand, int betMoney)
+{
+	if (uHand._handState == HandInfo::HandState::CURRENT) return 0;
+	float blackjack_bonus = 1.;
+	float double_down_bounus = 1.;
+	if (uHand._handState == HandInfo::HandState::BLACKJACK)
+	{
+		blackjack_bonus = 1.5; // 블랙잭이면 1.5배를 줌!
+	}
+
+	//더블다운이면 거기에 두배를 줌!
+	if (uHand._isDoubledown == true)
+	{
+		double_down_bounus = 2.;
+	}
+	auto sum = uHand.GetScore();
+
+	// 만약 유저가 버스트 했으면 무조건 돈을 잃음!
+	if (uHand._handState == HandInfo::HandState::BURST)
+	{
+		return 0;
+	}
+
+	// 딜러의 패가 더 높다면.. 돈을 잃음!
+	else if (dHand._handState > uHand._handState)
+	{
+		return 0;
+	}
+
+	// 유저 패가 더 높다면.. 돈을 땀!
+	else if (dHand._handState < uHand._handState)
+	{
+		return betMoney * blackjack_bonus * double_down_bounus;
+	}
+	// 패가 같은 등급이면
+	else
+	{
+		// 스탠드이면 딸 수도 있지만 아니면 비긴걸로
+		if (uHand._handState == HandInfo::HandState::STAND)
+		{
+			int dealerSum = dHand.GetBetterScore();
+			//Ace가 섞인 경우 더 좋은 숫자를 선택
+			
+			int useSum = uHand.GetBetterScore();
+			//int useSum = 0;
+			//if (std::get<0>(sum) == std::get<1>(sum))
+			//	useSum = std::get<0>(sum);
+			//else if (std::get<1>(sum) > 21) // Ace를 11로 계산하면 안되는 경우
+			//	useSum = std::get<0>(sum);
+			//else
+			//	useSum = std::get<1>(sum);
+
+			if (useSum > dealerSum) // 이겼을 때.
+			{
+				return betMoney * double_down_bounus;
+			}
+			else if (useSum < dealerSum) // 졌을때
+			{
+				return 0;
+			}
+			else // 비겼을때
+			{
+				return betMoney * double_down_bounus;
+			}
+		}
+		else // stand가 아닌데 같은 등급일때
+		{
+			return betMoney * double_down_bounus;
+		}
+	}
+
+	//여기에 올일이 없어야 한다. 
+	assert("Not_Expected_exception" == nullptr);
+	return 0;
 }

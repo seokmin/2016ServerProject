@@ -196,7 +196,7 @@ bool User::DoubleDown()
 
 std::tuple<int, int> User::GetCardSum(int hand)
 {
-	int sum1 = 0;
+	/*int sum1 = 0;
 	int sum2 = 0;
 	bool flag = false;
 	for (int i = 0; i < m_curCardNum[hand]; ++i)
@@ -214,10 +214,12 @@ std::tuple<int, int> User::GetCardSum(int hand)
 	if (flag) sum2 = sum1 + 10;
 	else sum2 = sum1;
 
-	return std::make_tuple(sum1, sum2);
+	return std::make_tuple(sum1, sum2);*/
+
+	return m_hand[hand].GetScore();
 }
 
-void User::CalculateMoney(int toChange)
+void User::ApplyEarnMoney(int toChange)
 {
 	Logger::GetInstance()->Logf(Logger::Level::INFO, L"Memory user money : %d -> %d", m_totalMoney, toChange + m_totalMoney);
 	m_totalMoney += toChange;

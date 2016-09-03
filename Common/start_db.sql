@@ -42,7 +42,7 @@ DROP procedure IF EXISTS `submit_server_status`;
 
 DELIMITER $$
 USE `jackblack`$$
-CREATE DEFINER=`next`@`%` PROCEDURE `submit_server_status`(
+CREATE DEFINER=`jackblack`@`%` PROCEDURE `submit_server_status`(
 	IN serverName VARCHAR(20),
     serverIP VARCHAR(16), serverPort INT,
     red INT, green INT, blue INT,
@@ -73,7 +73,7 @@ DROP procedure IF EXISTS `GetUserInfoByAuthToken`;
 
 DELIMITER $$
 USE `jackblack`$$
-CREATE DEFINER=`next`@`%` PROCEDURE `GetUserInfoByAuthToken`(IN aToken VARCHAR(45))
+CREATE DEFINER=`jackblack`@`%` PROCEDURE `GetUserInfoByAuthToken`(IN aToken VARCHAR(45))
 BEGIN
 SELECT u.username, pokemon, chip, authToken FROM auth AS a JOIN user AS u ON a.username = u.username HAVING authToken = aToken;
 END$$
@@ -87,7 +87,7 @@ DROP procedure IF EXISTS `Calc_user_money`;
 
 DELIMITER $$
 USE `jackblack`$$
-CREATE DEFINER=`next`@`%` PROCEDURE `Calc_user_money`(IN TargetName VARCHAR(45), deltaMoney INT)
+CREATE DEFINER=`jackblack`@`%` PROCEDURE `Calc_user_money`(IN TargetName VARCHAR(45), deltaMoney INT)
 BEGIN
 	UPDATE user SET chip = chip + deltaMoney
     WHERE username LIKE TargetName;

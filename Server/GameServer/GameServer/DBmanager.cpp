@@ -9,7 +9,14 @@ volatile long g_nThreadSeq = -1;
 
 DBmanager::~DBmanager()
 {
-	delete[] m_sqlMgrPool;
+	for (int i = 0; i < ServerConfig::numberOfDBThread; i++)
+	{
+		if (m_sqlMgrPool[i] != nullptr)
+		{
+			delete m_sqlMgrPool[i];
+			m_sqlMgrPool[i] = nullptr;
+		}
+	}
 }
 
 COMMON::ERROR_CODE DBmanager::Init(int numberOfDBThread)
@@ -171,7 +178,7 @@ void DBmanager::SubmitState(int max, int count, ServerConfig* pServerConfig)
 }
 
 
-void DBmanager::SubmitUserDeltaMoney(User * pUser, int deltaMoney)
+void DBmanager::SubmitUserEarnMoney(User * pUser, int deltaMoney)
 {
 	DBJob calcMoneyJob;
 
