@@ -725,7 +725,7 @@ int Room::CalculateResultByHand(HandInfo dHand, HandInfo uHand, int betMoney)
 	// 유저 패가 더 높다면.. 돈을 땀!
 	else if (dHand._handState < uHand._handState)
 	{
-		return betMoney * blackjack_bonus * double_down_bounus;
+		return betMoney * blackjack_bonus * double_down_bounus * 2; // *2를 해줘야 베팅했던 돈까지 돌려받는다.
 	}
 	// 패가 같은 등급이면
 	else
