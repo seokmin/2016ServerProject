@@ -3,7 +3,7 @@
 
 MySQLMangager::MySQLMangager()
 {
-	wcscpy_s(chr_ds_name, SQL_MAX_DSN_LENGTH, (SQLWCHAR *)L"mysql_seokmin_for_jb"); // odbc name
+	wcscpy_s(chr_ds_name, SQL_MAX_DSN_LENGTH, (SQLWCHAR *)L"mysql_aws_jb"); // odbc name
 	auto tmp = hstmt;
 }
 
