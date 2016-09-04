@@ -747,7 +747,7 @@ int Room::CalculateResultByHand(HandInfo dHand, HandInfo uHand, int betMoney)
 
 			if (useSum > dealerSum) // 이겼을 때.
 			{
-				return betMoney * double_down_bounus;
+				return betMoney * double_down_bounus * 2;
 			}
 			else if (useSum < dealerSum) // 졌을때
 			{
