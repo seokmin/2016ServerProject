@@ -274,7 +274,7 @@ void GameScene::packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo)
 	auto packet = (PacketGameBetNtf*)packetInfo.pRefData;
 	auto& betUser = _players[packet->_betSlot];
 	if (packet->_betSlot == _userSlotNum)
-		disableAllChoiceButton();
+		_betSlider->setVisible(false);
 
 	betUser->setMoneyBet(packet->_betMoney, betUser->getMoneyWhole() - packet->_betMoney);
 	betUser->setAlreadyBet(true);
