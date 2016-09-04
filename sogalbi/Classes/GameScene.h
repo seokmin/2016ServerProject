@@ -14,7 +14,7 @@ namespace cocos2d
 	}
 }
 
-class GameScene : public cocos2d::Layer
+class GameScene : public Layer
 {
 public:
     static cocos2d::Scene* createScene(int roomNum);
