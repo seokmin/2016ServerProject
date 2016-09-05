@@ -128,7 +128,7 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 	// result 10일때 invalid password다
 	if (resString == "")
 	{
-		ClientLogger::msgBox(L"로그인 서버가 응답하지 않습니다!", L"로그인 실패", false);
+		ClientLogger::msgBox(L"로그인 서버가 응답하지 않습니다!");
 		_loginMenu->setEnabled(true); // 로그인 실패했으므로 다시 누를 수 있게
 		return;
 	}
@@ -137,7 +137,7 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 	auto result = parseChannelInfo(resString, channels);
 	if (result == COMMON::RESULT_LOGIN::ERR_INVALID_PASSWORD)
 	{
-		ClientLogger::msgBox(L"비번 틀려쪙!", L"로그인 실패", false);
+		ClientLogger::msgBox(L"비번 틀려쪙!");
 		_loginMenu->setEnabled(true);
 		return;
 	}
@@ -147,9 +147,13 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::CHANNEL_SELECT_BGM.c_str(), true);
 		popUpChannelsLayer(channels);
 	}
+	else if (result == COMMON::RESULT_LOGIN::ERR_ALREADY_LOGIN)
+	{
+		ClientLogger::msgBox(L"이미 접속중인 아이디에용!!!!");
+	}
 	else
 	{
-		ClientLogger::msgBox(L"서버에 문제가 있어용", L"로그인 실패", false);
+		ClientLogger::msgBox(L"서버에 문제가 있어용");
 	}
 
 }
