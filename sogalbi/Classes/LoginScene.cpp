@@ -150,10 +150,12 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 	else if (result == COMMON::RESULT_LOGIN::ERR_ALREADY_LOGIN)
 	{
 		ClientLogger::msgBox(L"이미 접속중인 아이디에용!!!!");
+		_loginMenu->setEnabled(true);
 	}
 	else
 	{
 		ClientLogger::msgBox(L"서버에 문제가 있어용");
+		_loginMenu->setEnabled(true);
 	}
 
 }
