@@ -12,7 +12,9 @@ COMMON::ERROR_CODE App::Init()
 	
 	
 	wprintf(L"Please Type Server name : ");
-	std::wcin >> m_pServerConfig->SERVERNAME;
+	std::wstring serverName;
+	getline(std::wcin, serverName);
+	wcscpy(m_pServerConfig->SERVERNAME, serverName.c_str());
 	wprintf(L"Please Type Server IP : ");
 	std::wcin >> m_pServerConfig->IP;
 	wprintf(L"Please Type Server Port : ");
