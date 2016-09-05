@@ -36,16 +36,9 @@ bool GameScene::init(int roomNum)
 		return false;
 	}
 
-	auto tempLambda = [=]() {
-		initLayout(roomNum);
-		NetworkManager::getInstance()->setRecvCallback(CC_CALLBACK_3(GameScene::recvPacketProcess, this));
-		NetworkManager::getInstance()->sendPacket(PACKET_ID::ROOM_ENTER_USER_LIST_REQ, 0, nullptr);
-	};
-
-	// 네트워크 작업 스레딩
-	auto scheduler = Director::getInstance()->getScheduler();
-	scheduler->performFunctionInCocosThread(tempLambda);
-
+	initLayout(roomNum);
+	NetworkManager::getInstance()->setRecvCallback(CC_CALLBACK_3(GameScene::recvPacketProcess, this));
+	NetworkManager::getInstance()->sendPacket(PACKET_ID::ROOM_ENTER_USER_LIST_REQ, 0, nullptr);
 	// 타이머 고고씽
 	this->scheduleUpdate();
 

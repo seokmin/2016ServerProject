@@ -272,8 +272,9 @@ void LoginScene::packetProcess_RoomEnterRes(COMMON::RecvPacketInfo packetInfo)
 		// TODO : 에러시 처리
 		return;
 	}
-	Director::getInstance()->getScheduler()->performFunctionInCocosThread([] {CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true); });
-	
+	//Director::getInstance()->getScheduler()->performFunctionInCocosThread([] {CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true); });
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+
 	auto gameScene = GameScene::createScene(recvBody->_roomNum);
 	Director::getInstance()->pushScene(gameScene);
 	return;
