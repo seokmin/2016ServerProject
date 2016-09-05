@@ -4,15 +4,17 @@
 #include "IOCPManager.h"
 #include "PacketQueue.h"
 #include "DBmanager.h"
+#include "ServerConfig.h"
 
 #include "Room.h"
 #include "Dealer.h"
 #include <cassert>
 
-void Room::Init(PacketQueue* sendPacketQue, DBmanager* pDBman)
+void Room::Init(PacketQueue* sendPacketQue, DBmanager* pDBman, ServerConfig* serverConfig)
 {
 	m_pSendPacketQue = sendPacketQue;
 	m_pDBmanager = pDBman;
+	m_pServerConfig = serverConfig;
 
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
@@ -130,8 +132,8 @@ void Room::NotifyStartBettingTimer()
 	
 	PacketGameBetCounterNtf pkt;
 	pkt._countTime = ServerConfig::bettingTime;
-	pkt.minBet = ServerConfig::minBet;
-	pkt.maxBet = ServerConfig::maxBet;
+	pkt.minBet = m_pServerConfig->minBet;
+	pkt.maxBet = m_pServerConfig->maxBet;
 
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
@@ -275,7 +277,7 @@ void Room::ForceBetting()
 		if (m_userList[i] == nullptr)
 			continue;
 
-		ApplyBet(m_userList[i]->GetSessionIndex(), ServerConfig::minBet);
+		ApplyBet(m_userList[i]->GetSessionIndex(), m_pServerConfig->minBet);
 	}
 }
 

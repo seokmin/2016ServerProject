@@ -4,14 +4,15 @@
 #include "PacketQueue.h"
 #include "DBmanager.h"
 
-void RoomManager::Init(UserManager* pUserMan, DBmanager* pDBman, PacketQueue* sendPacketQue)
+void RoomManager::Init(UserManager* pUserMan, DBmanager* pDBman, PacketQueue* sendPacketQue, ServerConfig* serverConfig)
 {
 	m_pRefUserManager = pUserMan;
+	m_pServerConfig = serverConfig;
 
 	for (int i = 0; i < ServerConfig::MAX_ROOMCOUNT; i++)
 	{
 		auto room = std::make_shared<Room>(i);
-		room->Init(sendPacketQue, pDBman);
+		room->Init(sendPacketQue, pDBman, serverConfig);
 		m_roomList.push_back(room);
 	}
 }

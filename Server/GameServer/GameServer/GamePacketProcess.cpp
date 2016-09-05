@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "PacketProcess.h"
 #include "RoomManager.h"
+#include "UserManager.h"
 
 ERROR_CODE PacketProcess::GameBet(PacketInfo packetInfo)
 {
@@ -30,8 +31,13 @@ ERROR_CODE PacketProcess::GameChoice(PacketInfo packetInfo)
 	}
 
 	room->NotifyGameChoice(packetInfo.SessionIndex, reqPkt->_choice);
-	room->NotifyChangeTurn();
 
+	auto user = m_pRefUserMgr->GetUserBySessionId(packetInfo.SessionIndex);
+	if (user->GetHand(user->GetCurHand())._handState != HandInfo::HandState::CURRENT)
+	{
+		room->NotifyChangeTurn();
+	}
+	
 	return ERROR_CODE::NONE;
 }
 
