@@ -22,7 +22,7 @@ namespace LoginServer.Data
             Random r = new Random();
             int pokemon = r.Next(1, 151);
 
-            int startChip = 50;
+            int startChip = Program.StartMoney;
 
             return await DB.MysqlLib.CreateUser(username, pw, pokemon, startChip);
         }
