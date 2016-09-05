@@ -549,7 +549,10 @@ void Room::EndOfGame()
 		pkt._earnMoney[i] = earnMoney;
 
 		if (earnMoney > user->GetBetMoney())
+		{
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::WIN;
+			Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s : resut : ÀÌ°åÀ½!", user->GetName().c_str());
+		}
 		else if(earnMoney == user->GetBetMoney()) 
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::PUSH;
 		else if(earnMoney == 0)

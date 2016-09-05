@@ -24,7 +24,10 @@ ERROR_CODE PacketProcess::GameChoice(PacketInfo packetInfo)
 	
 	auto ret = room->ApplyChoice(packetInfo.SessionIndex, reqPkt->_choice);
 	if (ret != ERROR_CODE::NONE)
+	{
+		room->NotifyChangeTurn();
 		return ret;
+	}
 
 	room->NotifyGameChoice(packetInfo.SessionIndex, reqPkt->_choice);
 	room->NotifyChangeTurn();
