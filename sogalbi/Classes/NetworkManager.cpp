@@ -8,7 +8,7 @@ NetworkManager* NetworkManager::_instance = nullptr;
 
 NetworkManager::NetworkManager()
 {
-	initTcp();
+	//initTcp();
 }
 
 void NetworkManager::initTcp()
@@ -113,7 +113,6 @@ void NetworkManager::disconnectTcp()
 bool NetworkManager::sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData)
 {
 	_mutex.lock();
-
 	char data[COMMON::MAX_PACKET_SIZE] = { 0, };
 
 	// Çì´õ
@@ -152,6 +151,10 @@ bool NetworkManager::connectTcp(std::string serverIp, int serverPort)
 	auto returnVal = true;
 	if (_mutex.try_lock() == false)
 		return false;
+
+	disconnectTcp();
+	initTcp();
+
 	SOCKADDR_IN serverAddr;
 	ZeroMemory(&serverAddr, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;

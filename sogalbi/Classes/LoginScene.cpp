@@ -111,6 +111,8 @@ void LoginScene::logoutButtonClicked(Ref* pSender)
 	request->setRequestData(postData.c_str(), postData.length());
 	network::HttpClient::getInstance()->send(request);
 	request->release();
+
+	//NetworkManager::getInstance()->disconnectTcp();
 }
 
 void LoginScene::loginResponseArrived(network::HttpClient* sender, network::HttpResponse* response)
@@ -417,6 +419,7 @@ void LoginScene::connectChannel(std::string ip, int port)
 	if (!NetworkManager::getInstance()->connectTcp(ip, port))
 	{
 		// connect 실패시
+		//NetworkManager::getInstance()->disconnectTcp();
 		_channelsMenu->setEnabled(true); // 채널 접속 버튼 다시 누를 수 있게
 		return;
 	}
