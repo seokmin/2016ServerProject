@@ -47,7 +47,7 @@ namespace LoginServer.Data
                 channel[i].Rgb.g = (short)Int32.Parse(data.Rows[i]["g"].ToString());
                 channel[i].Rgb.b = (short)Int32.Parse(data.Rows[i]["b"].ToString());
                 channel[i].IP = data.Rows[i]["ip"].ToString();
-                channel[i].Port = (short)Int32.Parse(data.Rows[i]["port"].ToString());
+                channel[i].Port = Int32.Parse(data.Rows[i]["port"].ToString());
                 channel[i].MinBet = Int32.Parse(data.Rows[i]["minBet"].ToString());
                 channel[i].MaxBet = Int32.Parse(data.Rows[i]["maxBet"].ToString());
             }

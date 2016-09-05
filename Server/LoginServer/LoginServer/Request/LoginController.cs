@@ -48,7 +48,7 @@ namespace LoginServer.Request
             }
 
             responseResult.Channels = await Data.UserRepository.GetChannel();
-
+            
             Guid g = Guid.NewGuid();
             string authToken = Convert.ToBase64String(g.ToByteArray());
             //authToken = authToken.Replace("=", "");
