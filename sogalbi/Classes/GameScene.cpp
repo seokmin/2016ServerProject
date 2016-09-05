@@ -404,13 +404,17 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 	}
 	_players[packet->_slotNum]->setCounter(packet->_waitingTime);
 
-	auto& player = _players[_userSlotNum];
+	auto& player = _players[packet->_slotNum];
 
 	auto& hand = player->_hand[packet->_handNum];
-
+	
 	// ÇØ´ç hand´Â enable ÇØÁà¾ßÇÔ
 	hand->setVisible(true);
 	player->_hand[(packet->_handNum + 1) % 2]->setVisible(false);
+	if (packet->_handNum == 1)
+	{
+		player->hideBanner();
+	}
 
 
 	if (packet->_slotNum == _userSlotNum)
@@ -451,7 +455,8 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 		disableAllChoiceButton();
 	// ±ôºý±ôºý
 	auto flashEffect = Blink::create(0.5f, 2);
-	_players[packet->_slotNum]->runAction(flashEffect);
+	player->runAction(flashEffect);
+	player->setValueLabel(hand->getHandValue());
 
 }
 
