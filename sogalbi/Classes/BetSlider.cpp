@@ -37,6 +37,7 @@ bool BetSlider::init()
 	_maxLabel->setPosition(980, 30);
 	_currentLabel->setPositionY(41);
 
+	return true;
 }
 
 BetSlider* BetSlider::create(int minBet, int maxBet)

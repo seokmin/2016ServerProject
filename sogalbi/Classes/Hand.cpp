@@ -30,7 +30,7 @@ void Hand::pushCard(CardInfo& card, float delay /*= 0.f*/)
 	_cardInfos[_handNum] = card;
 
 	auto& cardSpr = _cardSprites[_handNum];
-	auto spawn = Spawn::create( MoveTo::create(0.3, cardSpr->getPosition()), RotateTo::create(0.3, 0), nullptr);
+	auto spawn = Spawn::create( MoveTo::create(0.3f, cardSpr->getPosition()), RotateTo::create(0.3f, 0), nullptr);
 	auto callFunc = CallFunc::create(CC_CALLBACK_0(Sprite::setVisible, cardSpr, true));
 	auto dieFunc = CallFunc::create(CC_CALLBACK_0(Hand::Die, this, .5f));
 	if (getHandValue().first <= 21)
@@ -56,33 +56,40 @@ void Hand::popCard()
 
 std::pair<int, int> Hand::getHandValue()
 {
-	std::pair<int, int> value = { 0,0 };
+	std::pair<int, int> valuePair = { 0,0 };
+	int value = 0;
 	for (auto& card : _cardInfos)
 	{
 		if (card._shape == CardInfo::CardShape::EMPTY)
 			break;
 		if (card._number == 1)
 		{
-			value.first += 1;
-			value.second += 11;
+			value += 1;
 		}
 		else if (card._number == 11 || card._number == 12 || card._number == 13) // jack
 		{
-			value.first += 10;
-			value.second += 10;
+			value += 10;
 		}
 		else
 		{
-			value.first += card._number;
-			value.second += card._number;
+			value += card._number;
 		}
 	}
-	if (value.second > 21)
-		value.second = value.first;
-	if (value.second == 21 || value.first == 21)
-		value = { 21,21 };
+
+	valuePair.first = value;
+	for(auto& card : _cardInfos)
+		if (card._number == 1)
+		{
+			valuePair.second = value + 10;
+			break;
+		}
+
+	if (valuePair.second > 21)
+		valuePair.second = valuePair.first;
+	if (valuePair.second == 21 || valuePair.first == 21)
+		valuePair = { 21,21 };
 	
-	return value;
+	return valuePair;
 }
 
 void Hand::clear()
