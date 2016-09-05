@@ -313,12 +313,12 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		if (std::get<0>(sum) > 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::BURST);
-			user->SwitchHandIfSplitExist();
+			// user->SwitchHandIfSplitExist(); // 이 부분은 Game Choice Ntf를 보낸 다음에 호출해야 할 것 같음.
 		}
 		else if (std::get<0>(sum) == 21 || std::get<1>(sum) == 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-			user->SwitchHandIfSplitExist();
+			// user->SwitchHandIfSplitExist();
 		}
 		else
 		{
@@ -348,7 +348,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
 		}
 		//바로 턴을 종료함.
-		user->SwitchHandIfSplitExist();
+		// user->SwitchHandIfSplitExist();
 
 	}
 	break;
@@ -519,6 +519,15 @@ void Room::NotifyGameChoice(int sessionIndex, ChoiceKind choice)
 		sendPacket.PacketBodySize = sizeof(pkt);
 		m_pSendPacketQue->PushBack(sendPacket);
 	}
+
+	if (user->GetHand(user->GetCurHand())._handState != HandInfo::HandState::CURRENT)
+	{
+		user->SwitchHandIfSplitExist();
+	}
+
+	m_lastActionTime = duration_cast< milliseconds >(
+		steady_clock::now().time_since_epoch()
+		).count();
 }
 
 void Room::EndOfGame()
