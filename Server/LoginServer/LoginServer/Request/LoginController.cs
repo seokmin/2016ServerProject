@@ -59,7 +59,7 @@ namespace LoginServer.Request
 
             if (affectedRows == 0)
             {
-                responseResult.Return(ERROR_CODE.REQ_LOGIN_AUTH_SAVE_ERROR);
+                responseResult.Return(ERROR_CODE.REQ_LOGIN_AUTH_DUPLICATE);
             }
 
             responseResult.AuthToken = authToken;

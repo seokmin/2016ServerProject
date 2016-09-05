@@ -68,7 +68,7 @@ namespace LoginServer.DB
                 myConnection.Open();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("INSERT INTO auth SET username = '{0}', authToken = '{1}', timestamp = '{2}'", username, authToken, timestamp);
+                sb.AppendFormat("CALL Save_AuthToken('{0}', '{1}', '{2}')", username, authToken, timestamp);
 
                 MySqlCommand cmd = new MySqlCommand(sb.ToString(), myConnection);
                 affectedRows = await cmd.ExecuteNonQueryAsync();
@@ -89,7 +89,7 @@ namespace LoginServer.DB
                 DataSet ds = new DataSet();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("SELECT name, ip, port, r, g, b, minBet, maxBet FROM channel WHERE timestamp > DATE_SUB(NOW(), INTERVAL 30 SECOND)");
+                sb.AppendFormat("SELECT name, ip, port, r, g, b, minBet, maxBet FROM channel WHERE timestamp > DATE_SUB(NOW(), INTERVAL 7 SECOND)");
 
                 MySqlDataAdapter da = new MySqlDataAdapter(sb.ToString(), myConnection);
                 await da.FillAsync(ds, "channelInfo");

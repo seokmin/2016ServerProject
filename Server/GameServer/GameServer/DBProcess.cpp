@@ -19,6 +19,7 @@ void DBProcess::Init(UserManager * userMgr, RoomManager * roomMgr, PacketQueue* 
 	DBFuncArray[(int)JOB_TYPE::SUBMIT_STATE] = &DBProcess::SubmitStateProcess;
 	DBFuncArray[(int)JOB_TYPE::GET_USER_INFO_BY_AUTH] = &DBProcess::GetUserByAuthProcess;
 	DBFuncArray[(int)JOB_TYPE::CALCULATE_MONEY] = &DBProcess::CalculateMoneyResProcess;
+	DBFuncArray[(int)JOB_TYPE::CLEAR_AUTH_TOKEN] = &DBProcess::SubmitStateProcess;
 }
 
 void DBProcess::Process(DBResult rslt)

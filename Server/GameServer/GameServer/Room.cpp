@@ -119,6 +119,18 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	wsprintf(infoStr, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName().c_str());
 	Logger::GetInstance()->Log(Logger::INFO, infoStr, 100);
 
+	// Auth Token도 지워줌니다.
+	DBJob dbJob;
+
+	SQLWCHAR query[200] = L"";
+	dbJob._type = JOB_TYPE::CLEAR_AUTH_TOKEN;
+	wsprintf(dbJob._query, L"CALL Remove_AuthToken(\"%s\");", pUser->GetName().c_str());
+	dbJob._sessionIndex = pUser->GetSessionIndex();
+	dbJob._nResult = 0;
+
+	m_pDBmanager->PushDBJob(dbJob, pUser->GetUserIdx() % ServerConfig::numberOfDBThread);
+
+	
 	pUser->Clear();
 
 	return	COMMON::ERROR_CODE::NONE;
