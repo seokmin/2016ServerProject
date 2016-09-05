@@ -267,7 +267,11 @@ void GameScene::packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo)
 	auto packet = (PacketGameBetNtf*)packetInfo.pRefData;
 	auto& betUser = _players[packet->_betSlot];
 	if (packet->_betSlot == _userSlotNum)
+	{
 		_betSlider->setVisible(false);
+		_betButton->setVisible(false);
+	}
+	_choiceButton->setVisible(true);
 
 	betUser->setMoneyBet(packet->_betMoney, betUser->getMoneyWhole() - packet->_betMoney);
 	betUser->setAlreadyBet(true);
@@ -496,11 +500,11 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 
 	disableAllChoiceButton();
 	// 자기 자신이면
-	if (packet->_slotNum == _userSlotNum && packet->_choice == ChoiceKind::HIT)
+	if (packet->_slotNum == _userSlotNum)
 	{
 		_itemHit->setEnabled(true);
 		_itemStand->setEnabled(true);
-		if (player->_hand[packet->_handNum]->_cardInfos[2]._shape == CardInfo::CardShape::EMPTY)
+		if (player->_hand[packet->_handNum]->_cardInfos[2]._shape == CardInfo::CardShape::EMPTY && packet->_choice == ChoiceKind::HIT)
 			_itemDoubleDown->setEnabled(true);
 	}
 

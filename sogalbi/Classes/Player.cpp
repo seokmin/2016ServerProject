@@ -17,11 +17,11 @@ bool Player::init()
 	_timer->setMidpoint(Vec2(0.5, 0.5));
 
 
-	_nameLabel = Label::createWithTTF("NULL", FILENAME::FONT::SOYANON, 24);
+	_nameLabel = Label::createWithTTF("", FILENAME::FONT::SOYANON, 24);
 	_pokemon = Sprite::create();
 
-	_moneyLabelFront = Label::createWithTTF(u8"0", FILENAME::FONT::SOYANON, 24);
-	_moneyLabelBack = Label::createWithTTF(u8"/0", FILENAME::FONT::SOYANON, 24);
+	_moneyLabelFront = Label::createWithTTF(u8"", FILENAME::FONT::SOYANON, 24);
+	_moneyLabelBack = Label::createWithTTF(u8"", FILENAME::FONT::SOYANON, 24);
 	
 	addChild(_timer, 1);
 

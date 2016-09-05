@@ -39,18 +39,15 @@ bool BetSlider::init()
 
 }
 
-BetSlider* BetSlider::create(int minBet, int maxBet, int startPercent /*= 10*/)
+BetSlider* BetSlider::create(int minBet, int maxBet)
 {
 	auto instance = BetSlider::create();
 	instance->setMinBet(minBet);
 	instance->setMaxBet(maxBet);
-	instance->setPercent(10);
+	instance->_currentBet = minBet;
 
-	auto percent = startPercent;
-	float divVal = (float)percent / 100.f;
-	instance->_currentBet = (instance->_maxBet - instance->_minBet) * divVal + instance->_minBet;
 	instance->_currentLabel->setString(std::to_string(instance->_currentBet));
-	float currentPos = percent * 980 / 100 + 2;
+	float currentPos = 2;
 	instance->_currentLabel->setPositionX(currentPos);
 
 	return instance;
@@ -66,6 +63,7 @@ void BetSlider::setMaxBet(int value)
 {
 	_maxBet = value;
 	_maxLabel->setString(std::to_string(value));
+	SliderChanged(nullptr, SLIDER_PERCENTCHANGED);
 }
 
 void BetSlider::SliderChanged(Ref* sender, SliderEventType type)

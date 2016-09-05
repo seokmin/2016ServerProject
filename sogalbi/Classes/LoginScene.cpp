@@ -218,6 +218,7 @@ void LoginScene::popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos)
 	_pokeImg->setSpriteFrame(FILENAME::SPRITE::POKE_ARRAY[tmpPokeNum]);
 	_pokeImg->setVisible(true);
 
+	short channelNum = 0;
 	for (auto& channel : channelInfos)
 	{
 		auto channelNode = Node::create();
@@ -228,7 +229,28 @@ void LoginScene::popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos)
 		};
 
 		auto buttonLabel = Label::createWithTTF(channel.name, FILENAME::FONT::SOYANON, 42);
+		
+		// 임시
+		switch (channelNum++)
+		{
+		case 0:
+			channel.rgb = { 228,0,127 };
+			break;
+		case 1:
+			channel.rgb = { 0,255,0 };
+			break;
+		case 2:
+			channel.rgb = { 0,160,233 };
+			break;
+		default:
+			channel.rgb.r = RandomHelper::random_int(200, 255);
+			channel.rgb.g = RandomHelper::random_int(200, 255);
+			channel.rgb.b = RandomHelper::random_int(200, 255);
+			break;
+		}
+		
 		buttonLabel->setColor(channel.rgb);
+
 		auto buttonItem = MenuItemLabel::create(buttonLabel, buttonClicked);
 
 		auto betString = std::string(u8"bet ");
@@ -306,7 +328,10 @@ void LoginScene::initLayout()
 	_loginMenu->setAnchorPoint(Vec2(0, 0));
 	_loginMenu->setPosition(890, 254);
 	addChild(_loginMenu, Z_ORDER::UI_LOGIN);
-
+	auto helpLabel = Label::createWithTTF(u8"※ 계정은 자동으로 생성됩니다. ※", FILENAME::FONT::SOYANON, 20);
+	addChild(helpLabel);
+	helpLabel->setPosition(920, 180);
+	helpLabel->setColor(Color3B::GRAY);
 	// 로그아웃 버튼
 	auto logoutLabel = Label::createWithTTF(u8"로그아웃", FILENAME::FONT::SOYANON, 32);
 	logoutLabel->setColor(Color3B{ 201,201,201 });

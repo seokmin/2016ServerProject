@@ -82,7 +82,7 @@ namespace FILENAME
 			DEF_FILENAME_POKEMON(POKE, u8"레트라.png"),
 			DEF_FILENAME_POKEMON(POKE, u8"루기아.png"),
 			DEF_FILENAME_POKEMON(POKE, u8"루주라.png"),
-			DEF_FILENAME_POKEMON(POKE, u8"라이코.png"),
+			DEF_FILENAME_POKEMON(POKE, u8"리아코.png"),
 			DEF_FILENAME_POKEMON(POKE, u8"리자몽.png"),
 			DEF_FILENAME_POKEMON(POKE, u8"마그마.png"),
 			DEF_FILENAME_POKEMON(POKE, u8"마릴.png"),
