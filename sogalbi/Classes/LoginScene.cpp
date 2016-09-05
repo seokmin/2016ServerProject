@@ -382,6 +382,18 @@ void LoginScene::initLayout()
 	_nameLabel->setAnchorPoint(Vec2(0, 0));
 	_nameLabel->setPosition(1088, 25);
 	addChild(_nameLabel, Z_ORDER::UI_ALWAYS_TOP);
+
+	// 충전 버튼
+	auto refillLabel = Label::createWithTTF(u8"무료충전", FILENAME::FONT::SOYANON, 40);
+	refillLabel->setColor(Color3B::WHITE);
+	auto refillButton = MenuItemLabel::create(refillLabel, [](Ref* pSender) {
+		ClientLogger::msgBox(L"게임 칩은 접속 할 때마다 자동으로 무료충전되며, 하루 1번만 가능합니다.");
+		return true;
+	});
+	auto reFillMenu = Menu::create(refillButton, nullptr);
+	_channelsBg->addChild(reFillMenu);
+	reFillMenu->setPosition(850, 60);
+
 }
 
 int LoginScene::parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector)
