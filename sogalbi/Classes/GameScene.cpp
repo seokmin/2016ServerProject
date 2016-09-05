@@ -40,8 +40,6 @@ bool GameScene::init(int roomNum)
 	initLayout(roomNum);
 	NetworkManager::getInstance()->setRecvCallback(CC_CALLBACK_3(GameScene::recvPacketProcess, this));
 	NetworkManager::getInstance()->sendPacket(PACKET_ID::ROOM_ENTER_USER_LIST_REQ, 0, nullptr);
-	// 타이머 고고씽
-	this->scheduleUpdate();
 
 	return true;
 }
@@ -246,10 +244,6 @@ void GameScene::packetProcess_RoomLeaveUserNtf(COMMON::RecvPacketInfo packetInfo
 	_players[packet->_slotNum]->clear();
 	if (packet->_slotNum == _userSlotNum)
 		logOut(nullptr);
-}
-
-void GameScene::update(float dt)
-{
 }
 
 bool GameScene::betButtonClicked(Ref* sender)
