@@ -6,7 +6,6 @@
 
 int main()
 {
-
 	App app;
 	app.Init();
 

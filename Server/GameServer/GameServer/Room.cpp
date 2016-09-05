@@ -170,6 +170,7 @@ void Room::NotifyBetDone(int sessionIndex, int betMoney)
 	}
 }
 
+// µ· ¾ø´Â À¯Àúµµ ÂÉ±î³¿
 void Room::SetRoomStateToWaiting()
 {
 	m_currentRoomState = ROOM_STATE::WAITING;
@@ -184,6 +185,11 @@ void Room::SetRoomStateToWaiting()
 			continue;
 
 		user->SetGameState(GAME_STATE::BETTING);
+
+		if (user->GetCurMoney() < m_pServerConfig->minBet || user->GetCurMoney() > m_pServerConfig->maxBet)
+		{
+			LeaveRoom(user);
+		}
 	}
 }
 

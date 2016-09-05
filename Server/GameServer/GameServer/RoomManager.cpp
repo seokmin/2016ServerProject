@@ -145,7 +145,7 @@ void RoomManager::RunPostTimeAction()
 
 			if (nowTime - room->GetLastActionTime() > room->GetWaitingForRestart() * 1000)
 			{
-				room->SetRoomStateToWaiting();
+				room->SetRoomStateToWaiting(); // 여기서 돈 없는 유저도 쫒아낼거임.
 				room->NotifyStartBettingTimer();
 			}
 		}
