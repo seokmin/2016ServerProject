@@ -273,7 +273,7 @@ void Room::ForceBetting()
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
 		if (m_userList[i] == nullptr)
-			return;
+			continue;
 
 		ApplyBet(m_userList[i]->GetSessionIndex(), ServerConfig::minBet);
 	}
