@@ -267,8 +267,8 @@ void GameScene::packetProcess_GameBetNtf(COMMON::RecvPacketInfo packetInfo)
 	{
 		_betSlider->setVisible(false);
 		_betButton->setVisible(false);
+		_choiceButton->setVisible(true);
 	}
-	_choiceButton->setVisible(true);
 
 	betUser->setMoneyBet(packet->_betMoney, betUser->getMoneyWhole() - packet->_betMoney);
 	betUser->setAlreadyBet(true);
