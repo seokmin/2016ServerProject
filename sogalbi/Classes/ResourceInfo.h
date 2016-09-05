@@ -236,6 +236,8 @@ namespace FILENAME
 		DEF_FILENAME(AUDIO, GAME_READY_BGM, "gameReadyBgm.mp3");
 		DEF_FILENAME(AUDIO, GAME_BATTLE_BGM, "battle.mp3");
 
+
+		DEF_FILENAME(AUDIO, BLACK_JACK, "blackJack.mp3");
 		DEF_FILENAME(AUDIO, BURST, "burst.wav");
 		DEF_FILENAME(AUDIO, STAND, "stand.wav");
 		DEF_FILENAME(AUDIO, HIT, "hit.wav");

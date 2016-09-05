@@ -340,7 +340,13 @@ void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 		if (player->_hand[0]->getHandValue().first == 21)
 		{
 			player->showBanner(Player::BannerKind::BLACK_JACK);
-			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::STAND.c_str());
+			CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILENAME::AUDIO::BLACK_JACK.c_str());
+			auto resume = []()
+			{
+				CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+			};
+			runAction(Sequence::create(DelayTime::create(1.2f), CallFunc::create(resume), nullptr));
 		}
 	}
 
