@@ -300,7 +300,7 @@ void LoginScene::packetProcess_RoomEnterRes(COMMON::RecvPacketInfo packetInfo)
 	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
 
 	auto gameScene = GameScene::createScene(recvBody->_roomNum);
-	Director::getInstance()->pushScene(gameScene);
+	Director::getInstance()->replaceScene(gameScene);
 	return;
 }
 

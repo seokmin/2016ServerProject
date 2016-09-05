@@ -11,6 +11,7 @@
 #include "Dealer.h"
 
 #include "GameScene.h"
+#include "LoginScene.h"
 
 
 Scene* GameScene::createScene(int roomNum)
@@ -75,7 +76,7 @@ void GameScene::initLayout(int roomNum)
 	// 나가기 버튼
 	auto leaveLabel = Label::createWithTTF(u8"나가기", FILENAME::FONT::SOYANON, 40);
 	leaveLabel->setColor(Color3B(201, 201, 201));
-	auto leaveButton = MenuItemLabel::create(leaveLabel, CC_CALLBACK_1(GameScene::menuCloseCallback, this));
+	auto leaveButton = MenuItemLabel::create(leaveLabel, CC_CALLBACK_1(GameScene::logOut, this));
 	auto leaveMenu = Menu::create(leaveButton, nullptr);
 	leaveMenu->setPosition(1199.f, 674.f);
 	this->addChild(leaveMenu, Z_ORDER::UI_TOP);
@@ -243,6 +244,8 @@ void GameScene::packetProcess_RoomLeaveUserNtf(COMMON::RecvPacketInfo packetInfo
 	if (packet->_slotNum < 0 || packet->_slotNum >= MAX_USERCOUNT_PER_ROOM)
 		return;
 	_players[packet->_slotNum]->clear();
+	if (packet->_slotNum == _userSlotNum)
+		logOut(nullptr);
 }
 
 void GameScene::update(float dt)
@@ -581,4 +584,12 @@ void GameScene::disableAllChoiceButton()
 	_itemDoubleDown->setEnabled(false);
 	_itemHit->setEnabled(false);
 	_itemStand->setEnabled(false);
+}
+
+bool GameScene::logOut(Ref* pSender)
+{
+	NetworkManager::getInstance()->disconnectTcp();
+	auto  loginScene = LoginScene::createScene();
+	Director::getInstance()->replaceScene(loginScene);
+	return true;
 }

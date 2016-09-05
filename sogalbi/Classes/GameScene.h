@@ -52,6 +52,8 @@ private:
 
 	void disableAllChoiceButton();
 
+	bool logOut(Ref* pSender);
+
 public:
 private:
 	enum Z_ORDER : short
