@@ -70,7 +70,7 @@ void GameScene::initLayout(int roomNum)
 	auto background = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::TABLE_BG);
 	background->setAnchorPoint(Vec2(0, 0));
 	background->getTexture()->setAliasTexParameters();
-	this->addChild(background,Z_ORDER::BACKGROUND);
+	this->addChild(background, Z_ORDER::BACKGROUND);
 
 	// 나가기 버튼
 	auto leaveLabel = Label::createWithTTF(u8"나가기", FILENAME::FONT::SOYANON, 40);
@@ -78,13 +78,13 @@ void GameScene::initLayout(int roomNum)
 	auto leaveButton = MenuItemLabel::create(leaveLabel, CC_CALLBACK_1(GameScene::menuCloseCallback, this));
 	auto leaveMenu = Menu::create(leaveButton, nullptr);
 	leaveMenu->setPosition(1199.f, 674.f);
-	this->addChild(leaveMenu,Z_ORDER::UI_TOP);
+	this->addChild(leaveMenu, Z_ORDER::UI_TOP);
 
 	// 딜러 덱
 	auto deck = Sprite::createWithSpriteFrameName(FILENAME::SPRITE::DECK);
 	deck->setPosition(900.f, 700.f);
 	deck->setRotation(-75.f);
-	this->addChild(deck,Z_ORDER::CARD_TOP);
+	this->addChild(deck, Z_ORDER::CARD_TOP);
 
 	// 방 번호
 	auto roomText = std::string("Room No : ") + std::to_string(roomNum);
@@ -92,13 +92,13 @@ void GameScene::initLayout(int roomNum)
 	roomNumLabel->setColor(Color3B(255, 255, 0));
 	roomNumLabel->setPosition(20.f, 660.f);
 	roomNumLabel->setAnchorPoint(Vec2(0.f, 0.f));
-	this->addChild(roomNumLabel,Z_ORDER::UI_TOP);
+	this->addChild(roomNumLabel, Z_ORDER::UI_TOP);
 
 	// 플레이어 네임택 와꾸
 	for (auto& player : _players)
 	{
 		player = Player::create();
-		addChild(player,NAMETAG_BG);
+		addChild(player, NAMETAG_BG);
 	}
 	auto screenSize = getContentSize();
 	_players[4]->setPosition(130, 260);
@@ -143,7 +143,7 @@ void GameScene::initLayout(int roomNum)
 	_itemHit = MenuItemLabel::create(labelHit, CC_CALLBACK_1(GameScene::hitButtonClicked, this));
 	_itemStand = MenuItemLabel::create(labelStand, CC_CALLBACK_1(GameScene::standButtonClicked, this));
 	disableAllChoiceButton();
-	_choiceButton = Menu::create(_itemSplit, _itemDoubleDown, _itemHit, _itemStand,nullptr);
+	_choiceButton = Menu::create(_itemSplit, _itemDoubleDown, _itemHit, _itemStand, nullptr);
 	_choiceButton->setPositionY(30);
 	_choiceButton->alignItemsHorizontallyWithPadding(60);
 	_choiceButton->setEnabled(false);
@@ -213,7 +213,7 @@ void GameScene::packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packet
 {
 	using namespace COMMON;
 	auto userList = (PacketRoomUserlistRes*)packetInfo.pRefData;
-	
+
 	auto isAlreadyPlaying = false;
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
@@ -224,9 +224,9 @@ void GameScene::packetProcess_RoomEnterUserListRes(COMMON::RecvPacketInfo packet
 	_userSlotNum = userList->_slot;
 	_players[_userSlotNum]->setAsPlayer();
 	if (isAlreadyPlaying)
-		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str(),true);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_BATTLE_BGM.c_str(), true);
 	else
-		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_READY_BGM.c_str(),true);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_READY_BGM.c_str(), true);
 }
 
 void GameScene::packetProcess_RoomEnterUserNtf(COMMON::RecvPacketInfo packetInfo)
@@ -252,8 +252,8 @@ void GameScene::update(float dt)
 bool GameScene::betButtonClicked(Ref* sender)
 {
 	using namespace COMMON;
-	auto packet = PacketGameBetReq{_betSlider->getCurrentBet()};
-	
+	auto packet = PacketGameBetReq{ _betSlider->getCurrentBet() };
+
 	NetworkManager::getInstance()->sendPacket(PACKET_ID::GAME_BET_REQ, sizeof(packet), (char*)&packet);
 	_betButton->setVisible(false);
 	_betSlider->setVisible(false);
@@ -278,10 +278,10 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 {
 	using namespace COMMON;
 	auto packet = (PacketGameBetCounterNtf*)packetInfo.pRefData;
-	
+
 	if (CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying() == false)
 		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::GAME_READY_BGM.c_str(), true);
-	
+
 	auto& time = packet->_countTime;
 	for (auto& user : _players)
 	{
@@ -309,19 +309,19 @@ void GameScene::packetProcess_GameBetCounter(COMMON::RecvPacketInfo packetInfo)
 void GameScene::packetProcess_GameStartNtf(COMMON::RecvPacketInfo packetInfo)
 {
 	using namespace COMMON;
-	
+
 	auto packet = (PacketGameStartNtf*)packetInfo.pRefData;
 
 	for (int i = 0; i < 5; ++i)
 	{
 		auto& player = _players[i];
-		if(player->isActivated() == false)
+		if (player->isActivated() == false)
 			continue;
 		player->_hand[0]->setVisible(true);
 		player->_hand[1]->setVisible(false);
 		auto cards = packet->_handInfo[i]._cardList;
 		player->_hand[0]->pushCard(cards[0]);
-		player->_hand[0]->pushCard(cards[1],0.5f);
+		player->_hand[0]->pushCard(cards[1], 0.5f);
 		player->setValueLabel(player->_hand[0]->getHandValue());
 	}
 	//_dealerHand->pushCard(packet->_dealerCard);
@@ -398,7 +398,7 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 	_players[packet->_slotNum]->setCounter(packet->_waitingTime);
 
 	auto& player = _players[_userSlotNum];
-	
+
 	auto& hand = player->_hand[packet->_handNum];
 
 	// 해당 hand는 enable 해줘야함
@@ -414,19 +414,26 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 		_choiceButton->setEnabled(true);
 
 		// split 버튼 활성화 여부
-		// 숫자가 같으면
-		if (firstCard._number == secondCard._number)
+		// 아직 스플릿 안했으면
+		if (player->_hand[1]->_cardInfos[0]._shape == CardInfo::CardShape::EMPTY)
 		{
-			// 돈도 있으면
-			if (player->getMoneyBet() <= player->getMoneyWhole())
+			// 숫자가 같으면
+			if (firstCard._number == secondCard._number)
 			{
-				_itemSplit->setEnabled(true);
+				// 돈도 있으면
+				if (player->getMoneyBet() <= player->getMoneyWhole())
+				{
+					_itemSplit->setEnabled(true);
+				}
 			}
 		}
 		// double down 버튼 활성화 여부
+		// 돈이 있으면
 		if (player->getMoneyBet() <= player->getMoneyWhole())
 		{
-			_itemDoubleDown->setEnabled(true);
+			// 카드가 한장이면 안된다( 스플릿시)
+			if(hand->_cardInfos[1]._shape != CardInfo::CardShape::EMPTY)
+				_itemDoubleDown->setEnabled(true);
 		}
 		// hit 버튼 활성화 여부
 		_itemHit->setEnabled(true);
@@ -438,7 +445,7 @@ void GameScene::packetProcess_GameChangeTurnNtf(COMMON::RecvPacketInfo packetInf
 	// 깜빡깜빡
 	auto flashEffect = Blink::create(0.5f, 2);
 	_players[packet->_slotNum]->runAction(flashEffect);
-	
+
 }
 
 void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
@@ -446,7 +453,7 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	using namespace COMMON;
 	auto packet = (PacketGameChoiceNtf*)packetInfo.pRefData;
 	auto& player = _players[packet->_slotNum];
-	if(packet->_recvCard._shape != CardInfo::CardShape::EMPTY)
+	if (packet->_recvCard._shape != CardInfo::CardShape::EMPTY)
 		player->_hand[packet->_handNum]->pushCard(packet->_recvCard);
 	player->setMoneyBet(packet->_betMoney, packet->_currentMoney);
 	player->setCounter(packet->_waitingTime);
@@ -456,6 +463,8 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	{
 		_itemHit->setEnabled(true);
 		_itemStand->setEnabled(true);
+		if (player->_hand[packet->_handNum]->_cardInfos[2]._shape == CardInfo::CardShape::EMPTY)
+			_itemDoubleDown->setEnabled(true);
 	}
 	else
 	{
@@ -477,7 +486,7 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 		break;
 	case ChoiceKind::SPLIT:
 		player->showEffect(Player::EffectKind::SPLIT);
-		player->_hand[1]->pushCard(player->_hand[0]->getCard(1)); 
+		player->_hand[1]->pushCard(player->_hand[0]->getCard(1));
 		player->_hand[0]->popCard();
 		break;
 	case ChoiceKind::DOUBLE_DOWN:
@@ -514,21 +523,21 @@ void GameScene::packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetI
 		player->initCounter();
 		player->setAlreadyBet(false);
 	}
-// 	// 딜러가 새로 깐 카드들
- 	auto& cardList = packet->_dealerResult._openedCardList;
- 	float waitingTime = 0.f;
-// 	for (auto& card : cardList)
-// 	{
-// 		if (card._shape == CardInfo::CardShape::EMPTY)
-// 			break;
-// 		_dealerHand->pushCard(card, waitingTime);
-// 		
-// 		waitingTime += 1.f;
-// 	}
-// 
-// 	//딜러 Burst이면 어둡게
-// 	if (_dealerHand->getHandValue().first > 21)
-// 		_dealerHand->Die(waitingTime - .6f);
+	// 	// 딜러가 새로 깐 카드들
+	auto& cardList = packet->_dealerResult._openedCardList;
+	float waitingTime = 0.f;
+	// 	for (auto& card : cardList)
+	// 	{
+	// 		if (card._shape == CardInfo::CardShape::EMPTY)
+	// 			break;
+	// 		_dealerHand->pushCard(card, waitingTime);
+	// 		
+	// 		waitingTime += 1.f;
+	// 	}
+	// 
+	// 	//딜러 Burst이면 어둡게
+	// 	if (_dealerHand->getHandValue().first > 21)
+	// 		_dealerHand->Die(waitingTime - .6f);
 
 	for (auto& card : cardList)
 	{
@@ -541,9 +550,9 @@ void GameScene::packetProcess_GameDealerResultNtf(COMMON::RecvPacketInfo packetI
 	// 돈 결과 알려줌
 	for (int i = 0; i < 5; ++i)
 	{
-		if(_players[i]->_hand[0]->_cardInfos[0]._shape == CardInfo::CardShape::EMPTY)
+		if (_players[i]->_hand[0]->_cardInfos[0]._shape == CardInfo::CardShape::EMPTY)
 			continue;
-		auto callFunc = CallFunc::create(CC_CALLBACK_0(Player::setMoneyBet,_players[i],0,packet->_currentMoney[i]));
+		auto callFunc = CallFunc::create(CC_CALLBACK_0(Player::setMoneyBet, _players[i], 0, packet->_currentMoney[i]));
 		_players[i]->runAction(Sequence::create(DelayTime::create(waitingTime), callFunc, nullptr));
 	}
 
