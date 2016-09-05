@@ -32,8 +32,10 @@ ERROR_CODE PacketProcess::GameChoice(PacketInfo packetInfo)
 
 	room->NotifyGameChoice(packetInfo.SessionIndex, reqPkt->_choice);
 
+	// 핸드가 다음 핸드로 플레이 될 때만 노티를 보냄.
 	auto user = m_pRefUserMgr->GetUserBySessionId(packetInfo.SessionIndex);
-	if (user->GetHand(user->GetCurHand())._handState != HandInfo::HandState::CURRENT)
+	if (user->GetHand(user->GetCurHand())._handState != HandInfo::HandState::CURRENT || 
+		(user->GetCurHand() == 1 && user->GetHand(user->GetCurHand())._handState == HandInfo::HandState::CURRENT))
 	{
 		room->NotifyChangeTurn();
 	}

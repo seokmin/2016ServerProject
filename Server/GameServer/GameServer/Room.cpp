@@ -216,6 +216,10 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 		return ERROR_CODE::ROOM_GAME_NOT_IN_PROPER_STATE;
 	}
 
+	// 서버 설정 돈 보다 작다면..
+	if (betMoney < m_pServerConfig->minBet)
+		betMoney = m_pServerConfig->minBet;
+
 	// 유저의 돈을 갈취한 뒤..
 	auto ret = user->ApplyBet(betMoney);
 	if (ret != ERROR_CODE::NONE)
@@ -646,8 +650,8 @@ void Room::NotifyLeaveUserInfo(int sessionIndex)
 	{
 		if (m_userList[i] == nullptr) continue;
 
-		if (m_userList[i]->CheckUserWithSessionIndex(sessionIndex))
-			continue;
+		//if (m_userList[i]->CheckUserWithSessionIndex(sessionIndex))
+		//	continue;
 
 		// Res 보냄
 		PacketInfo sendPacket;
@@ -758,7 +762,7 @@ int Room::CalculateResultByHand(HandInfo dHand, HandInfo uHand, int betMoney)
 
 			if (useSum > dealerSum) // 이겼을 때.
 			{
-				return betMoney * double_down_bounus;
+				return betMoney * double_down_bounus * 2;
 			}
 			else if (useSum < dealerSum) // 졌을때
 			{

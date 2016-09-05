@@ -89,7 +89,7 @@ namespace LoginServer.DB
                 DataSet ds = new DataSet();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("SELECT name, ip, port, r, g, b, minBet, maxBet FROM channel");
+                sb.AppendFormat("SELECT name, ip, port, r, g, b, minBet, maxBet FROM channel WHERE timestamp > DATE_SUB(NOW(), INTERVAL 30 SECOND)");
 
                 MySqlDataAdapter da = new MySqlDataAdapter(sb.ToString(), myConnection);
                 await da.FillAsync(ds, "channelInfo");

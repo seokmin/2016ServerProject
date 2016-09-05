@@ -36,7 +36,10 @@ void DBProcess::Process(DBResult rslt)
 
 ERROR_CODE DBProcess::SubmitStateProcess(DBResult rslt)
 {
-	Logger::GetInstance()->Logf(Logger::INFO, L"[DB : GOOD] Server Id = %s %s ", rslt._result1, rslt._result2);
+	if (rslt._retCode != SQL_SUCCESS)
+	{
+		Logger::GetInstance()->Logf(Logger::ERROR_FATAL, L"=========[DB : FATAL] Faild to Write DB :: Server Id = %s %s ", rslt._result1, rslt._result2);
+	}
 	return ERROR_CODE();
 }
 
