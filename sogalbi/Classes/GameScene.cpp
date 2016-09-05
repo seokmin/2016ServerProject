@@ -458,18 +458,6 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	player->setMoneyBet(packet->_betMoney, packet->_currentMoney);
 	player->setCounter(packet->_waitingTime);
 	player->setValueLabel(player->_hand[packet->_handNum]->getHandValue());
-	// 자기 자신이면
-	if (packet->_slotNum == _userSlotNum)
-	{
-		_itemHit->setEnabled(true);
-		_itemStand->setEnabled(true);
-		if (player->_hand[packet->_handNum]->_cardInfos[2]._shape == CardInfo::CardShape::EMPTY)
-			_itemDoubleDown->setEnabled(true);
-	}
-	else
-	{
-		disableAllChoiceButton();
-	}
 
 	// 이펙트 뿌리기, 사운드 재생
 	auto soundName = std::string{};
@@ -505,6 +493,16 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	}
 	if (value.first == 21 || value.second == 21)
 		player->showBanner(Player::BannerKind::STAND);
+
+	disableAllChoiceButton();
+	// 자기 자신이면
+	if (packet->_slotNum == _userSlotNum && packet->_choice == ChoiceKind::HIT)
+	{
+		_itemHit->setEnabled(true);
+		_itemStand->setEnabled(true);
+		if (player->_hand[packet->_handNum]->_cardInfos[2]._shape == CardInfo::CardShape::EMPTY)
+			_itemDoubleDown->setEnabled(true);
+	}
 
 	if (soundName != "")
 		CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(soundName.c_str());
