@@ -1,21 +1,45 @@
-# 2016ServerProject
-프로젝트명 : 잭블랙잭블랙잭블랙잭블랙잭블랙잭블랙잭  
-다들 아는 그 카드게임  
+# 잭블랙이블랙잭을한다 - ProtoType Release 0.1
 
-## 패킷 구조
-/common/packet.h
-먼저 찜한사람이 수정하고 common폴더에 추가합시당  
-[링크(구글닥스)](https://docs.google.com/spreadsheets/d/13zOo826LMDAvX_KQ-mffD9NehRGVJEXf8I36mpPwZKs/edit)  
+##개요
 
-## 코딩 규칙  
-- 공통
-Common폴더의 구현은 전부 namespace COMMON에 등록.  
+누구나 아는 그 게임 : 블랙잭
 
-- (채널)
-struct의 멤버는 ```_```로 시작  
-class의 멤버는 ```m_```로 시작  
-우리가 구현한 메서드는 대문자로 시작  
-대충 컴파일되게만 해놓고 세부 구현 안한곳은 ```// [TODO] 구현할 내용``` 입력해놓기
+멀티 채널 지원, 빠른 입장, 한글 닉네임, 칩 무료충전
 
+###클라이언트
 
-Logger는 싱글톤으로 만들었습니다. 맘껏 불러서 쓰시면 됩니다.  
+Cocos2d-x 3.12 기반
+
+타겟 플랫폼 - Windows PC (추후 Android 지원 예정)
+
+###서버
+
+로그인 서버 : C#_Asp.Net 기반
+
+채널 서버 : C++, IOCP 기반
+
+##How to Build
+
+###클라이언트
+    1. cocos2d-x 3.12버전을 sogalbi\cocos2d 폴더에 풀어주세요
+      http://www.cocos2d-x.org/filedown/cocos2d-x-3.12.zip
+    2. 압축을 풀었으면 sogalbi\cocos2d\download-deps.py를 실행하여 추가 구성요소를 다운 받아 주세요.
+    3. sogalbi\proj.win32\sogalbi.sln 파일을 visual studio 2015 버전으로 열어서 작업하시면 됩니다.
+    4. 이상의 내용은 sogalbi 폴더 안의 "cocos2d폴더는 알아서.txt"에도 적혀있습니다.
+
+###로그인 서버
+    1. 로그인 서버 sln 파일을 열어 빌드합니다.
+    2. 실행 시 exe 파일과 같은 폴더 내에 LoginServerConfig.xml 파일이 필요합니다.
+    3. LoginServerConfig.xml 파일 구성 형식은 로그인 서버 폴더 내를 참고하세요.
+    4. 실행 시 관리자 권한을 필요로 합니다.
+
+### 채널 서버
+    1. 그냥 빌드하면 됩니다.
+    2. 실행 시 exe 파일과 같은 폴더 내에 config.ini 파일이 필요합니다.
+    3. config.ini 파일 구성 형식은 채널 서버 폴더 내를 참고하세요.
+
+##스크린샷
+
+![image](/sc1.png)
+![image](/sc2.png)
+![image](/sc3.png)
