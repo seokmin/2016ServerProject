@@ -189,6 +189,6 @@ void DBmanager::SubmitUserEarnMoney(User * pUser, int deltaMoney)
 	calcMoneyJob._nResult = 2;
 	wprintf_s(query);
 
-	Logger::GetInstance()->Logf(Logger::Level::INFO, L"submit money to DB: %d ->%d", pUser->GetTotalMoney(), pUser->GetTotalMoney() + deltaMoney);
+	Logger::GetInstance()->Logf(Logger::Level::INFO, L"submit money to DB: delta:%d, result_target:%d", deltaMoney, pUser->GetTotalMoney());
 	PushDBJob(calcMoneyJob, 0);
 }

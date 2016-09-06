@@ -22,6 +22,12 @@ void Room::Init(PacketQueue* sendPacketQue, DBmanager* pDBman, ServerConfig* ser
 	}
 }
 
+Room::~Room() {
+	for (auto& pUser : m_userList) {
+		LeaveRoom(pUser);
+	}
+}
+
 bool Room::EnterUser(User* user)
 {
 	int seat = GetAvailableSeat();
@@ -372,6 +378,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		
 		Logger::GetInstance()->Logf(Logger::Level::INFO, L"Splite! user:%s", user->GetName().c_str());
 		user->Split();
+		m_pDBmanager->SubmitUserEarnMoney(user, -(user->GetBetMoney()));
 	}
 	break;
 	
@@ -575,9 +582,9 @@ void Room::EndOfGame()
 
 		Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s : resut : curBetMoney:%d, total EarnMoney:%d", user->GetName().c_str(),user->GetBetMoney() ,earnMoney);
 
-		m_pDBmanager->SubmitUserEarnMoney(user, earnMoney);
 		user->ApplyEarnMoney(earnMoney);
-		
+		m_pDBmanager->SubmitUserEarnMoney(user, earnMoney);
+
 		pkt._currentMoney[i] = m_userList[i]->GetCurMoney();
 		pkt._earnMoney[i] = earnMoney;
 

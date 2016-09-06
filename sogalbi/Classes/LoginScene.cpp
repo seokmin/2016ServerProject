@@ -78,7 +78,7 @@ void LoginScene::loginButtonClicked(cocos2d::Ref* pSender)
 	else
 	{
 		auto request = new network::HttpRequest();
-		auto address = "http://10.73.43.23:8258/Request/Login";
+		auto address = "http://localhost:8258/Request/Login";
 		request->setUrl(address);
 		request->setRequestType(network::HttpRequest::Type::POST);
 		request->setResponseCallback(CC_CALLBACK_2(LoginScene::loginResponseArrived, this));
@@ -102,7 +102,7 @@ void LoginScene::logoutButtonClicked(Ref* pSender)
 
 	popDownChannelsLayer();
 	auto request = new network::HttpRequest();
-	auto address = "http://10.73.43.23:8258/Request/Logout";
+	auto address = "http://localhost:8258/Request/Logout";
 	request->setUrl(address);
 	request->setRequestType(network::HttpRequest::Type::POST);
 	request->setResponseCallback(CC_CALLBACK_2(LoginScene::logoutResponseArrived, this));

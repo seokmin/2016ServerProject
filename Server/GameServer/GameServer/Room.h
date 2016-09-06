@@ -26,7 +26,7 @@ class Room
 
 public:
 	Room(const int i) : m_id(i) {};
-	~Room() {};
+	~Room();
 
 	void Init(PacketQueue* sendPacketQue, DBmanager* pDBman, ServerConfig* serverConfig);
 
