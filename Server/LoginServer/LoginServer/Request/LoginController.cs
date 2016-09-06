@@ -66,7 +66,14 @@ namespace LoginServer.Request
             return responseResult;
         }
 
-
+        [Route("Request/Recharge")]
+        [HttpPost]
+        public async Task<RES_RECHARGE> Process(REQ_RECHARGE requestPacket)
+        {
+            var responseResult = new RES_RECHARGE();
+            responseResult.resultMoney = await Data.UserRepository.RechargeMoney(requestPacket.UserID);
+            return responseResult;
+        }
 
         [Route("Request/Logout")]
         [HttpPost]

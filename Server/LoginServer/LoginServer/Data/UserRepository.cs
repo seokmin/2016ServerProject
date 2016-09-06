@@ -34,6 +34,13 @@ namespace LoginServer.Data
             return await DB.MysqlLib.SaveAuthToken(authToken, username, timestamp);
         }
 
+        public static async Task<int> RechargeMoney(string username)
+        {
+            int rechargeChip = Program.StartMoney;
+            return await DB.MysqlLib.RechargeMoney(username, rechargeChip);
+        }
+
+
         public static async Task<RES_LOGIN_CHANNEL[]> GetChannel()
         {
             var data = await DB.MysqlLib.GetChannel();
