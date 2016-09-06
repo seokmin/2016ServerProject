@@ -67,5 +67,16 @@ namespace LoginServer
         }
         public short Result;
     }
+
+
+    public struct REQ_RECHARGE
+    {
+        public string UserID;
+    }
+
+    public struct RES_RECHARGE
+    {
+        public int resultMoney;
+    }
     #endregion
 }

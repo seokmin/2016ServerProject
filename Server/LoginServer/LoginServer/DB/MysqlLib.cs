@@ -79,6 +79,31 @@ namespace LoginServer.DB
             return affectedRows;
         }
 
+        public static async Task<int> RechargeMoney(string username, int money)
+        {
+            var result = 0;
+            using (MySqlConnection myConnection = new MySqlConnection(MYSQL_CONNECT_STRING))
+            {
+                myConnection.Open();
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("CALL Recharge_money('{0}', '{1}')", username, money);
+                
+                MySqlCommand cmd = new MySqlCommand(sb.ToString(), myConnection);
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                
+                while(rdr.Read())
+                {
+                    var result_string = rdr["chip"].ToString();
+                    result = Int32.Parse(result_string);
+                }
+
+                myConnection.Close();
+            }
+
+            return result;
+        }
+
         public static async Task<DataTable> GetChannel()
         {
             DataTable dt = null;
