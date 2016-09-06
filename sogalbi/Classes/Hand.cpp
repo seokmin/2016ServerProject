@@ -77,6 +77,7 @@ std::pair<int, int> Hand::getHandValue()
 	}
 
 	valuePair.first = value;
+	valuePair.second = value;;
 	for(auto& card : _cardInfos)
 		if (card._number == 1)
 		{
