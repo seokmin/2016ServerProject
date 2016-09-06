@@ -46,36 +46,29 @@ void App::Run()
 
 	while (m_IsReady)
 	{
+		
 		while (true)
 		{
 			m_pRoomMgr->RunPostTimeAction();
 
 			auto& packet = m_pRecvPacketQue.get()->ReadFront();
+			auto& dbRslt = m_pDB->FrontDBResult();
+			
+			if (packet.PacketId == 0 && dbRslt._type == JOB_TYPE::NONE)
+				break;
+
 			if (packet.PacketId != 0)
 			{
 				m_pPacketProc->Process(packet);
 				m_pRecvPacketQue.get()->PopFront();
 			}
 
-			if (!m_pDB->DBResultEmpty())
+			if (dbRslt._type != JOB_TYPE::NONE)
 			{
-				auto& dbRslt = m_pDB->FrontDBResult();
-				if (dbRslt._type == JOB_TYPE::SUBMIT_STATE)
-				{
-					if (dbRslt._type == JOB_TYPE::NONE)
-						break;
-
-					m_pDBProc->Process(dbRslt);
-					m_pDB->PopDBResult();
-				}
-				else
-				{
-					m_pDBProc->Process(dbRslt);
-					m_pDB->PopDBResult();
-				}
+				m_pDBProc->Process(dbRslt);
+				m_pDB->PopDBResult();
 				
 			}
-
 		}
 		
 		std::this_thread::sleep_for(std::chrono::milliseconds(0));
