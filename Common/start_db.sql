@@ -29,7 +29,7 @@ CREATE TABLE `user` (
   `username` varchar(45) NOT NULL,
   `pw` varchar(255) NOT NULL,
   `pokemon` int(11) DEFAULT NULL,
-  `chip` int(11) NOT NULL DEFAULT '500',
+  `chip` int(11) NOT NULL DEFAULT 150,
   `last_recharge` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
