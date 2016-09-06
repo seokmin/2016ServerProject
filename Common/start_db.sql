@@ -137,6 +137,8 @@ CREATE DEFINER=`next`@`%` PROCEDURE `Recharge_money`(IN target_name varchar(45),
 BEGIN
 UPDATE user SET chip = chip + money
 	WHERE username = target_name AND chip < money;
+UPDATE user SET last_recharge = NOW() WHERE username= target_name AND ROW_COUNT() = 1; 
+SELECT chip FROM user WHERE username = target_name;
 END$$
 
 DELIMITER ;
