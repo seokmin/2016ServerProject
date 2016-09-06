@@ -115,6 +115,45 @@ void LoginScene::logoutButtonClicked(Ref* pSender)
 	//NetworkManager::getInstance()->disconnectTcp();
 }
 
+void LoginScene::rechargeButtonCLicked(Ref * pSender)
+{
+
+	auto request = new network::HttpRequest();
+	auto address = "http://localhost:8258/Request/Recharge";
+	request->setUrl(address);
+	request->setRequestType(network::HttpRequest::Type::POST);
+	request->setResponseCallback(CC_CALLBACK_2(LoginScene::RechargeResponseArrived, this));
+	request->setHeaders({ "Content-Type:application/json" });
+	std::string postData = "{\"UserID\" : \"" + _nameField->getString() + "\"}";
+	request->setRequestData(postData.c_str(), postData.length());
+	network::HttpClient::getInstance()->send(request);
+	request->release();
+
+	return;
+}
+
+void LoginScene::RechargeResponseArrived(network::HttpClient * sender, network::HttpResponse * response)
+{
+	auto resData = response->getResponseData();
+	auto resString = std::string("");
+	for (auto& i : *resData)
+		resString += i;
+
+	Json::Value value;
+	auto result = _reader.parse(resString, value);
+
+	int newChip = value.get("resultMoney", _currentChip).asInt();
+
+	if( newChip == _currentChip)
+		ClientLogger::msgBox(L"충전되지 않았어요..");
+	else
+		ClientLogger::msgBox(L"충전되었습니다!");
+
+	_currentChip = newChip;
+	_moneyLabel->setString(std::to_string(_currentChip));
+}
+
+
 void LoginScene::loginResponseArrived(network::HttpClient* sender, network::HttpResponse* response)
 {
 
@@ -190,6 +229,7 @@ void LoginScene::channelButtonClicked(DEF::ChannelInfo& targetChannel)
 	
 	newThread.detach();
 }
+
 
 void LoginScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, char* bodyPos)
 {
@@ -417,10 +457,7 @@ void LoginScene::initLayout()
 	// 충전 버튼
 	auto refillLabel = Label::createWithTTF(u8"무료충전", FILENAME::FONT::SOYANON, 40);
 	refillLabel->setColor(Color3B::WHITE);
-	auto refillButton = MenuItemLabel::create(refillLabel, [](Ref* pSender) {
-		ClientLogger::msgBox(L"게임 칩은 접속 할 때마다 자동으로 무료충전되며, 하루 1번만 가능합니다.");
-		return true;
-	});
+	auto refillButton = MenuItemLabel::create(refillLabel, CC_CALLBACK_1(LoginScene::rechargeButtonCLicked, this));
 	auto reFillMenu = Menu::create(refillButton, nullptr);
 	_channelsBg->addChild(reFillMenu);
 	reFillMenu->setPosition(850, 60);

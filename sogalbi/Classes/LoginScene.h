@@ -33,6 +33,9 @@ public:
 
 	void channelButtonClicked(DEF::ChannelInfo& clickChannel);
 
+	void rechargeButtonCLicked(Ref* pSender);
+	void RechargeResponseArrived(network::HttpClient* sender, network::HttpResponse* response);
+
 	void recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, char* bodyPos);
 
 	CREATE_FUNC(LoginScene);
