@@ -48,7 +48,7 @@ namespace LoginServer.Request
             }
 
             responseResult.Channels = await Data.UserRepository.GetChannel();
-
+            
             Guid g = Guid.NewGuid();
             string authToken = Convert.ToBase64String(g.ToByteArray());
             //authToken = authToken.Replace("=", "");
@@ -59,7 +59,7 @@ namespace LoginServer.Request
 
             if (affectedRows == 0)
             {
-                responseResult.Return(ERROR_CODE.REQ_LOGIN_AUTH_SAVE_ERROR);
+                responseResult.Return(ERROR_CODE.REQ_LOGIN_AUTH_DUPLICATE);
             }
 
             responseResult.AuthToken = authToken;

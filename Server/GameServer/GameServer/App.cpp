@@ -3,10 +3,29 @@
 #include "IOCPManager.h"
 #include "App.h"
 
+#include <locale>
+
 COMMON::ERROR_CODE App::Init()
 {
+	std::wcin.imbue(std::locale("korean"));
 	m_pServerConfig = std::make_unique<ServerConfig>();
 	
+	
+	wprintf(L"Please Type Server name : ");
+	std::wstring serverName;
+	getline(std::wcin, serverName);
+	wcscpy(m_pServerConfig->SERVERNAME, serverName.c_str());
+	wprintf(L"Please Type Server IP : ");
+	std::wcin >> m_pServerConfig->IP;
+	wprintf(L"Please Type Server Port : ");
+	scanf("%u", &m_pServerConfig->Port);
+	wprintf(L"Please Type Server Min Bet : ");
+	scanf("%u", &m_pServerConfig->minBet);
+	wprintf(L"Please Type Server Max Bet : ");
+	scanf("%u", &m_pServerConfig->maxBet);
+
+	getchar();
+
 	//network init
 	m_pSendPacketQue = std::make_unique<PacketQueue>();
 	m_pRecvPacketQue = std::make_unique<PacketQueue>();
@@ -20,7 +39,7 @@ COMMON::ERROR_CODE App::Init()
 	m_pDB->Init(m_numberOfDBThread);
 	m_pDBProc->Init(m_pUserMgr.get(), m_pRoomMgr.get(), m_pSendPacketQue.get(), m_pDB.get());
 	m_pUserMgr->Init(m_pRoomMgr.get(), m_pDB.get());
-	m_pRoomMgr->Init(m_pUserMgr.get(), m_pDB.get(), m_pSendPacketQue.get());
+	m_pRoomMgr->Init(m_pUserMgr.get(), m_pDB.get(), m_pSendPacketQue.get(), m_pServerConfig.get());
 
 	m_pPacketProc = std::make_unique<PacketProcess>();
 	m_pPacketProc->Init(m_pUserMgr.get(), m_pRoomMgr.get(), m_pRecvPacketQue.get(), m_pSendPacketQue.get());
@@ -28,7 +47,7 @@ COMMON::ERROR_CODE App::Init()
 	LoadConfig();
 	m_IsReady = true;
 	m_dbisRunning = true;
-
+	
 	return COMMON::ERROR_CODE::NONE;
 }
 

@@ -4,126 +4,6 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>Sprites/Dummy/dummy1.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{60,20}</string>
-                <key>spriteSourceSize</key>
-                <string>{60,20}</string>
-                <key>textureRect</key>
-                <string>{{2005,537},{60,20}}</string>
-                <key>textureRotated</key>
-                <true/>
-            </dict>
-            <key>Sprites/Dummy/dummy2.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{60,20}</string>
-                <key>spriteSourceSize</key>
-                <string>{60,20}</string>
-                <key>textureRect</key>
-                <string>{{2005,599},{60,20}}</string>
-                <key>textureRotated</key>
-                <true/>
-            </dict>
-            <key>Sprites/Dummy/dummy3.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{60,20}</string>
-                <key>spriteSourceSize</key>
-                <string>{60,20}</string>
-                <key>textureRect</key>
-                <string>{{2005,661},{60,20}}</string>
-                <key>textureRotated</key>
-                <true/>
-            </dict>
-            <key>Sprites/Dummy/dummy4.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{60,20}</string>
-                <key>spriteSourceSize</key>
-                <string>{60,20}</string>
-                <key>textureRect</key>
-                <string>{{90,1525},{60,20}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>Sprites/Dummy/dummy5.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{60,20}</string>
-                <key>spriteSourceSize</key>
-                <string>{60,20}</string>
-                <key>textureRect</key>
-                <string>{{152,1525},{60,20}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>Sprites/Dummy/dummy6.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{60,20}</string>
-                <key>spriteSourceSize</key>
-                <string>{60,20}</string>
-                <key>textureRect</key>
-                <string>{{289,1458},{60,20}}</string>
-                <key>textureRotated</key>
-                <true/>
-            </dict>
-            <key>Sprites/Dummy/dummy7.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{60,20}</string>
-                <key>spriteSourceSize</key>
-                <string>{60,20}</string>
-                <key>textureRect</key>
-                <string>{{487,1626},{60,20}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>Sprites/Dummy/dummy8.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{60,20}</string>
-                <key>spriteSourceSize</key>
-                <string>{60,20}</string>
-                <key>textureRect</key>
-                <string>{{549,1626},{60,20}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
             <key>Sprites/arrow.png</key>
             <dict>
                 <key>aliases</key>
@@ -135,9 +15,9 @@
                 <key>spriteSourceSize</key>
                 <string>{36,28}</string>
                 <key>textureRect</key>
-                <string>{{175,1547},{36,28}}</string>
+                <string>{{150,1688},{36,28}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/bannerBlackJack.png</key>
             <dict>
@@ -150,9 +30,9 @@
                 <key>spriteSourceSize</key>
                 <string>{176,26}</string>
                 <key>textureRect</key>
-                <string>{{2005,359},{176,26}}</string>
+                <string>{{243,1492},{176,26}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/bannerBurst.png</key>
             <dict>
@@ -165,7 +45,7 @@
                 <key>spriteSourceSize</key>
                 <string>{177,26}</string>
                 <key>textureRect</key>
-                <string>{{2005,1},{177,26}}</string>
+                <string>{{1877,239},{177,26}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -180,9 +60,9 @@
                 <key>spriteSourceSize</key>
                 <string>{177,26}</string>
                 <key>textureRect</key>
-                <string>{{2005,180},{177,26}}</string>
+                <string>{{1,1660},{177,26}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/bannerWaiting.png</key>
             <dict>
@@ -195,9 +75,9 @@
                 <key>spriteSourceSize</key>
                 <string>{176,29}</string>
                 <key>textureRect</key>
-                <string>{{232,1283},{176,29}}</string>
+                <string>{{243,1461},{176,29}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/barProgress.png</key>
             <dict>
@@ -210,7 +90,7 @@
                 <key>spriteSourceSize</key>
                 <string>{983,14}</string>
                 <key>textureRect</key>
-                <string>{{611,1626},{983,14}}</string>
+                <string>{{1,1445},{983,14}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -225,9 +105,9 @@
                 <key>spriteSourceSize</key>
                 <string>{983,14}</string>
                 <key>textureRect</key>
-                <string>{{942,1609},{983,14}}</string>
+                <string>{{1861,1},{983,14}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/cards/C10.png</key>
             <dict>
@@ -240,9 +120,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{49,1549},{89,124}}</string>
+                <string>{{1946,1},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/C2.png</key>
             <dict>
@@ -255,7 +135,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{214,1521},{89,124}}</string>
+                <string>{{1946,127},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -270,7 +150,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{305,1520},{89,124}}</string>
+                <string>{{1,1534},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -285,7 +165,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{311,1421},{89,124}}</string>
+                <string>{{1421,1244},{89,124}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -300,7 +180,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{387,1283},{89,124}}</string>
+                <string>{{92,1534},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -315,9 +195,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{396,1512},{89,124}}</string>
+                <string>{{1549,1155},{89,124}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/cards/C7.png</key>
             <dict>
@@ -330,7 +210,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{437,1409},{89,124}}</string>
+                <string>{{1675,1155},{89,124}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -345,9 +225,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{478,1283},{89,124}}</string>
+                <string>{{1547,1246},{89,124}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/cards/C9.png</key>
             <dict>
@@ -360,9 +240,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{487,1500},{89,124}}</string>
+                <string>{{1673,1246},{89,124}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/cards/CA.png</key>
             <dict>
@@ -375,7 +255,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{563,1409},{89,124}}</string>
+                <string>{{1283,1368},{89,124}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -390,7 +270,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{569,1283},{89,124}}</string>
+                <string>{{183,1534},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -405,7 +285,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{660,1283},{89,124}}</string>
+                <string>{{274,1520},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -420,9 +300,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{578,1500},{89,124}}</string>
+                <string>{{274,1646},{89,124}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/cards/D10.png</key>
             <dict>
@@ -435,7 +315,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{669,1500},{89,124}}</string>
+                <string>{{365,1520},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -450,7 +330,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{689,1409},{89,124}}</string>
+                <string>{{400,1646},{89,124}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -465,7 +345,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{760,1500},{89,124}}</string>
+                <string>{{1905,253},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -480,9 +360,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{723,723},{89,124}}</string>
+                <string>{{456,1512},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/D5.png</key>
             <dict>
@@ -495,9 +375,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{723,814},{89,124}}</string>
+                <string>{{547,1461},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/D6.png</key>
             <dict>
@@ -510,9 +390,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{723,905},{89,124}}</string>
+                <string>{{638,1461},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/D7.png</key>
             <dict>
@@ -525,9 +405,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{723,996},{89,124}}</string>
+                <string>{{729,1461},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/D8.png</key>
             <dict>
@@ -540,9 +420,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{723,1087},{89,124}}</string>
+                <string>{{820,1461},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/D9.png</key>
             <dict>
@@ -555,9 +435,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{723,1178},{89,124}}</string>
+                <string>{{911,1461},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/DA.png</key>
             <dict>
@@ -570,7 +450,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{751,1269},{89,124}}</string>
+                <string>{{1002,1445},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -585,9 +465,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{815,1395},{89,124}}</string>
+                <string>{{1093,1445},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/DK.png</key>
             <dict>
@@ -600,9 +480,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{842,1301},{89,124}}</string>
+                <string>{{1184,1445},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/DQ.png</key>
             <dict>
@@ -615,9 +495,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{851,1486},{89,124}}</string>
+                <string>{{1275,1459},{89,124}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/cards/H10.png</key>
             <dict>
@@ -630,7 +510,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{941,1392},{89,124}}</string>
+                <string>{{547,1587},{89,124}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -645,7 +525,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{968,1301},{89,124}}</string>
+                <string>{{673,1587},{89,124}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -660,9 +540,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{942,1483},{89,124}}</string>
+                <string>{{799,1587},{89,124}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/cards/H4.png</key>
             <dict>
@@ -675,7 +555,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1033,1483},{89,124}}</string>
+                <string>{{925,1587},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -690,9 +570,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1067,1392},{89,124}}</string>
+                <string>{{1016,1571},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/H6.png</key>
             <dict>
@@ -705,9 +585,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1094,1301},{89,124}}</string>
+                <string>{{1107,1571},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/H7.png</key>
             <dict>
@@ -720,7 +600,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1124,1483},{89,124}}</string>
+                <string>{{1198,1571},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -735,9 +615,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1193,1392},{89,124}}</string>
+                <string>{{1289,1550},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/H9.png</key>
             <dict>
@@ -750,7 +630,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1220,1301},{89,124}}</string>
+                <string>{{1421,1335},{89,124}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -765,9 +645,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1215,1483},{89,124}}</string>
+                <string>{{1547,1337},{89,124}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/cards/HJ.png</key>
             <dict>
@@ -780,9 +660,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1306,1483},{89,124}}</string>
+                <string>{{1673,1337},{89,124}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/cards/HK.png</key>
             <dict>
@@ -795,9 +675,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1319,1392},{89,124}}</string>
+                <string>{{1877,418},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/HQ.png</key>
             <dict>
@@ -810,7 +690,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1397,1483},{89,124}}</string>
+                <string>{{1877,544},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -825,9 +705,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1346,1301},{89,124}}</string>
+                <string>{{1877,670},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/S2.png</key>
             <dict>
@@ -840,9 +720,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1445,1392},{89,124}}</string>
+                <string>{{1877,796},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/S3.png</key>
             <dict>
@@ -855,9 +735,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1472,1301},{89,124}}</string>
+                <string>{{1877,922},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/S4.png</key>
             <dict>
@@ -870,7 +750,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1488,1483},{89,124}}</string>
+                <string>{{1861,1048},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -885,9 +765,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1571,1392},{89,124}}</string>
+                <string>{{1380,1550},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/S6.png</key>
             <dict>
@@ -900,7 +780,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1598,1301},{89,124}}</string>
+                <string>{{1401,1459},{89,124}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -915,7 +795,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1579,1483},{89,124}}</string>
+                <string>{{1471,1550},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -930,9 +810,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1670,1483},{89,124}}</string>
+                <string>{{1527,1428},{89,124}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/cards/S9.png</key>
             <dict>
@@ -945,7 +825,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1697,1392},{89,124}}</string>
+                <string>{{1653,1428},{89,124}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -960,7 +840,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1761,1483},{89,124}}</string>
+                <string>{{1562,1519},{89,124}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -975,9 +855,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1724,1301},{89,124}}</string>
+                <string>{{1653,1519},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/SK.png</key>
             <dict>
@@ -990,9 +870,9 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1823,1392},{89,124}}</string>
+                <string>{{1744,1519},{89,124}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/cards/SQ.png</key>
             <dict>
@@ -1005,7 +885,7 @@
                 <key>spriteSourceSize</key>
                 <string>{89,124}</string>
                 <key>textureRect</key>
-                <string>{{1850,1301},{89,124}}</string>
+                <string>{{1779,1428},{89,124}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -1020,9 +900,9 @@
                 <key>spriteSourceSize</key>
                 <string>{1280,720}</string>
                 <key>textureRect</key>
-                <string>{{851,723},{1152,576}}</string>
+                <string>{{1283,1},{1152,576}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/chip.png</key>
             <dict>
@@ -1035,9 +915,9 @@
                 <key>spriteSourceSize</key>
                 <string>{43,35}</string>
                 <key>textureRect</key>
-                <string>{{263,1421},{43,35}}</string>
+                <string>{{1590,1692},{43,35}}</string>
                 <key>textureRotated</key>
-                <false/>
+                <true/>
             </dict>
             <key>Sprites/deckRed.png</key>
             <dict>
@@ -1050,9 +930,9 @@
                 <key>spriteSourceSize</key>
                 <string>{136,122}</string>
                 <key>textureRect</key>
-                <string>{{263,1283},{136,122}}</string>
+                <string>{{1283,1244},{136,122}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/doubleDown.png</key>
             <dict>
@@ -1065,9 +945,9 @@
                 <key>spriteSourceSize</key>
                 <string>{264,87}</string>
                 <key>textureRect</key>
-                <string>{{1,1283},{264,87}}</string>
+                <string>{{1283,1155},{264,87}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/hit.png</key>
             <dict>
@@ -1080,9 +960,9 @@
                 <key>spriteSourceSize</key>
                 <string>{54,35}</string>
                 <key>textureRect</key>
-                <string>{{175,1577},{54,35}}</string>
+                <string>{{1757,1700},{54,35}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/loginBg.png</key>
             <dict>
@@ -1097,7 +977,7 @@
                 <key>textureRect</key>
                 <string>{{1,1},{1280,720}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/nameTag.png</key>
             <dict>
@@ -1110,7 +990,7 @@
                 <key>spriteSourceSize</key>
                 <string>{236,67}</string>
                 <key>textureRect</key>
-                <string>{{163,1283},{236,67}}</string>
+                <string>{{1877,1},{236,67}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -1125,9 +1005,54 @@
                 <key>spriteSourceSize</key>
                 <string>{240,71}</string>
                 <key>textureRect</key>
-                <string>{{90,1283},{240,71}}</string>
+                <string>{{1,1461},{240,71}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
+            </dict>
+            <key>Sprites/poke/가디.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,40}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,40}</string>
+                <key>textureRect</key>
+                <string>{{1676,1695},{40,40}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/강챙이.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{55,48}</string>
+                <key>spriteSourceSize</key>
+                <string>{55,48}</string>
+                <key>textureRect</key>
+                <string>{{1857,1343},{55,48}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/갸라도스.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{56,56}</string>
+                <key>spriteSourceSize</key>
+                <string>{56,56}</string>
+                <key>textureRect</key>
+                <string>{{1835,1519},{56,56}}</string>
+                <key>textureRotated</key>
+                <false/>
             </dict>
             <key>Sprites/poke/거북왕.png</key>
             <dict>
@@ -1140,7 +1065,157 @@
                 <key>spriteSourceSize</key>
                 <string>{56,55}</string>
                 <key>textureRect</key>
-                <string>{{232,1461},{56,55}}</string>
+                <string>{{1859,1174},{56,55}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/고라파덕.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{37,40}</string>
+                <key>spriteSourceSize</key>
+                <string>{37,40}</string>
+                <key>textureRect</key>
+                <string>{{1947,379},{37,40}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/고오스.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{46,48}</string>
+                <key>spriteSourceSize</key>
+                <string>{46,48}</string>
+                <key>textureRect</key>
+                <string>{{1989,381},{46,48}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/고우스트.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{47,47}</string>
+                <key>spriteSourceSize</key>
+                <string>{47,47}</string>
+                <key>textureRect</key>
+                <string>{{101,1688},{47,47}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/고지.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{47,47}</string>
+                <key>spriteSourceSize</key>
+                <string>{47,47}</string>
+                <key>textureRect</key>
+                <string>{{1968,631},{47,47}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/근육몬.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{55,54}</string>
+                <key>spriteSourceSize</key>
+                <string>{55,54}</string>
+                <key>textureRect</key>
+                <string>{{1917,1232},{55,54}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/꼬렛.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{34,38}</string>
+                <key>spriteSourceSize</key>
+                <string>{34,38}</string>
+                <key>textureRect</key>
+                <string>{{1935,1398},{34,38}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/꼬마돌.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,33}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,33}</string>
+                <key>textureRect</key>
+                <string>{{1853,1393},{40,33}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/꼬부기.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{36,37}</string>
+                <key>spriteSourceSize</key>
+                <string>{36,37}</string>
+                <key>textureRect</key>
+                <string>{{1981,1508},{36,37}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/꼬지모.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{48,48}</string>
+                <key>spriteSourceSize</key>
+                <string>{48,48}</string>
+                <key>textureRect</key>
+                <string>{{1968,431},{48,48}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/나시.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{50,55}</string>
+                <key>spriteSourceSize</key>
+                <string>{50,55}</string>
+                <key>textureRect</key>
+                <string>{{1484,1676},{50,55}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -1155,9 +1230,369 @@
                 <key>spriteSourceSize</key>
                 <string>{40,39}</string>
                 <key>textureRect</key>
-                <string>{{1991,1416},{40,39}}</string>
+                <string>{{1996,297},{40,39}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/날쌩마.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{55,56}</string>
+                <key>spriteSourceSize</key>
+                <string>{55,56}</string>
+                <key>textureRect</key>
+                <string>{{1857,1285},{55,56}}</string>
                 <key>textureRotated</key>
                 <false/>
+            </dict>
+            <key>Sprites/poke/내루미.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{55,45}</string>
+                <key>spriteSourceSize</key>
+                <string>{55,45}</string>
+                <key>textureRect</key>
+                <string>{{1562,1645},{55,45}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/냄새꼬.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{45,44}</string>
+                <key>spriteSourceSize</key>
+                <string>{45,44}</string>
+                <key>textureRect</key>
+                <string>{{1968,1026},{45,44}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/닥트리오.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{52,40}</string>
+                <key>spriteSourceSize</key>
+                <string>{52,40}</string>
+                <key>textureRect</key>
+                <string>{{1799,1384},{52,40}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/단데기.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{28,35}</string>
+                <key>spriteSourceSize</key>
+                <string>{28,35}</string>
+                <key>textureRect</key>
+                <string>{{2000,1110},{28,35}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/독침붕.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{56,55}</string>
+                <key>spriteSourceSize</key>
+                <string>{56,55}</string>
+                <key>textureRect</key>
+                <string>{{1801,1213},{56,55}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/디그다.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{35,25}</string>
+                <key>spriteSourceSize</key>
+                <string>{35,25}</string>
+                <key>textureRect</key>
+                <string>{{2000,1140},{35,25}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/딱충이.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{23,38}</string>
+                <key>spriteSourceSize</key>
+                <string>{23,38}</string>
+                <key>textureRect</key>
+                <string>{{1970,1313},{23,38}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/또가스.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{46,45}</string>
+                <key>spriteSourceSize</key>
+                <string>{46,45}</string>
+                <key>textureRect</key>
+                <string>{{1974,1265},{46,45}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/또도가스.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{52,53}</string>
+                <key>spriteSourceSize</key>
+                <string>{52,53}</string>
+                <key>textureRect</key>
+                <string>{{1783,1645},{52,53}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/뚜벅쵸.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{29,32}</string>
+                <key>spriteSourceSize</key>
+                <string>{29,32}</string>
+                <key>textureRect</key>
+                <string>{{1527,1519},{29,32}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/라이츄.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{55,54}</string>
+                <key>spriteSourceSize</key>
+                <string>{55,54}</string>
+                <key>textureRect</key>
+                <string>{{1315,1676},{55,54}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/라프라스.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{52,56}</string>
+                <key>spriteSourceSize</key>
+                <string>{52,56}</string>
+                <key>textureRect</key>
+                <string>{{1859,1231},{52,56}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/라플레시아.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{49,45}</string>
+                <key>spriteSourceSize</key>
+                <string>{49,45}</string>
+                <key>textureRect</key>
+                <string>{{1619,1645},{49,45}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/레어코일.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{48,45}</string>
+                <key>spriteSourceSize</key>
+                <string>{48,45}</string>
+                <key>textureRect</key>
+                <string>{{1968,730},{48,45}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/레트라.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{48,44}</string>
+                <key>spriteSourceSize</key>
+                <string>{48,44}</string>
+                <key>textureRect</key>
+                <string>{{1968,780},{48,44}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/루기아.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{56,56}</string>
+                <key>spriteSourceSize</key>
+                <string>{56,56}</string>
+                <key>textureRect</key>
+                <string>{{1801,1155},{56,56}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/루주라.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{47,44}</string>
+                <key>spriteSourceSize</key>
+                <string>{47,44}</string>
+                <key>textureRect</key>
+                <string>{{1968,830},{47,44}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/리아코.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{38,40}</string>
+                <key>spriteSourceSize</key>
+                <string>{38,40}</string>
+                <key>textureRect</key>
+                <string>{{1150,1697},{38,40}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/리자몽.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{56,56}</string>
+                <key>spriteSourceSize</key>
+                <string>{56,56}</string>
+                <key>textureRect</key>
+                <string>{{1835,1577},{56,56}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/마그마.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{48,48}</string>
+                <key>spriteSourceSize</key>
+                <string>{48,48}</string>
+                <key>textureRect</key>
+                <string>{{1968,481},{48,48}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/마릴.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,38}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,38}</string>
+                <key>textureRect</key>
+                <string>{{1066,1697},{40,38}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/마임맨.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{48,48}</string>
+                <key>spriteSourceSize</key>
+                <string>{48,48}</string>
+                <key>textureRect</key>
+                <string>{{1968,531},{48,48}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/마자용.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{38,48}</string>
+                <key>spriteSourceSize</key>
+                <string>{38,48}</string>
+                <key>textureRect</key>
+                <string>{{1016,1697},{38,48}}</string>
+                <key>textureRotated</key>
+                <true/>
             </dict>
             <key>Sprites/poke/망나뇽.png</key>
             <dict>
@@ -1170,7 +1605,862 @@
                 <key>spriteSourceSize</key>
                 <string>{55,55}</string>
                 <key>textureRect</key>
-                <string>{{1976,1359},{55,55}}</string>
+                <string>{{584,1678},{55,55}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/메타몽.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{34,23}</string>
+                <key>spriteSourceSize</key>
+                <string>{34,23}</string>
+                <key>textureRect</key>
+                <string>{{1893,1603},{34,23}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/모다피.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,39}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,39}</string>
+                <key>textureRect</key>
+                <string>{{1996,339},{40,39}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/모래두지.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{38,40}</string>
+                <key>spriteSourceSize</key>
+                <string>{38,40}</string>
+                <key>textureRect</key>
+                <string>{{1192,1697},{38,40}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/뮤.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{36,38}</string>
+                <key>spriteSourceSize</key>
+                <string>{36,38}</string>
+                <key>textureRect</key>
+                <string>{{1905,1479},{36,38}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/뮤츠.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{53,56}</string>
+                <key>spriteSourceSize</key>
+                <string>{53,56}</string>
+                <key>textureRect</key>
+                <string>{{870,1678},{53,56}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/미뇽.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{36,38}</string>
+                <key>spriteSourceSize</key>
+                <string>{36,38}</string>
+                <key>textureRect</key>
+                <string>{{1943,1479},{36,38}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/밀탱크.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{46,46}</string>
+                <key>spriteSourceSize</key>
+                <string>{46,46}</string>
+                <key>textureRect</key>
+                <string>{{1952,1121},{46,46}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/발챙이.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{38,38}</string>
+                <key>spriteSourceSize</key>
+                <string>{38,38}</string>
+                <key>textureRect</key>
+                <string>{{1275,1697},{38,38}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/버터플.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{53,52}</string>
+                <key>spriteSourceSize</key>
+                <string>{53,52}</string>
+                <key>textureRect</key>
+                <string>{{1837,1635},{53,52}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/별가사리.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{39,42}</string>
+                <key>spriteSourceSize</key>
+                <string>{39,42}</string>
+                <key>textureRect</key>
+                <string>{{1996,253},{39,42}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/부스터.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{44,46}</string>
+                <key>spriteSourceSize</key>
+                <string>{44,46}</string>
+                <key>textureRect</key>
+                <string>{{1974,1217},{44,46}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/부우부.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,40}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,40}</string>
+                <key>textureRect</key>
+                <string>{{1893,1519},{40,40}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/붐볼.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{25,25}</string>
+                <key>spriteSourceSize</key>
+                <string>{25,25}</string>
+                <key>textureRect</key>
+                <string>{{1409,1426},{25,25}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/브케인.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,39}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,39}</string>
+                <key>textureRect</key>
+                <string>{{1971,1427},{40,39}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/뿔충이.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{27,38}</string>
+                <key>spriteSourceSize</key>
+                <string>{27,38}</string>
+                <key>textureRect</key>
+                <string>{{180,1708},{27,38}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/삐삐.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{37,37}</string>
+                <key>spriteSourceSize</key>
+                <string>{37,37}</string>
+                <key>textureRect</key>
+                <string>{{1718,1698},{37,37}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/샤미드.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{45,46}</string>
+                <key>spriteSourceSize</key>
+                <string>{45,46}</string>
+                <key>textureRect</key>
+                <string>{{1969,1169},{45,46}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/수륙챙이.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{47,44}</string>
+                <key>spriteSourceSize</key>
+                <string>{47,44}</string>
+                <key>textureRect</key>
+                <string>{{1968,879},{47,44}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/스라크.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{56,55}</string>
+                <key>spriteSourceSize</key>
+                <string>{56,55}</string>
+                <key>textureRect</key>
+                <string>{{1799,1270},{56,55}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/슬리퍼.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{53,54}</string>
+                <key>spriteSourceSize</key>
+                <string>{53,54}</string>
+                <key>textureRect</key>
+                <string>{{1372,1676},{53,54}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/슬리프.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{48,48}</string>
+                <key>spriteSourceSize</key>
+                <string>{48,48}</string>
+                <key>textureRect</key>
+                <string>{{1968,581},{48,48}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/식스테일.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{44,44}</string>
+                <key>spriteSourceSize</key>
+                <string>{44,44}</string>
+                <key>textureRect</key>
+                <string>{{1971,1338},{44,44}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/신뇽.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{45,47}</string>
+                <key>spriteSourceSize</key>
+                <string>{45,47}</string>
+                <key>textureRect</key>
+                <string>{{1968,928},{45,47}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/썬더.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{55,50}</string>
+                <key>spriteSourceSize</key>
+                <string>{55,50}</string>
+                <key>textureRect</key>
+                <string>{{1914,1346},{55,50}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/아보.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{38,36}</string>
+                <key>spriteSourceSize</key>
+                <string>{38,36}</string>
+                <key>textureRect</key>
+                <string>{{1981,1468},{38,36}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/아보크.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{55,55}</string>
+                <key>spriteSourceSize</key>
+                <string>{55,55}</string>
+                <key>textureRect</key>
+                <string>{{641,1678},{55,55}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/아쿠스타.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{47,46}</string>
+                <key>spriteSourceSize</key>
+                <string>{47,46}</string>
+                <key>textureRect</key>
+                <string>{{1837,1689},{47,46}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/야도란.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{53,52}</string>
+                <key>spriteSourceSize</key>
+                <string>{53,52}</string>
+                <key>textureRect</key>
+                <string>{{1892,1635},{53,52}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/왕콘치.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{55,55}</string>
+                <key>spriteSourceSize</key>
+                <string>{55,55}</string>
+                <key>textureRect</key>
+                <string>{{698,1678},{55,55}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/우츠동.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{47,43}</string>
+                <key>spriteSourceSize</key>
+                <string>{47,43}</string>
+                <key>textureRect</key>
+                <string>{{1541,1692},{47,43}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/윈디.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{51,55}</string>
+                <key>spriteSourceSize</key>
+                <string>{51,55}</string>
+                <key>textureRect</key>
+                <string>{{1427,1676},{51,55}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/윤겔라.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{48,47}</string>
+                <key>spriteSourceSize</key>
+                <string>{48,47}</string>
+                <key>textureRect</key>
+                <string>{{1,1688},{48,47}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/이브이.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,37}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,37}</string>
+                <key>textureRect</key>
+                <string>{{1905,379},{40,37}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/이상해씨.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{33,32}</string>
+                <key>spriteSourceSize</key>
+                <string>{33,32}</string>
+                <key>textureRect</key>
+                <string>{{1976,1585},{33,32}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/이상해풀.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{41,44}</string>
+                <key>spriteSourceSize</key>
+                <string>{41,44}</string>
+                <key>textureRect</key>
+                <string>{{1971,1384},{41,44}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/잉어킹.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{47,46}</string>
+                <key>spriteSourceSize</key>
+                <string>{47,46}</string>
+                <key>textureRect</key>
+                <string>{{1886,1689},{47,46}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/잠만보.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{56,50}</string>
+                <key>spriteSourceSize</key>
+                <string>{56,50}</string>
+                <key>textureRect</key>
+                <string>{{1917,1174},{56,50}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/쥬레곤.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{55,55}</string>
+                <key>spriteSourceSize</key>
+                <string>{55,55}</string>
+                <key>textureRect</key>
+                <string>{{755,1678},{55,55}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/쥬쥬.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{48,47}</string>
+                <key>spriteSourceSize</key>
+                <string>{48,47}</string>
+                <key>textureRect</key>
+                <string>{{51,1688},{48,47}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/쥬피썬더.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{45,47}</string>
+                <key>spriteSourceSize</key>
+                <string>{45,47}</string>
+                <key>textureRect</key>
+                <string>{{1968,977},{45,47}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/질뻐기.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{54,51}</string>
+                <key>spriteSourceSize</key>
+                <string>{54,51}</string>
+                <key>textureRect</key>
+                <string>{{1727,1645},{54,51}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/질퍽이.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,39}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,39}</string>
+                <key>textureRect</key>
+                <string>{{1905,1438},{40,39}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/찌리리공.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{36,35}</string>
+                <key>spriteSourceSize</key>
+                <string>{36,35}</string>
+                <key>textureRect</key>
+                <string>{{2000,1072},{36,35}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/치코리타.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{36,40}</string>
+                <key>spriteSourceSize</key>
+                <string>{36,40}</string>
+                <key>textureRect</key>
+                <string>{{1935,1519},{36,40}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/칠색조.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{55,56}</string>
+                <key>spriteSourceSize</key>
+                <string>{55,56}</string>
+                <key>textureRect</key>
+                <string>{{526,1678},{55,56}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/캐터피.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{27,26}</string>
+                <key>spriteSourceSize</key>
+                <string>{27,26}</string>
+                <key>textureRect</key>
+                <string>{{220,1708},{27,26}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/코일.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{28,21}</string>
+                <key>spriteSourceSize</key>
+                <string>{28,21}</string>
+                <key>textureRect</key>
+                <string>{{2014,780},{28,21}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/콘치.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,47}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,47}</string>
+                <key>textureRect</key>
+                <string>{{1627,1695},{40,47}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/크랩.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,39}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,39}</string>
+                <key>textureRect</key>
+                <string>{{1935,1561},{40,39}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/탕구리.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{40,38}</string>
+                <key>spriteSourceSize</key>
+                <string>{40,38}</string>
+                <key>textureRect</key>
+                <string>{{1108,1697},{40,38}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/토게피.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{25,29}</string>
+                <key>spriteSourceSize</key>
+                <string>{25,29}</string>
+                <key>textureRect</key>
+                <string>{{1929,1603},{25,29}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/파이리.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{37,36}</string>
+                <key>spriteSourceSize</key>
+                <string>{37,36}</string>
+                <key>textureRect</key>
+                <string>{{1976,1547},{37,36}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/파이어.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{54,56}</string>
+                <key>spriteSourceSize</key>
+                <string>{54,56}</string>
+                <key>textureRect</key>
+                <string>{{812,1678},{54,56}}</string>
+                <key>textureRotated</key>
+                <true/>
+            </dict>
+            <key>Sprites/poke/팬텀.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{47,46}</string>
+                <key>spriteSourceSize</key>
+                <string>{47,46}</string>
+                <key>textureRect</key>
+                <string>{{1935,1689},{47,46}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/포니타.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{46,47}</string>
+                <key>spriteSourceSize</key>
+                <string>{46,47}</string>
+                <key>textureRect</key>
+                <string>{{1952,1072},{46,47}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/푸린.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{39,38}</string>
+                <key>spriteSourceSize</key>
+                <string>{39,38}</string>
+                <key>textureRect</key>
+                <string>{{1234,1697},{39,38}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/프리져.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{54,56}</string>
+                <key>spriteSourceSize</key>
+                <string>{54,56}</string>
+                <key>textureRect</key>
+                <string>{{1914,1288},{54,56}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -1185,7 +2475,22 @@
                 <key>spriteSourceSize</key>
                 <string>{56,55}</string>
                 <key>textureRect</key>
-                <string>{{1976,1301},{56,55}}</string>
+                <string>{{1799,1327},{56,55}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/피죤투.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{48,55}</string>
+                <key>spriteSourceSize</key>
+                <string>{48,55}</string>
+                <key>textureRect</key>
+                <string>{{1670,1645},{48,55}}</string>
                 <key>textureRotated</key>
                 <true/>
             </dict>
@@ -1200,7 +2505,22 @@
                 <key>spriteSourceSize</key>
                 <string>{40,40}</string>
                 <key>textureRect</key>
-                <string>{{1949,1416},{40,40}}</string>
+                <string>{{1893,1561},{40,40}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>Sprites/poke/홍수몬.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{45,48}</string>
+                <key>spriteSourceSize</key>
+                <string>{45,48}</string>
+                <key>textureRect</key>
+                <string>{{1968,680},{45,48}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -1215,9 +2535,9 @@
                 <key>spriteSourceSize</key>
                 <string>{92,46}</string>
                 <key>textureRect</key>
-                <string>{{1,1549},{92,46}}</string>
+                <string>{{180,1660},{92,46}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/stand.png</key>
             <dict>
@@ -1230,9 +2550,9 @@
                 <key>spriteSourceSize</key>
                 <string>{111,49}</string>
                 <key>textureRect</key>
-                <string>{{1852,1483},{111,49}}</string>
+                <string>{{421,1461},{111,49}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
             <key>Sprites/tableBg.png</key>
             <dict>
@@ -1245,7 +2565,7 @@
                 <key>spriteSourceSize</key>
                 <string>{1280,720}</string>
                 <key>textureRect</key>
-                <string>{{723,1},{1280,720}}</string>
+                <string>{{1,723},{1280,720}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -1260,9 +2580,9 @@
                 <key>spriteSourceSize</key>
                 <string>{12,42}</string>
                 <key>textureRect</key>
-                <string>{{396,1638},{12,42}}</string>
+                <string>{{1861,986},{12,42}}</string>
                 <key>textureRotated</key>
-                <true/>
+                <false/>
             </dict>
         </dict>
         <key>metadata</key>
@@ -1276,9 +2596,9 @@
             <key>realTextureFileName</key>
             <string>textures.png</string>
             <key>size</key>
-            <string>{2032,1651}</string>
+            <string>{2036,1736}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:5ec95cc553437bb97725305c870905f7:1a3cd3c14b77727a93a6860caa31aa9e:1abd9b1a32dd92fa37ae3f420f34f475$</string>
+            <string>$TexturePacker:SmartUpdate:6abdbe9f115bce80b5587c655eb635bd:3b3b0f3c017ee28cd9c3a351e39d2f4b:1abd9b1a32dd92fa37ae3f420f34f475$</string>
             <key>textureFileName</key>
             <string>textures.png</string>
         </dict>

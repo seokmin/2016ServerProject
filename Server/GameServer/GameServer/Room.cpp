@@ -4,19 +4,27 @@
 #include "IOCPManager.h"
 #include "PacketQueue.h"
 #include "DBmanager.h"
+#include "ServerConfig.h"
 
 #include "Room.h"
 #include "Dealer.h"
 #include <cassert>
 
-void Room::Init(PacketQueue* sendPacketQue, DBmanager* pDBman)
+void Room::Init(PacketQueue* sendPacketQue, DBmanager* pDBman, ServerConfig* serverConfig)
 {
 	m_pSendPacketQue = sendPacketQue;
 	m_pDBmanager = pDBman;
+	m_pServerConfig = serverConfig;
 
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
 		m_userList[i] = nullptr;
+	}
+}
+
+Room::~Room() {
+	for (auto& pUser : m_userList) {
+		LeaveRoom(pUser);
 	}
 }
 
@@ -117,6 +125,18 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	wsprintf(infoStr, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName().c_str());
 	Logger::GetInstance()->Log(Logger::INFO, infoStr, 100);
 
+	// Auth Token도 지워줌니다.
+	DBJob dbJob;
+
+	SQLWCHAR query[200] = L"";
+	dbJob._type = JOB_TYPE::CLEAR_AUTH_TOKEN;
+	wsprintf(dbJob._query, L"CALL Remove_AuthToken(\"%s\");", pUser->GetName().c_str());
+	dbJob._sessionIndex = pUser->GetSessionIndex();
+	dbJob._nResult = 0;
+
+	m_pDBmanager->PushDBJob(dbJob, pUser->GetUserIdx() % ServerConfig::numberOfDBThread);
+
+	
 	pUser->Clear();
 
 	return	COMMON::ERROR_CODE::NONE;
@@ -130,8 +150,8 @@ void Room::NotifyStartBettingTimer()
 	
 	PacketGameBetCounterNtf pkt;
 	pkt._countTime = ServerConfig::bettingTime;
-	pkt.minBet = ServerConfig::minBet;
-	pkt.maxBet = ServerConfig::maxBet;
+	pkt.minBet = m_pServerConfig->minBet;
+	pkt.maxBet = m_pServerConfig->maxBet;
 
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
@@ -168,6 +188,7 @@ void Room::NotifyBetDone(int sessionIndex, int betMoney)
 	}
 }
 
+// 돈 없는 유저도 쪼까냄
 void Room::SetRoomStateToWaiting()
 {
 	m_currentRoomState = ROOM_STATE::WAITING;
@@ -182,6 +203,11 @@ void Room::SetRoomStateToWaiting()
 			continue;
 
 		user->SetGameState(GAME_STATE::BETTING);
+
+		if (user->GetCurMoney() < m_pServerConfig->minBet || user->GetCurMoney() > m_pServerConfig->maxBet)
+		{
+			LeaveRoom(user);
+		}
 	}
 }
 
@@ -207,6 +233,10 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 		Logger::GetInstance()->Log(Logger::Level::ERROR_NORMAL, L"베팅상태가 아닌데.. 베팅함.", 20);
 		return ERROR_CODE::ROOM_GAME_NOT_IN_PROPER_STATE;
 	}
+
+	// 서버 설정 돈 보다 작다면..
+	if (betMoney < m_pServerConfig->minBet)
+		betMoney = m_pServerConfig->minBet;
 
 	// 유저의 돈을 갈취한 뒤..
 	auto ret = user->ApplyBet(betMoney);
@@ -273,9 +303,9 @@ void Room::ForceBetting()
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
 		if (m_userList[i] == nullptr)
-			return;
+			continue;
 
-		ApplyBet(m_userList[i]->GetSessionIndex(), ServerConfig::minBet);
+		ApplyBet(m_userList[i]->GetSessionIndex(), m_pServerConfig->minBet);
 	}
 }
 
@@ -301,12 +331,12 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		if (std::get<0>(sum) > 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::BURST);
-			user->SwitchHandIfSplitExist();
+			// user->SwitchHandIfSplitExist(); // 이 부분은 Game Choice Ntf를 보낸 다음에 호출해야 할 것 같음.
 		}
 		else if (std::get<0>(sum) == 21 || std::get<1>(sum) == 21)
 		{
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
-			user->SwitchHandIfSplitExist();
+			// user->SwitchHandIfSplitExist();
 		}
 		else
 		{
@@ -336,7 +366,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 			user->SetHandState(user->GetCurHand(), COMMON::HandInfo::HandState::STAND);
 		}
 		//바로 턴을 종료함.
-		user->SwitchHandIfSplitExist();
+		// user->SwitchHandIfSplitExist();
 
 	}
 	break;
@@ -348,6 +378,7 @@ ERROR_CODE Room::ApplyChoice(int sessionIndex, ChoiceKind choice)
 		
 		Logger::GetInstance()->Logf(Logger::Level::INFO, L"Splite! user:%s", user->GetName().c_str());
 		user->Split();
+		m_pDBmanager->SubmitUserEarnMoney(user, -(user->GetBetMoney()));
 	}
 	break;
 	
@@ -507,6 +538,15 @@ void Room::NotifyGameChoice(int sessionIndex, ChoiceKind choice)
 		sendPacket.PacketBodySize = sizeof(pkt);
 		m_pSendPacketQue->PushBack(sendPacket);
 	}
+
+	if (user->GetHand(user->GetCurHand())._handState != HandInfo::HandState::CURRENT)
+	{
+		user->SwitchHandIfSplitExist();
+	}
+
+	m_lastActionTime = duration_cast< milliseconds >(
+		steady_clock::now().time_since_epoch()
+		).count();
 }
 
 void Room::EndOfGame()
@@ -542,14 +582,17 @@ void Room::EndOfGame()
 
 		Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s : resut : curBetMoney:%d, total EarnMoney:%d", user->GetName().c_str(),user->GetBetMoney() ,earnMoney);
 
-		m_pDBmanager->SubmitUserEarnMoney(user, earnMoney);
 		user->ApplyEarnMoney(earnMoney);
-		
+		m_pDBmanager->SubmitUserEarnMoney(user, earnMoney);
+
 		pkt._currentMoney[i] = m_userList[i]->GetCurMoney();
 		pkt._earnMoney[i] = earnMoney;
 
 		if (earnMoney > user->GetBetMoney())
+		{
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::WIN;
+			Logger::GetInstance()->Logf(Logger::Level::INFO, L"%s : resut : 이겼음!", user->GetName().c_str());
+		}
 		else if(earnMoney == user->GetBetMoney()) 
 			pkt._winYeobu[i] = COMMON::PacketGameDealerResultNtf::WIN_YEOBU::PUSH;
 		else if(earnMoney == 0)
@@ -635,8 +678,8 @@ void Room::NotifyLeaveUserInfo(int sessionIndex)
 	{
 		if (m_userList[i] == nullptr) continue;
 
-		if (m_userList[i]->CheckUserWithSessionIndex(sessionIndex))
-			continue;
+		//if (m_userList[i]->CheckUserWithSessionIndex(sessionIndex))
+		//	continue;
 
 		// Res 보냄
 		PacketInfo sendPacket;

@@ -166,7 +166,7 @@ void DBmanager::SubmitState(int max, int count, ServerConfig* pServerConfig)
 	);
 	submitJob._nResult = 2;
 	//wprintf_s(query);
-
+	
 	// 이게 하나씩 늘어나면서 어느 디비쓰레드가 작업할지 정해줌.
 	static int dbCount = 0;
 	if (dbCount == 4) dbCount = 0;
@@ -189,6 +189,6 @@ void DBmanager::SubmitUserEarnMoney(User * pUser, int deltaMoney)
 	calcMoneyJob._nResult = 2;
 	wprintf_s(query);
 
-	Logger::GetInstance()->Logf(Logger::Level::INFO, L"submit money to DB: %d ->%d", pUser->GetTotalMoney(), pUser->GetTotalMoney() + deltaMoney);
+	Logger::GetInstance()->Logf(Logger::Level::INFO, L"submit money to DB: delta:%d, result_target:%d", deltaMoney, pUser->GetTotalMoney());
 	PushDBJob(calcMoneyJob, 0);
 }

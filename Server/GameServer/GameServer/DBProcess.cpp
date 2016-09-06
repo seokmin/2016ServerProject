@@ -19,6 +19,7 @@ void DBProcess::Init(UserManager * userMgr, RoomManager * roomMgr, PacketQueue* 
 	DBFuncArray[(int)JOB_TYPE::SUBMIT_STATE] = &DBProcess::SubmitStateProcess;
 	DBFuncArray[(int)JOB_TYPE::GET_USER_INFO_BY_AUTH] = &DBProcess::GetUserByAuthProcess;
 	DBFuncArray[(int)JOB_TYPE::CALCULATE_MONEY] = &DBProcess::CalculateMoneyResProcess;
+	DBFuncArray[(int)JOB_TYPE::CLEAR_AUTH_TOKEN] = &DBProcess::SubmitStateProcess;
 }
 
 void DBProcess::Process(DBResult rslt)
@@ -36,7 +37,10 @@ void DBProcess::Process(DBResult rslt)
 
 ERROR_CODE DBProcess::SubmitStateProcess(DBResult rslt)
 {
-	Logger::GetInstance()->Logf(Logger::INFO, L"[DB : GOOD] Server Id = %s %s ", rslt._result1, rslt._result2);
+	if (rslt._retCode != SQL_SUCCESS)
+	{
+		Logger::GetInstance()->Logf(Logger::ERROR_FATAL, L"=========[DB : FATAL] Faild to Write DB :: Server Id = %s %s ", rslt._result1, rslt._result2);
+	}
 	return ERROR_CODE();
 }
 

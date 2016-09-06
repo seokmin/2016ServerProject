@@ -44,7 +44,7 @@ namespace LoginServer
         public string Name;
         public Rgb Rgb;
         public string IP;
-        public short Port;
+        public int Port;
         public int MinBet;
         public int MaxBet;
     }

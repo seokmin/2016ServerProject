@@ -78,7 +78,7 @@ void LoginScene::loginButtonClicked(cocos2d::Ref* pSender)
 	else
 	{
 		auto request = new network::HttpRequest();
-		auto address = "http://127.0.0.1:8258/Request/Login";
+		auto address = "http://localhost:8258/Request/Login";
 		request->setUrl(address);
 		request->setRequestType(network::HttpRequest::Type::POST);
 		request->setResponseCallback(CC_CALLBACK_2(LoginScene::loginResponseArrived, this));
@@ -102,7 +102,7 @@ void LoginScene::logoutButtonClicked(Ref* pSender)
 
 	popDownChannelsLayer();
 	auto request = new network::HttpRequest();
-	auto address = "http://10.73.43.23:8258/Request/Logout";
+	auto address = "http://localhost:8258/Request/Logout";
 	request->setUrl(address);
 	request->setRequestType(network::HttpRequest::Type::POST);
 	request->setResponseCallback(CC_CALLBACK_2(LoginScene::logoutResponseArrived, this));
@@ -111,6 +111,8 @@ void LoginScene::logoutButtonClicked(Ref* pSender)
 	request->setRequestData(postData.c_str(), postData.length());
 	network::HttpClient::getInstance()->send(request);
 	request->release();
+
+	//NetworkManager::getInstance()->disconnectTcp();
 }
 
 void LoginScene::loginResponseArrived(network::HttpClient* sender, network::HttpResponse* response)
@@ -126,7 +128,7 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 	// result 10일때 invalid password다
 	if (resString == "")
 	{
-		ClientLogger::msgBox(L"로그인 서버가 응답하지 않습니다!", L"로그인 실패", false);
+		ClientLogger::msgBox(L"로그인 서버가 응답하지 않습니다!");
 		_loginMenu->setEnabled(true); // 로그인 실패했으므로 다시 누를 수 있게
 		return;
 	}
@@ -135,7 +137,7 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 	auto result = parseChannelInfo(resString, channels);
 	if (result == COMMON::RESULT_LOGIN::ERR_INVALID_PASSWORD)
 	{
-		ClientLogger::msgBox(L"비번 틀려쪙!", L"로그인 실패", false);
+		ClientLogger::msgBox(L"비번 틀려쪙!");
 		_loginMenu->setEnabled(true);
 		return;
 	}
@@ -145,9 +147,15 @@ void LoginScene::loginResponseArrived(network::HttpClient* sender, network::Http
 		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILENAME::AUDIO::CHANNEL_SELECT_BGM.c_str(), true);
 		popUpChannelsLayer(channels);
 	}
+	else if (result == COMMON::RESULT_LOGIN::ERR_ALREADY_LOGIN)
+	{
+		ClientLogger::msgBox(L"이미 접속중인 아이디에용!!!!");
+		_loginMenu->setEnabled(true);
+	}
 	else
 	{
-		ClientLogger::msgBox(L"서버에 문제가 있어용", L"로그인 실패", false);
+		ClientLogger::msgBox(L"서버에 문제가 있어용");
+		_loginMenu->setEnabled(true);
 	}
 
 }
@@ -216,6 +224,7 @@ void LoginScene::popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos)
 	_pokeImg->setSpriteFrame(FILENAME::SPRITE::POKE_ARRAY[tmpPokeNum]);
 	_pokeImg->setVisible(true);
 
+	short channelNum = 0;
 	for (auto& channel : channelInfos)
 	{
 		auto channelNode = Node::create();
@@ -226,7 +235,28 @@ void LoginScene::popUpChannelsLayer(std::vector<DEF::ChannelInfo>& channelInfos)
 		};
 
 		auto buttonLabel = Label::createWithTTF(channel.name, FILENAME::FONT::SOYANON, 42);
+		
+		// 임시
+		switch (channelNum++)
+		{
+		case 0:
+			channel.rgb = { 228,0,127 };
+			break;
+		case 1:
+			channel.rgb = { 0,255,0 };
+			break;
+		case 2:
+			channel.rgb = { 0,160,233 };
+			break;
+		default:
+			channel.rgb.r = RandomHelper::random_int(200, 255);
+			channel.rgb.g = RandomHelper::random_int(200, 255);
+			channel.rgb.b = RandomHelper::random_int(200, 255);
+			break;
+		}
+		
 		buttonLabel->setColor(channel.rgb);
+
 		auto buttonItem = MenuItemLabel::create(buttonLabel, buttonClicked);
 
 		auto betString = std::string(u8"bet ");
@@ -272,10 +302,11 @@ void LoginScene::packetProcess_RoomEnterRes(COMMON::RecvPacketInfo packetInfo)
 		// TODO : 에러시 처리
 		return;
 	}
-	Director::getInstance()->getScheduler()->performFunctionInCocosThread([] {CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true); });
-	
+	//Director::getInstance()->getScheduler()->performFunctionInCocosThread([] {CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true); });
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+
 	auto gameScene = GameScene::createScene(recvBody->_roomNum);
-	Director::getInstance()->pushScene(gameScene);
+	Director::getInstance()->replaceScene(gameScene);
 	return;
 }
 
@@ -303,7 +334,10 @@ void LoginScene::initLayout()
 	_loginMenu->setAnchorPoint(Vec2(0, 0));
 	_loginMenu->setPosition(890, 254);
 	addChild(_loginMenu, Z_ORDER::UI_LOGIN);
-
+	auto helpLabel = Label::createWithTTF(u8"※ 계정은 자동으로 생성됩니다. ※", FILENAME::FONT::SOYANON, 20);
+	addChild(helpLabel);
+	helpLabel->setPosition(920, 180);
+	helpLabel->setColor(Color3B::GRAY);
 	// 로그아웃 버튼
 	auto logoutLabel = Label::createWithTTF(u8"로그아웃", FILENAME::FONT::SOYANON, 32);
 	logoutLabel->setColor(Color3B{ 201,201,201 });
@@ -379,6 +413,18 @@ void LoginScene::initLayout()
 	_nameLabel->setAnchorPoint(Vec2(0, 0));
 	_nameLabel->setPosition(1088, 25);
 	addChild(_nameLabel, Z_ORDER::UI_ALWAYS_TOP);
+
+	// 충전 버튼
+	auto refillLabel = Label::createWithTTF(u8"무료충전", FILENAME::FONT::SOYANON, 40);
+	refillLabel->setColor(Color3B::WHITE);
+	auto refillButton = MenuItemLabel::create(refillLabel, [](Ref* pSender) {
+		ClientLogger::msgBox(L"게임 칩은 접속 할 때마다 자동으로 무료충전되며, 하루 1번만 가능합니다.");
+		return true;
+	});
+	auto reFillMenu = Menu::create(refillButton, nullptr);
+	_channelsBg->addChild(reFillMenu);
+	reFillMenu->setPosition(850, 60);
+
 }
 
 int LoginScene::parseChannelInfo(std::string& resLoginString, std::vector<DEF::ChannelInfo>& channelsVector)
@@ -416,6 +462,7 @@ void LoginScene::connectChannel(std::string ip, int port)
 	if (!NetworkManager::getInstance()->connectTcp(ip, port))
 	{
 		// connect 실패시
+		//NetworkManager::getInstance()->disconnectTcp();
 		_channelsMenu->setEnabled(true); // 채널 접속 버튼 다시 누를 수 있게
 		return;
 	}

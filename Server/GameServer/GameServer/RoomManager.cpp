@@ -4,14 +4,15 @@
 #include "PacketQueue.h"
 #include "DBmanager.h"
 
-void RoomManager::Init(UserManager* pUserMan, DBmanager* pDBman, PacketQueue* sendPacketQue)
+void RoomManager::Init(UserManager* pUserMan, DBmanager* pDBman, PacketQueue* sendPacketQue, ServerConfig* serverConfig)
 {
 	m_pRefUserManager = pUserMan;
+	m_pServerConfig = serverConfig;
 
 	for (int i = 0; i < ServerConfig::MAX_ROOMCOUNT; i++)
 	{
 		auto room = std::make_shared<Room>(i);
-		room->Init(sendPacketQue, pDBman);
+		room->Init(sendPacketQue, pDBman, serverConfig);
 		m_roomList.push_back(room);
 	}
 }
@@ -144,7 +145,7 @@ void RoomManager::RunPostTimeAction()
 
 			if (nowTime - room->GetLastActionTime() > room->GetWaitingForRestart() * 1000)
 			{
-				room->SetRoomStateToWaiting();
+				room->SetRoomStateToWaiting(); // 여기서 돈 없는 유저도 쫒아낼거임.
 				room->NotifyStartBettingTimer();
 			}
 		}

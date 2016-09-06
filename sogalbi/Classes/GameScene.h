@@ -20,8 +20,6 @@ public:
     static cocos2d::Scene* createScene(int roomNum);
 
     virtual bool init(int roomNum);
-
-	void update(float dt);
     
     void menuCloseCallback(cocos2d::Ref* pSender);
 	static GameScene* create(int roomNum);
@@ -51,6 +49,8 @@ private:
 	bool standButtonClicked(Ref* sender);
 
 	void disableAllChoiceButton();
+
+	bool logOut(Ref* pSender);
 
 public:
 private:

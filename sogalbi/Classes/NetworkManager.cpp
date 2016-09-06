@@ -8,7 +8,7 @@ NetworkManager* NetworkManager::_instance = nullptr;
 
 NetworkManager::NetworkManager()
 {
-	initTcp();
+	//initTcp();
 }
 
 void NetworkManager::initTcp()
@@ -47,8 +47,8 @@ void NetworkManager::recvAndGivePacketsToCallbackFuncThread()
 		auto receivedSize = recv(_sock, _recvBuffer + remainingDataSizeInRecvBuffer, sizeof(_recvBuffer), 0);
 		if (receivedSize == SOCKET_ERROR)
 			return;
-		
-		
+
+
 		// 버퍼에 남아있는 데이터의 양. 일관성을 지켜주려면 recv한 만큼 늘려주는 것이 당연.
 		remainingDataSizeInRecvBuffer += receivedSize;
 		// 다음번에 만들 패킷 위치는 recv버퍼 맨 앞부터.
@@ -64,8 +64,21 @@ void NetworkManager::recvAndGivePacketsToCallbackFuncThread()
 				// 바디를 만들기에도 충분할 때
 				if (remainingDataSizeInRecvBuffer >= packetHeader->_bodySize + PACKET_HEADER_SIZE)
 				{
+					static bool processDone = false;
+
+					// 프로세싱 함수가 처리될 때까지 기다림
+					processDone = false;
+					auto processLambda = [&]() {
+						_callbackFunc(packetHeader->_id, packetHeader->_bodySize, nextPacketAddress + PACKET_HEADER_SIZE);
+						processDone = true;
+					};
+
 					// 여기까지 왔다면 패킷을 만들 수 있는 것. 패킷을 부탁한 쪽에 넘긴다.
-					_callbackFunc(packetHeader->_id, packetHeader->_bodySize, nextPacketAddress + PACKET_HEADER_SIZE);
+					Director::getInstance()->getScheduler()->performFunctionInCocosThread(processLambda);
+
+					while (processDone == false)
+						std::this_thread::sleep_for(std::chrono::milliseconds(0));
+
 
 					// 다음에 만들 패킷의 주소는 지금 만든 패킷의 바로 뒤이다.
 					nextPacketAddress += PACKET_HEADER_SIZE + packetHeader->_bodySize;
@@ -80,12 +93,11 @@ void NetworkManager::recvAndGivePacketsToCallbackFuncThread()
 			memcpy(_recvBuffer, nextPacketAddress, remainingDataSizeInRecvBuffer);
 			break;
 		}
-
 		// 만들 수 있을 만큼 다 만들었으므로 다음번 Recv를 기다린다.
 	}
-
-
 }
+
+
 
 void NetworkManager::setRecvCallback(std::function<void(const COMMON::PACKET_ID, const short, char*)> callbackFunc)
 {
@@ -101,7 +113,6 @@ void NetworkManager::disconnectTcp()
 bool NetworkManager::sendPacket(const COMMON::PACKET_ID packetId, const short dataSize, char* pData)
 {
 	_mutex.lock();
-
 	char data[COMMON::MAX_PACKET_SIZE] = { 0, };
 
 	// 헤더
@@ -140,6 +151,10 @@ bool NetworkManager::connectTcp(std::string serverIp, int serverPort)
 	auto returnVal = true;
 	if (_mutex.try_lock() == false)
 		return false;
+
+	disconnectTcp();
+	initTcp();
+
 	SOCKADDR_IN serverAddr;
 	ZeroMemory(&serverAddr, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
