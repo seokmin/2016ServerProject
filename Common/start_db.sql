@@ -30,9 +30,9 @@ CREATE TABLE `user` (
   `pw` varchar(255) NOT NULL,
   `pokemon` int(11) DEFAULT NULL,
   `chip` int(11) NOT NULL DEFAULT '500',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+  `last_recharge` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 -- ----------------create stored procedure----------------------------
@@ -81,6 +81,15 @@ END$$
 DELIMITER ;
 
 
+-- --------------- GetNameByAutoToken -----------------------
+DELIMITER $$
+CREATE DEFINER=`next`@`%` PROCEDURE `GetNameByAuthToken`(IN aToken VARCHAR(45))
+BEGIN
+SELECT username FROM auth WHERE authToken = aToken;
+END$$
+DELIMITER ;
+
+
 -- ---------------Calc_user_money---------------------
 USE `jackblack`;
 DROP procedure IF EXISTS `Calc_user_money`;
@@ -97,3 +106,22 @@ END$$
 DELIMITER ;
 
 
+-- ------------- Remove_AuthToken ------------------
+DELIMITER $$
+CREATE DEFINER=`next`@`%` PROCEDURE `Remove_AuthToken`(IN uName VARCHAR(45))
+BEGIN
+DELETE FROM auth WHERE username = uName;
+END$$
+DELIMITER ;
+
+
+-- -------------  Save_AuthToken --------------------
+DELIMITER $$
+CREATE DEFINER=`next`@`%` PROCEDURE `Save_AuthToken`(IN uName VARCHAR(45), IN aToken VARCHAR(45), IN tStamp VARCHAR(45))
+BEGIN
+INSERT INTO auth (username, authToken, timestamp)
+SELECT uName, aToken, tStamp FROM DUAL
+WHERE NOT EXISTS
+(SELECT username FROM auth WHERE username = uName);
+END$$
+DELIMITER ;
