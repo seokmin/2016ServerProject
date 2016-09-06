@@ -11,11 +11,12 @@ public:
 	static const int MAX_NET_ERROR_STRING_COUNT = 64;
 	static const int MAX_NAME_LEN = 19;
 	static const int MAX_IP_LEN = 32; // IP 문자열 최대 길이
+	static const int MAX_PATH_LEN = 1024;
 	static const int MAX_PACKET_SIZE = 1024; // 최대 패킷 크기
 	static const int PACKET_HEADER_SIZE = COMMON::PACKET_HEADER_SIZE;
 
 	static const int MAX_USERCOUNT_PER_CHANNEL = 5000;
-	int ExtraClientCount = 100; // 넘쳤다는걸 알려주기 위한 여유분..
+	int				 ExtraClientCount = 100; // 넘쳤다는걸 알려주기 위한 여유분..
 	static const int MAX_ROOMCOUNT = 1000;
 	static const int MAX_USERCOUNT_PER_ROOM = COMMON::MAX_USERCOUNT_PER_ROOM;
 
