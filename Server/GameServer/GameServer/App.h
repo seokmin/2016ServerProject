@@ -19,7 +19,7 @@ public:
 	void Run();
 	void Stop() { m_IsReady = false; };
 
-	COMMON::ERROR_CODE LoadConfig();
+	COMMON::ERROR_CODE InitConfig();
 
 private:
 	void Release();
