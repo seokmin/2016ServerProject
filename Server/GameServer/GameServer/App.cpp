@@ -110,38 +110,38 @@ void App::StateCheckAndSubmit()
 COMMON::ERROR_CODE App::InitConfig()
 {
 
-	CHAR szBuf[ServerConfig::MAX_PATH_LEN] = { 0, };
-	std::string strINIpath(".\\config.ini");
-	std::string strSection, strKey, strValue;
-	strSection = "ServerConfig";
+	WCHAR szBuf[ServerConfig::MAX_PATH_LEN] = { 0, };
+	std::wstring strINIpath(L".\\config.ini");
+	std::wstring strSection, strKey, strValue;
+	strSection = L"ServerConfig";
 
-	strKey = "SERVER_NAME";
-	auto ret = GetPrivateProfileStringA(
-		strSection.c_str(), strKey.c_str(), " ",
+	strKey = L"SERVER_NAME";
+	auto ret = GetPrivateProfileStringW(
+		strSection.c_str(), strKey.c_str(), L" ",
 		szBuf,
 		ServerConfig::MAX_PATH_LEN, strINIpath.c_str());
-	MultiByteToWideChar(CP_ACP, MB_COMPOSITE, szBuf, -1, m_pServerConfig->SERVERNAME, ServerConfig::MAX_NAME_LEN);
+	wcscpy(m_pServerConfig->SERVERNAME, szBuf);
 	std::wcout << strKey.c_str() << ":" << m_pServerConfig->SERVERNAME << std::endl;
 
-	strKey = "IP";
-	ret = GetPrivateProfileStringA(
-		strSection.c_str(), strKey.c_str(), " ",
+	strKey = L"IP";
+	ret = GetPrivateProfileStringW(
+		strSection.c_str(), strKey.c_str(), L" ",
 		szBuf,
 		ServerConfig::MAX_PATH_LEN, strINIpath.c_str());
-	MultiByteToWideChar(CP_ACP, MB_COMPOSITE, szBuf, -1, m_pServerConfig->IP, ServerConfig::MAX_IP_LEN);
+	wcscpy(m_pServerConfig->IP, szBuf);
 	std::wcout << strKey.c_str() << ":" << m_pServerConfig->IP << std::endl;
 
-	strKey = "PORT";
-	m_pServerConfig->Port = GetPrivateProfileIntA(strSection.c_str(), strKey.c_str(), 34567, strINIpath.c_str());
-	std::cout << strKey.c_str() << ":" << m_pServerConfig->Port << std::endl;
+	strKey = L"PORT";
+	m_pServerConfig->Port = GetPrivateProfileIntW(strSection.c_str(), strKey.c_str(), 34567, strINIpath.c_str());
+	std::wcout << strKey.c_str() << ":" << m_pServerConfig->Port << std::endl;
 
-	strKey = "MINBET";
-	m_pServerConfig->minBet = GetPrivateProfileIntA(strSection.c_str(), strKey.c_str(), 10, strINIpath.c_str());
-	std::cout << strKey.c_str() << ":" << m_pServerConfig->minBet << std::endl;
+	strKey = L"MINBET";
+	m_pServerConfig->minBet = GetPrivateProfileIntW(strSection.c_str(), strKey.c_str(), 10, strINIpath.c_str());
+	std::wcout << strKey.c_str() << ":" << m_pServerConfig->minBet << std::endl;
 
-	strKey = "MAXBET";
-	m_pServerConfig->maxBet = GetPrivateProfileIntA(strSection.c_str(), strKey.c_str(), 5000, strINIpath.c_str());
-	std::cout << strKey.c_str() << ":" << m_pServerConfig->maxBet << std::endl;
+	strKey = L"MAXBET";
+	m_pServerConfig->maxBet = GetPrivateProfileIntW(strSection.c_str(), strKey.c_str(), 5000, strINIpath.c_str());
+	std::wcout << strKey.c_str() << ":" << m_pServerConfig->maxBet << std::endl;
 
 	return COMMON::ERROR_CODE::NONE;
 }
