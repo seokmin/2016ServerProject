@@ -125,3 +125,19 @@ WHERE NOT EXISTS
 (SELECT username FROM auth WHERE username = uName);
 END$$
 DELIMITER ;
+
+
+-- ----------------- Recharge_money ----------------------
+USE `jackblack`;
+DROP procedure IF EXISTS `Recharge_money`;
+
+DELIMITER $$
+USE `jackblack`$$
+CREATE DEFINER=`next`@`%` PROCEDURE `Recharge_money`(IN target_name varchar(45), money int)
+BEGIN
+UPDATE user SET chip = chip + money
+	WHERE username = target_name AND chip < money;
+END$$
+
+DELIMITER ;
+
