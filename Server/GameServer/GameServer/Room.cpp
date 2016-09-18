@@ -207,6 +207,7 @@ void Room::SetRoomStateToWaiting()
 		if (user->GetCurMoney() < m_pServerConfig->minBet || user->GetCurMoney() > m_pServerConfig->maxBet)
 		{
 			LeaveRoom(user);
+			user = nullptr;
 		}
 	}
 }
