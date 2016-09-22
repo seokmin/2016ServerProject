@@ -73,48 +73,50 @@ void DBmanager::DBThreadWorker()
 			break;
 		}
 
+		//m_mutex.lock();
+		//if (m_jobQ[index].empty())
+		//{
+		//	m_mutex.unlock();
+		//	WCHAR levelStr[200];
+		//	wsprintf(levelStr, L"DB 쓰레드(%d)에서 이벤트를 받았는데 Q에 아무것도 없음.. ", index);
+		//	Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
+		//	ResetEvent(hDBEvent[index]);
+		//	return;
+		//}
+		//m_mutex.unlock();
+
 		m_mutex.lock();
-		if (m_jobQ[index].empty())
+		while (!m_jobQ[index].empty())
 		{
+			m_jobPool[index] = m_jobQ[index].front();
+			m_jobQ[index].pop_front();
 			m_mutex.unlock();
-			WCHAR levelStr[200];
-			wsprintf(levelStr, L"DB 쓰레드(%d)에서 이벤트를 받았는데 Q에 아무것도 없음.. ", index);
-			Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
-			ResetEvent(hDBEvent[index]);
-			return;
+
+			auto ret = m_sqlMgrPool[index]->sqlconn();
+			ret = m_sqlMgrPool[index]->sqlexec(m_jobPool[index]._query, m_jobPool[index]._nResult, m_resultPool[index]._result1, m_resultPool[index]._result2, m_resultPool[index]._result3, m_resultPool[index]._result4);
+			m_sqlMgrPool[index]->sqldisconn();
+
+			if (!MYSQLSUCCESS(ret))
+			{
+				WCHAR levelStr[200];
+				wsprintf(levelStr, L"DBT(%d) DB Upsert 결과 실패.. 실패 결과를 큐에 전달함", index);
+				Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
+			}
+
+			m_resultPool[index]._retCode = ret;
+			m_resultPool[index]._type = m_jobPool[index]._type;
+			m_resultPool[index]._sessionIndex = m_jobPool[index]._sessionIndex;
+			wcscpy_s(m_resultPool[index]._query, m_jobPool[index]._query);
+
+			m_jobPool[index].Reset();
+			m_mutex.lock();
+			m_jobResultQ.push_back(m_resultPool[index]);
+			m_mutex.unlock();
+			m_resultPool[index].Reset();
+			m_mutex.lock();
 		}
 		m_mutex.unlock();
-
-		m_mutex.lock();
-		m_jobPool[index] = m_jobQ[index].front();
-		m_jobQ[index].pop_front();
-		m_mutex.unlock();
-
-		auto ret = m_sqlMgrPool[index]->sqlconn();
-		ret = m_sqlMgrPool[index]->sqlexec(m_jobPool[index]._query, m_jobPool[index]._nResult, m_resultPool[index]._result1, m_resultPool[index]._result2, m_resultPool[index]._result3, m_resultPool[index]._result4);
-		m_sqlMgrPool[index]->sqldisconn();
-
-		if (!MYSQLSUCCESS(ret))
-		{
-			WCHAR levelStr[200];
-			wsprintf(levelStr, L"DBT(%d) DB Upsert 결과 실패.. 실패 결과를 큐에 전달함", index);
-			Logger::GetInstance()->Log(Logger::INFO, levelStr, 200);
-		}
-
-		m_resultPool[index]._retCode = ret;
-		m_resultPool[index]._type = m_jobPool[index]._type;
-		m_resultPool[index]._sessionIndex = m_jobPool[index]._sessionIndex;
-		wcscpy_s(m_resultPool[index]._query, m_jobPool[index]._query);
-
-		m_jobPool[index].Reset();
-		m_mutex.lock();
-		m_jobResultQ.push_back(m_resultPool[index]);
-		m_mutex.unlock();
-		m_resultPool[index].Reset();
-
 		ResetEvent(hDBEvent[index]);
-
-		
 	}
 }
 
