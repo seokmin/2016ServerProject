@@ -1,4 +1,6 @@
+use jackblack;
 
+DROP table IF EXISTS `auth`;
 CREATE TABLE `auth` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
@@ -82,8 +84,9 @@ DELIMITER ;
 
 
 -- --------------- GetNameByAutoToken -----------------------
+DROP procedure IF EXISTS `GetNameByAuthToken`;
 DELIMITER $$
-CREATE DEFINER=`next`@`%` PROCEDURE `GetNameByAuthToken`(IN aToken VARCHAR(45))
+CREATE PROCEDURE `GetNameByAuthToken`(IN aToken VARCHAR(45))
 BEGIN
 SELECT username FROM auth WHERE authToken = aToken;
 END$$
@@ -107,8 +110,9 @@ DELIMITER ;
 
 
 -- ------------- Remove_AuthToken ------------------
+DROP procedure IF EXISTS `Remove_AuthToken`;
 DELIMITER $$
-CREATE DEFINER=`next`@`%` PROCEDURE `Remove_AuthToken`(IN uName VARCHAR(45))
+CREATE PROCEDURE `Remove_AuthToken`(IN uName VARCHAR(45))
 BEGIN
 DELETE FROM auth WHERE username = uName;
 END$$
@@ -116,8 +120,9 @@ DELIMITER ;
 
 
 -- -------------  Save_AuthToken --------------------
+DROP procedure IF EXISTS `Save_AuthToken`;
 DELIMITER $$
-CREATE DEFINER=`next`@`%` PROCEDURE `Save_AuthToken`(IN uName VARCHAR(45), IN aToken VARCHAR(45), IN tStamp VARCHAR(45))
+CREATE PROCEDURE `Save_AuthToken`(IN uName VARCHAR(45), IN aToken VARCHAR(45), IN tStamp VARCHAR(45))
 BEGIN
 INSERT INTO auth (username, authToken, timestamp)
 SELECT uName, aToken, tStamp FROM DUAL
@@ -133,7 +138,7 @@ DROP procedure IF EXISTS `Recharge_money`;
 
 DELIMITER $$
 USE `jackblack`$$
-CREATE DEFINER=`next`@`%` PROCEDURE `Recharge_money`(IN target_name varchar(45), money int)
+CREATE PROCEDURE `Recharge_money`(IN target_name varchar(45), money int)
 BEGIN
 UPDATE user SET chip = chip + money
 	WHERE username = target_name AND chip < money;
