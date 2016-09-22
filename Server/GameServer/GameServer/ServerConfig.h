@@ -27,7 +27,7 @@ public:
 	unsigned int maxBet = 10000;
 
 	static const unsigned int bettingTime = 15;
-	static const unsigned int enuriMilliseconds = 300;
+	static const unsigned int enuriMilliseconds = 440;
 	static const unsigned int waitingTime = 10;
 	static const unsigned int numberOfDBThread = 4;
 
