@@ -24,7 +24,6 @@ struct Deck
 				_deck.push_back(card);
 			}
 		}
-		std::srand(unsigned(std::time(0)));
 		std::random_shuffle(_deck.begin(), _deck.end());
 	}
 

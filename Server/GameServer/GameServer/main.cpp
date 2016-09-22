@@ -6,6 +6,8 @@
 
 int main()
 {
+	std::srand(unsigned(std::time(0)));
+
 	App app;
 	app.Init();
 
