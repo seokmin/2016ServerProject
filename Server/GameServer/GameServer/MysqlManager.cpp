@@ -48,8 +48,10 @@ RETCODE MySQLMangager::sqlconn() {
 
 // Execute SQL command with SQLExecDirect() ODBC API.
 RETCODE MySQLMangager::sqlexec(SQLWCHAR * query, int n_args, ...) {
-	Logger::GetInstance()->Logf(Logger::Level::INFO, L"Query send : %s", query);
+	
+	//Logger::GetInstance()->Logf(Logger::Level::INFO, L"Query send : %s", query);
 	rc = SQLExecDirect(hstmt, query, SQL_NTS);
+	
 	if (!MYSQLSUCCESS(rc)) {  //Error
 		error_out();
 		// Deallocate handles and disconnect.
@@ -68,9 +70,8 @@ RETCODE MySQLMangager::sqlexec(SQLWCHAR * query, int n_args, ...) {
 			{
 				SQLWCHAR* rslt = va_arg(ap, SQLWCHAR*);
 				SQLGetData(hstmt, i+1, SQL_C_WCHAR, rslt, MAX_DATA, &cbData);
-				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%ls", rslt);
+				//Logger::GetInstance()->Logf(Logger::Level::INFO, L"%ls", rslt);
 			}
-			//swprintf_s(result, cbData, L"%ls", szData);
 		}
 	}
 	return SQL_SUCCESS;

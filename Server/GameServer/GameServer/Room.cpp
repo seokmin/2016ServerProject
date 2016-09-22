@@ -215,6 +215,12 @@ ERROR_CODE Room::ApplyBet(int sessionIndex, int betMoney)
 {
 	User* user = GetUserBySessionIndex(sessionIndex);
 
+	if (user == nullptr)
+	{
+		Logger::GetInstance()->Log(Logger::Level::ERROR_NORMAL, L"뭐야 유저가 없어 널이야", 20);
+		return ERROR_CODE::ROOM_USER_LIST_INVALID_SESSION_ID;
+	}
+
 	// 상태가 베팅이 아닌데 감히 베팅을 하려 하다니..
 	if (user->GetGameState() != GAME_STATE::BETTING)
 	{
@@ -290,7 +296,7 @@ void Room::ForceBetting()
 {
 	for (int i = 0; i < MAX_USERCOUNT_PER_ROOM; ++i)
 	{
-		if (m_userList[i] == nullptr)
+		if (m_userList[i] == nullptr || m_userList[i]->GetGameState() != GAME_STATE::BETTING)
 			continue;
 
 		ApplyBet(m_userList[i]->GetSessionIndex(), m_pServerConfig->minBet);

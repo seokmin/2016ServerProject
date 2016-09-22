@@ -84,7 +84,7 @@ void RoomManager::RunPostTimeAction()
 				steady_clock::now().time_since_epoch()
 				).count();
 
-			if (nowTime - room->GetLastActionTime() > ServerConfig::bettingTime * 1000)
+			if (nowTime - room->GetLastActionTime() > ServerConfig::bettingTime * 1000 + ServerConfig::enuriMilliseconds) // 패킷이 늦게 도착했을 수도 있으니 0.3초 봐줌.
 			{
 				room->ForceBetting();
 				//room->NotifyStartGame(); // 이 부분이 노티파이가 있어서 뺌..
@@ -99,7 +99,7 @@ void RoomManager::RunPostTimeAction()
 				steady_clock::now().time_since_epoch()
 				).count();
 
-			if (nowTime - room->GetLastActionTime() > 2 * 1000)
+			if (nowTime - room->GetLastActionTime() > 1500)
 			{
 				// 사실상 이때부터 게임 시작.
 				room->NotifyChangeTurn();
@@ -115,7 +115,7 @@ void RoomManager::RunPostTimeAction()
 				steady_clock::now().time_since_epoch()
 				).count();
 
-			if (nowTime - room->GetLastActionTime() > ServerConfig::waitingTime * 1000)
+			if (nowTime - room->GetLastActionTime() > ServerConfig::waitingTime * 1000 + ServerConfig::enuriMilliseconds)
 			{
 				auto user = room->GetCurrentBettingUser();
 				if (user == nullptr)
