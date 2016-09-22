@@ -11,7 +11,9 @@ namespace LoginServer.DB
 {
     public static class MysqlLib
     {
+        const string MYSQL_HOST = "13.94.44.159";
         const string MYSQL_DB = "jackblack";
+        const string MYSQL_USER_ID = "jackblack";
         const string MYSQL_USER_PW = "1234";
 
         const string MYSQL_CONNECT_STRING = "Server=" + MYSQL_HOST + ";Database=" + MYSQL_DB + ";Uid=" + MYSQL_USER_ID + ";Pwd=" + MYSQL_USER_PW;
