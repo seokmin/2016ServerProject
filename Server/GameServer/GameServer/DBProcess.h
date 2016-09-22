@@ -25,6 +25,7 @@ private:
 	ERROR_CODE SubmitStateProcess(DBResult ret);
 	ERROR_CODE GetUserByAuthProcess(DBResult ret);
 	ERROR_CODE CalculateMoneyResProcess(DBResult ret);
+	ERROR_CODE ClearUserAuthToken(DBResult ret);
 
 private:
 	UserManager*			m_pUserMgr;

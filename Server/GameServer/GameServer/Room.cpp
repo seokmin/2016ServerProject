@@ -119,25 +119,11 @@ COMMON::ERROR_CODE Room::LeaveRoom(User * pUser)
 	}
 
 	// 유저의 상태/방정보도 나가도록 해줘야 함
-	//pUser->LeaveRoom();
-
-	WCHAR infoStr[100];
-	wsprintf(infoStr, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName().c_str());
-	Logger::GetInstance()->Log(Logger::INFO, infoStr, 100);
-
+	Logger::GetInstance()->Logf(Logger::INFO, L"유저가 로그아아웃 했습니다. RoomId:%d UserName:%s", m_id, pUser->GetName().c_str());
 	// Auth Token도 지워줌니다.
-	DBJob dbJob;
-
-	SQLWCHAR query[200] = L"";
-	dbJob._type = JOB_TYPE::CLEAR_AUTH_TOKEN;
-	wsprintf(dbJob._query, L"CALL Remove_AuthToken(\"%s\");", pUser->GetName().c_str());
-	dbJob._sessionIndex = pUser->GetSessionIndex();
-	dbJob._nResult = 0;
-
-	m_pDBmanager->PushDBJob(dbJob, pUser->GetUserIdx() % ServerConfig::numberOfDBThread);
-
+	m_pDBmanager->DeleteAuthToken(pUser);
 	
-	pUser->Clear();
+	pUser->LeaveRoom(); //정보 삭제는 NTFclose session 에서 한다.
 
 	return	COMMON::ERROR_CODE::NONE;
 }
@@ -202,13 +188,14 @@ void Room::SetRoomStateToWaiting()
 		if (user == nullptr)
 			continue;
 
-		user->SetGameState(GAME_STATE::BETTING);
-
 		if (user->GetCurMoney() < m_pServerConfig->minBet || user->GetCurMoney() > m_pServerConfig->maxBet)
 		{
 			LeaveRoom(user);
-			user = nullptr;
+			//user = nullptr; // 아니.. 이 아래에서 이러면 바로 에러가 나지 ㅠㅠ 내가 한듯. continue 추가함
+			continue;
 		}
+
+		user->SetGameState(GAME_STATE::BETTING);
 	}
 }
 

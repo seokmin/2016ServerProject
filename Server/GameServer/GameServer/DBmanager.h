@@ -75,6 +75,7 @@ public:
 	DBResult	FrontDBResult();
 	void		PopDBResult();
 	void		SubmitUserEarnMoney(User* pUser, int deltaMoney);
+	void		DeleteAuthToken(User* pUser);
 
 	void		PushDBJob(DBJob job, int pushIndex);
 
