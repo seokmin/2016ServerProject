@@ -19,7 +19,7 @@ void DBProcess::Init(UserManager * userMgr, RoomManager * roomMgr, PacketQueue* 
 	DBFuncArray[(int)JOB_TYPE::SUBMIT_STATE] = &DBProcess::SubmitStateProcess;
 	DBFuncArray[(int)JOB_TYPE::GET_USER_INFO_BY_AUTH] = &DBProcess::GetUserByAuthProcess;
 	DBFuncArray[(int)JOB_TYPE::CALCULATE_MONEY] = &DBProcess::CalculateMoneyResProcess;
-	DBFuncArray[(int)JOB_TYPE::CLEAR_AUTH_TOKEN] = &DBProcess::SubmitStateProcess;
+	DBFuncArray[(int)JOB_TYPE::CLEAR_AUTH_TOKEN] = &DBProcess::ClearUserAuthToken;
 }
 
 void DBProcess::Process(DBResult rslt)
@@ -99,5 +99,11 @@ ERROR_CODE DBProcess::GetUserByAuthProcess(DBResult rslt)
 ERROR_CODE DBProcess::CalculateMoneyResProcess(DBResult rslt)
 {
 	Logger::GetInstance()->Logf(Logger::INFO, L"[Submit DB(User money): Success]name:%s , money : %s", rslt._result1, rslt._result2);
+	return ERROR_CODE();
+}
+
+ERROR_CODE DBProcess::ClearUserAuthToken(DBResult ret)
+{
+
 	return ERROR_CODE();
 }

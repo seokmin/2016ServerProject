@@ -194,3 +194,17 @@ void DBmanager::SubmitUserEarnMoney(User * pUser, int deltaMoney)
 	Logger::GetInstance()->Logf(Logger::Level::INFO, L"submit money to DB: delta:%d, result_target:%d", deltaMoney, pUser->GetTotalMoney());
 	PushDBJob(calcMoneyJob, pUser->GetUserIdx() % 4);
 }
+
+void DBmanager::DeleteAuthToken(User * pUser)
+{
+	DBJob dbJob;
+
+	SQLWCHAR query[200] = L"";
+	dbJob._type = JOB_TYPE::CLEAR_AUTH_TOKEN;
+	wsprintf(dbJob._query, L"CALL Remove_AuthToken(\"%s\");", pUser->GetName().c_str());
+	dbJob._sessionIndex = pUser->GetSessionIndex();
+	dbJob._nResult = 0;
+
+	PushDBJob(dbJob, pUser->GetUserIdx() % ServerConfig::numberOfDBThread);
+	return;
+}

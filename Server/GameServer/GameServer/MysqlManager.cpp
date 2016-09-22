@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MysqlManager.h"
+//#include "Logger.h"
 
 MySQLMangager::MySQLMangager()
 {
@@ -47,6 +48,7 @@ RETCODE MySQLMangager::sqlconn() {
 
 // Execute SQL command with SQLExecDirect() ODBC API.
 RETCODE MySQLMangager::sqlexec(SQLWCHAR * query, int n_args, ...) {
+	Logger::GetInstance()->Logf(Logger::Level::INFO, L"Query send : %s", query);
 	rc = SQLExecDirect(hstmt, query, SQL_NTS);
 	if (!MYSQLSUCCESS(rc)) {  //Error
 		error_out();
@@ -66,6 +68,7 @@ RETCODE MySQLMangager::sqlexec(SQLWCHAR * query, int n_args, ...) {
 			{
 				SQLWCHAR* rslt = va_arg(ap, SQLWCHAR*);
 				SQLGetData(hstmt, i+1, SQL_C_WCHAR, rslt, MAX_DATA, &cbData);
+				Logger::GetInstance()->Logf(Logger::Level::INFO, L"%ls", rslt);
 			}
 			//swprintf_s(result, cbData, L"%ls", szData);
 		}
@@ -89,7 +92,9 @@ void MySQLMangager::error_out() {
 	SWORD cbmsg;
 
 	while (SQLError(0, 0, hstmt, szSQLSTATE, &nErr, msg, sizeof(msg), &cbmsg) == SQL_SUCCESS) {
-		wprintf_s(L"Error:\nSQLSTATE=%ls, Native error=%ld, msg='%ls'", szSQLSTATE, nErr, msg);
+		Logger::GetInstance()->Logf(Logger::Level::WARNING, L"Error:\nSQLSTATE=%ls, Native error=%ld, msg='%ls'", szSQLSTATE, nErr, msg);
+		
+		//wprintf_s(L"Error:\nSQLSTATE=%ls, Native error=%ld, msg='%ls'", szSQLSTATE, nErr, msg);
 
 		//swprintf_s(szData, sizeof(szData), L"Error:\nSQLSTATE=%ls, Native error=%ld, msg='%ls'", szSQLSTATE, nErr, msg);
 		//MessageBox(NULL, szData, L"ODBC Error", MB_OK);
