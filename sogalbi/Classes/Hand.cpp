@@ -51,6 +51,7 @@ void Hand::pushCard(CardInfo& card, float delay /*= 0.f*/)
 void Hand::popCard()
 {
 	--_handNum;
+	_cardInfos[_handNum]._shape = CardInfo::CardShape::EMPTY;
 	_cardSprites[_handNum]->setVisible(false);
 }
 
