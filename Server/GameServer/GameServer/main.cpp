@@ -3,15 +3,14 @@
 
 #include "stdafx.h"
 #include "App.h"
+#include <iomanip>
 
 int main()
 {
-	std::srand(unsigned(std::time(0)));
-
 	App app;
-	app.Init();
 
 	std::thread logicThread([&]() {
+		app.Init();
 		app.Run(); }
 	);
 

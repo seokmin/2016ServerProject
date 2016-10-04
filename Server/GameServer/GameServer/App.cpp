@@ -6,6 +6,7 @@
 
 COMMON::ERROR_CODE App::Init()
 {
+	std::srand(std::time(nullptr));
 	std::wcin.imbue(std::locale("korean"));
 	std::wcout.imbue(std::locale("korean"));
 
