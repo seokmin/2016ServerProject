@@ -80,4 +80,6 @@ private:
 	int				_currentChip = 0;
 	std::string		_authToken;
 	int				_pokeNum;
+
+	void			_md5(std::string& src, std::string& dest);
 };

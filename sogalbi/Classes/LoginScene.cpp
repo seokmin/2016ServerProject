@@ -16,6 +16,7 @@
 
 #include "BetSlider.h"
 #include "Hand.h"
+#include "md5/md5.h"
 
 cocos2d::Scene* LoginScene::createScene()
 {
@@ -70,6 +71,9 @@ void LoginScene::loginButtonClicked(cocos2d::Ref* pSender)
 	
 	auto name = _nameField->getString();
 	auto pass = _passField->getString();
+	std::string pass_encrypt;
+
+	_md5(pass, pass_encrypt);
 
 	if (name == "")
 		MessageBoxW(nullptr, L"이름을 쳐!", L"오류다", MB_OK);
@@ -84,7 +88,7 @@ void LoginScene::loginButtonClicked(cocos2d::Ref* pSender)
 		request->setResponseCallback(CC_CALLBACK_2(LoginScene::loginResponseArrived, this));
 		request->setHeaders({ "Content-Type:application/json" });
 		std::string postData = "{\"UserID\" : \"" + name + "\",\"PW\" : \""
-			+ pass + "\"}";
+			+ pass_encrypt + "\"}";
 		request->setRequestData(postData.c_str(), postData.length());
 		network::HttpClient::getInstance()->send(request);
 		request->release();
@@ -515,4 +519,18 @@ void LoginScene::connectChannel(std::string ip, int port)
 	}
 	// send 성공시
 	// 걍 response 기다린다.
+}
+
+void LoginScene::_md5(std::string & src, std::string & dest)
+{
+	//md5 hasing
+	md5_state_t state;
+	md5_byte_t digest[16];
+	md5_init(&state);
+	md5_append(&state, (const md5_byte_t *)src.c_str(), src.length());
+	md5_finish(&state, digest);
+	char pass_encrypt[33];
+	for (int di = 0; di < 16; ++di)
+		sprintf(pass_encrypt + di * 2, "%02x", digest[di]);
+	dest = pass_encrypt;
 }
