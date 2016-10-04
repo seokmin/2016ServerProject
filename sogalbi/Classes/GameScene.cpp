@@ -469,7 +469,6 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 		player->_hand[packet->_handNum]->pushCard(packet->_recvCard);
 	player->setMoneyBet(packet->_betMoney, packet->_currentMoney);
 	player->setCounter(packet->_waitingTime);
-	player->setValueLabel(player->_hand[packet->_handNum]->getHandValue());
 
 	// 이펙트 뿌리기, 사운드 재생
 	auto soundName = std::string{};
@@ -497,6 +496,9 @@ void GameScene::packetProcess_GameChoiceNtf(COMMON::RecvPacketInfo packetInfo)
 	default:
 		break;
 	}
+
+	player->setValueLabel(player->_hand[packet->_handNum]->getHandValue());
+	
 	auto value = player->_hand[packet->_handNum]->getHandValue();
 	if (value.first > 21)
 	{
