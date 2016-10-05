@@ -141,8 +141,13 @@ USE `jackblack`$$
 CREATE PROCEDURE `Recharge_money`(IN target_name varchar(45), money int)
 BEGIN
 UPDATE user SET chip = chip + money
-	WHERE username = target_name AND chip < money;
-UPDATE user SET last_recharge = NOW() WHERE username= target_name AND ROW_COUNT() = 1; 
+	WHERE username = target_name 
+    AND chip < money 
+    AND (last_recharge <= NOW() - INTERVAL 10 MINUTE);
+UPDATE user SET last_recharge = NOW() 
+	WHERE username= target_name AND ROW_COUNT() = 1 
+	AND chip < money
+    AND (last_recharge <= NOW() - INTERVAL 10 MINUTE); 
 SELECT chip FROM user WHERE username = target_name;
 END$$
 

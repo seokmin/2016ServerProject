@@ -149,7 +149,7 @@ void LoginScene::RechargeResponseArrived(network::HttpClient * sender, network::
 	int newChip = value.get("resultMoney", _currentChip).asInt();
 
 	if( newChip == _currentChip)
-		ClientLogger::msgBox(L"충전되지 않았어요..");
+		ClientLogger::msgBox(L"충전되지 않았어요.. 충전은 10분에 1번만 가능합니다.");
 	else
 		ClientLogger::msgBox(L"충전되었습니다!");
 
