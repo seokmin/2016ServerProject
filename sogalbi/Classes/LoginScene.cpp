@@ -343,11 +343,17 @@ void LoginScene::packetProcess_RoomEnterRes(COMMON::RecvPacketInfo packetInfo)
 {
 	using namespace COMMON;
 	auto recvBody = (PacketRoomEnterRes*)packetInfo.pRefData;
+	if (recvBody->_errorCode == ERROR_CODE::ROOM_ENTER_INVALID_AUTH)
+	{
+		ClientLogger::msgBox(L"로그인 시간이 만료되었습니다. 다시 로그인 해주세요 촤하하");
+		Director::getInstance()->replaceScene(LoginScene::createScene());
+	}
 	if (!recvBody->_errorCode == ERROR_CODE::NONE)
 	{
 		// TODO : 에러시 처리
 		return;
 	}
+
 	//Director::getInstance()->getScheduler()->performFunctionInCocosThread([] {CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true); });
 	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
 
