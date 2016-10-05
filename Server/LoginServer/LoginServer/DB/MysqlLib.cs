@@ -164,6 +164,33 @@ namespace LoginServer.DB
                 myConnection.Close();
             }
         }
+
+        public static async Task ClearAuthTokenLoop(int lastTime)
+        {
+            while(true)
+            {
+                await Task.Delay(5000);
+
+                using (MySqlConnection myConnection = new MySqlConnection(MYSQL_CONNECT_STRING))
+                {
+                    myConnection.Open();
+
+                    DataSet ds = new DataSet();
+
+                    var timestamp = DateTime.Now.AddSeconds(lastTime * -1).ToString("yyyy-MM-dd HH:mm:ss");
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendFormat("DELETE FROM auth WHERE timestamp < '{0}'", timestamp);
+
+                    MySqlCommand cmd = new MySqlCommand(sb.ToString(), myConnection);
+                    await cmd.ExecuteNonQueryAsync();
+
+                    myConnection.Close();
+
+                    Console.WriteLine(sb.ToString());
+                }
+            }
+        }
     }
 
     public class DBUser
