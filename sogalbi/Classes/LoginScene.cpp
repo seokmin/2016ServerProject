@@ -247,7 +247,9 @@ void LoginScene::recvPacketProcess(COMMON::PACKET_ID packetId, short bodySize, c
 		packetProcess_RoomEnterRes(packetInfo);
 		break;
 	default:
-		ClientLogger::msgBox(L"모르는 패킷");
+		ClientLogger::msgBox(L"오류가 발생했습니다.");
+		auto loginScene = LoginScene::createScene();
+		Director::getInstance()->replaceScene(loginScene);
 		break;
 	}
 }
