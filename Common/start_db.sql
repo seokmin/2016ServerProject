@@ -146,10 +146,11 @@ UPDATE user SET chip = chip + money
     AND (last_recharge <= NOW() - INTERVAL 10 MINUTE);
 UPDATE user SET last_recharge = NOW() 
 	WHERE username= target_name AND ROW_COUNT() = 1 
-	AND chip < money
     AND (last_recharge <= NOW() - INTERVAL 10 MINUTE); 
 SELECT chip FROM user WHERE username = target_name;
 END$$
 
 DELIMITER ;
+
+
 
