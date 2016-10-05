@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+	<head>
+    <title>잭블랙이블랙잭을한다 랭킹</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/public/js/refresh.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/index.css"/>
+	</head>
+	<body>
+      <h1>랭킹현황</h1>
+      <table>
+        <tr>
+          <th>번호</th>
+          <th>이름</th>
+          <th>칩</th>
+        </tr>
+        <% for(var i=0; i<users.length; i++) { %>
+        <tr>
+          <td><%= i + 1%></td>
+          <td><%= users[i].username%></td>
+          <td><%= users[i].chip%></td>
+        </tr>
+        <%}%>
+      </table>
+	</body>
+</html>

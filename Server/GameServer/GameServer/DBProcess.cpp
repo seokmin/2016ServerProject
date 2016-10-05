@@ -63,6 +63,25 @@ ERROR_CODE DBProcess::GetUserByAuthProcess(DBResult rslt)
 	std::string sAuth(wAuth.begin(), wAuth.end());
 	auto user = m_pUserMgr->GetUserBySessionId(rslt._sessionIndex);
 
+	// 유저 정보를 가져오지 못 하면
+	if (sAuth.empty())
+	{
+		Logger::GetInstance()->Logf(Logger::ERROR_FATAL, L"[LOGIC] Inavlid Auth Token approach!!");
+		
+		user->SetIoState(IO_STATE::NONE);
+
+		PacketRoomEnterRes resPkt;
+		resPkt._errorCode = ERROR_CODE::ROOM_ENTER_INVALID_AUTH;
+		resPkt._roomNum = -1;
+		RecvPacketInfo sendPacket;
+		sendPacket.SessionIndex = rslt._sessionIndex;
+		sendPacket.PacketId = PACKET_ID::ROOM_ENTER_RES;
+		sendPacket.pRefData = (char *)&resPkt;
+		sendPacket.PacketBodySize = sizeof(resPkt);
+		m_pSendPacketQue->PushBack(sendPacket);
+		return ERROR_CODE::ROOM_ENTER_INVALID_AUTH;
+	}
+
 	// 로그인 로직 시작
 	user->Init(sAuth, rslt._result1, _wtoi(rslt._result2), _wtoi(rslt._result3));
 	user->SetIoState(IO_STATE::NONE);
